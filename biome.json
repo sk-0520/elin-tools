@@ -2,11 +2,11 @@
 	"$schema": "https://biomejs.dev/schemas/2.0.4/schema.json",
 	"files": {
 		"includes": [
-			"app/**/*",
 			"components/**/*",
 			"features/**/*",
+			"pages/**/*",
 			"public/**/*",
-			"test/**/*"
+			"tests/**/*"
 		]
 	},
 	"linter": {

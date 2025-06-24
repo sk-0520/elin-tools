@@ -16,9 +16,18 @@
 			"ts",
 			"js"
 		],
+		"transform": {
+			"^.+\\.ts$": [
+				"ts-jest",
+				"tsconfig.json"
+			]
+		},
 		"testMatch": [
-			"**/test/**/*"
+			"**/tests/**/*"
 		],
+		"moduleNameMapper": {
+			"@/(.*)$": "<rootDir>/$1"
+		},
 		"collectCoverage": true,
 		"coverageDirectory": "coverage"
 	},
@@ -38,6 +47,7 @@
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"jest": "^30.0.2",
+		"ts-jest": "^29.4.0",
 		"typescript": "^5"
 	}
 }
