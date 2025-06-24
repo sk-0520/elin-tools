@@ -9,8 +9,9 @@ import {
 	Toolbar,
 	Typography,
 } from "@mui/material";
-import { type FC, type ReactNode, useState } from "react";
+import type { FC, ReactNode } from "react";
 import { type PageId, Pages } from "@/features/pages";
+import { useSidebarStore } from "@/hooks/useSidebarStore";
 
 const sidebarWidth = "200px";
 
@@ -21,11 +22,7 @@ export interface DefaultPageProps {
 
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
-	const [isOpen, setIsOpen] = useState(false);
-
-	const handleDrawerOpen = () => {
-		setIsOpen((v) => !v);
-	};
+	const sidebarStore = useSidebarStore();
 
 	return (
 		<Box sx={{ display: "flex" }}>
@@ -39,13 +36,13 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
-						onClick={handleDrawerOpen}
+						onClick={sidebarStore.toggle}
 						edge="start"
 						sx={{
 							marginRight: "1ch",
 						}}
 					>
-						{isOpen ? <MenuOpenIcon /> : <MenuIcon />}
+						{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
 					</IconButton>
 					<Typography variant="h6" noWrap component="h1">
 						{Pages[pageId].title}
@@ -60,7 +57,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						width: sidebarWidth,
 						boxSizing: "border-box",
 					},
-					display: isOpen ? undefined : "none",
+					display: sidebarStore.isOpen ? undefined : "none",
 				}}
 				variant="permanent"
 				anchor="left"

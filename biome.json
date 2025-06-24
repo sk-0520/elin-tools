@@ -4,6 +4,7 @@
 		"includes": [
 			"components/**/*",
 			"features/**/*",
+			"hooks/**/*",
 			"pages/**/*",
 			"public/**/*",
 			"tests/**/*"
