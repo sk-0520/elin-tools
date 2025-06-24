@@ -1,8 +1,9 @@
-export interface Page {
+export type PageId = "root";
+export interface PageInfo {
 	title: string;
 }
 
-export const Pages: { [key: string]: Page } = {
+export const Pages: Record<PageId, PageInfo> = {
 	root: {
 		title: "",
 	},

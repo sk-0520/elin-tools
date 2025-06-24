@@ -1,6 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-
 import {
 	AppBar,
 	Box,
@@ -11,15 +10,17 @@ import {
 	Typography,
 } from "@mui/material";
 import { type FC, type ReactNode, useState } from "react";
+import { type PageId, Pages } from "@/features/pages";
 
 const sidebarWidth = "200px";
 
 export interface DefaultPageProps {
+	pageId: PageId;
 	children: ReactNode;
 }
 
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
-	const { children } = props;
+	const { children, pageId } = props;
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleDrawerOpen = () => {
@@ -47,8 +48,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						{isOpen ? <MenuOpenIcon /> : <MenuIcon />}
 					</IconButton>
 					<Typography variant="h6" noWrap component="h1">
-						{/* {currentPage.title} */}
-						asdasdasd
+						{Pages[pageId].title}
 					</Typography>
 				</Toolbar>
 			</AppBar>
