@@ -19,6 +19,7 @@ jobs:
           cache: npm
 
       - name: <Install> NPM
+        shell: bash
         run: npm ci
 
       - name: <Lint> front-end
