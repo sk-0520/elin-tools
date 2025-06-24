@@ -1,10 +1,13 @@
 export type PageId = "root";
+
 export interface PageInfo {
+	id: PageId;
 	title: string;
 }
 
-export const Pages: Record<PageId, PageInfo> = {
-	root: {
-		title: "",
+export const Pages: Array<PageInfo> = [
+	{
+		id: "root",
+		title: "トップ",
 	},
-};
+];

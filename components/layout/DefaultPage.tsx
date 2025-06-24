@@ -12,6 +12,7 @@ import {
 import type { FC, ReactNode } from "react";
 import { type PageId, Pages } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
+import { SideMenu } from "../SideMenu";
 
 const sidebarWidth = "200px";
 
@@ -23,6 +24,11 @@ export interface DefaultPageProps {
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
 	const sidebarStore = useSidebarStore();
+
+	const page = Pages.find((a) => a.id === pageId);
+	if (!page) {
+		throw new Error(pageId);
+	}
 
 	return (
 		<Box sx={{ display: "flex" }}>
@@ -45,7 +51,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
 					</IconButton>
 					<Typography variant="h6" noWrap component="h1">
-						{Pages[pageId].title}
+						{page.title}
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -64,10 +70,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 			>
 				<Toolbar />
 				<Divider />
-				{/* <SideMenu
-					selectedPageKey={selectedPageKey}
-					handleSelectPageKey={handleSelectPageKey}
-				/> */}
+				<SideMenu selectedPageId={pageId} />
 			</Drawer>
 
 			<Box
