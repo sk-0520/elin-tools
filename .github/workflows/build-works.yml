@@ -1,0 +1,47 @@
+name: Build Works
+
+on: push
+
+jobs:
+  build:
+    name: "<Build> Application"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: <Checkout> Repository
+        uses: actions/checkout@v4
+
+      - name: <Add> Node/NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./.node-version
+          cache: npm
+
+      - name: <Install> NPM
+        run: npm ci
+
+      - name: <Lint> front-end
+        shell: bash
+        run: npm run lint
+
+      - name: <Build> front-end
+        shell: bash
+        run: npm run build
+
+      - name: <Test> front-end
+        shell: bash
+        run: npm run test
+
+      - name: <Artifact> front-end
+        uses: actions/upload-artifact@v4
+        with:
+          name: out
+          path: out
+
+      - name: <Artifact> coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+

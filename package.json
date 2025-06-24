@@ -6,9 +6,21 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
+		"test": "jest",
 		"lint": "biome check .",
 		"lint-fix": "biome check --write .",
 		"lint-fix-unsafe": "biome check --write --unsafe ."
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"ts",
+			"js"
+		],
+		"testMatch": [
+			"**/test/**/*"
+		],
+		"collectCoverage": true,
+		"coverageDirectory": "coverage"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
@@ -21,9 +33,11 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.4",
+		"@types/jest": "^30.0.0",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"jest": "^30.0.2",
 		"typescript": "^5"
 	}
 }
