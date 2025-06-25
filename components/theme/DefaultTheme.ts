@@ -1,6 +1,7 @@
-import type { ThemeOptions } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
+import { DefaultFontFamily } from "./DefaultFonts";
 
-export const DefaultTheme: ThemeOptions = {
+export const DefaultTheme = createTheme({
 	palette: {
 		mode: "light",
 		primary: {
@@ -67,20 +68,7 @@ export const DefaultTheme: ThemeOptions = {
 		button: {
 			textTransform: "none",
 		},
-		fontFamily: [
-			"Verdana",
-			"Skia-Regular_Condensed",
-			"Tahoma",
-			"Meiryo UI",
-			"メイリオ",
-			"Meiryo",
-			"Osaka",
-			"YuGothic",
-			"Yu Gothic",
-			"sans-serif",
-		]
-			.map((a) => (a.includes(" ") ? `"${a}"` : a))
-			.join(","),
+		fontFamily: DefaultFontFamily,
 		h1: {
 			fontWeight: 600,
 		},
@@ -93,4 +81,4 @@ export const DefaultTheme: ThemeOptions = {
 			standard: 300,
 		},
 	},
-};
+});

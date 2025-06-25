@@ -74,7 +74,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 			</Drawer>
 
 			<Box
-				component="main"
 				sx={{
 					flexGrow: 1,
 					bgcolor: "background.default",
@@ -82,7 +81,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 				}}
 			>
 				<Toolbar />
-				{children}
+				<main>{children}</main>
 			</Box>
 		</Box>
 	);
