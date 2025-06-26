@@ -16,5 +16,5 @@ export const Pages: Array<PageInfo> = [
 		id: "weapon",
 		href: "/weapon",
 		title: "武器",
-	}
+	},
 ];

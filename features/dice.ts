@@ -5,7 +5,7 @@ export class DiceFormatError extends DiceError {}
 
 export type DiceSign = "+" | "-";
 const DiceRegex =
-	/^\s*(?<COUNT>\d+)d(?<SIDES>\d+)((?<FIXED_SIGN>\+|-)(?<FIXED_VALUE>\d+))?s*$/;
+	/^\s*(?<COUNT>\d+)\s*d\s*(?<SIDES>\d+)(\s*(?<FIXED_SIGN>\+|-)\s*(?<FIXED_VALUE>\d+))?\s*$/;
 
 export interface DiceUnknownDice {
 	/** 振り数 */
@@ -23,7 +23,7 @@ export interface DiceWithFixed extends DiceUnknownDice {
 	/** 固定値あり */
 	fixed: true;
 	/** 固定値の正負 */
-	fixedSign: "+" | "-";
+	fixedSign: DiceSign;
 	/** 固定値の絶対値 */
 	fixedValue: number;
 }
@@ -60,6 +60,8 @@ export interface DiceValue {
 	/** 面数 */
 	sides: number;
 
+	/** 固定値の有無 */
+	hasFixed: boolean;
 	/** 固定値の正負 */
 	fixedSign: DiceSign;
 	/** 固定値の絶対値 */
@@ -71,9 +73,8 @@ export interface DiceValue {
 	maximum: number;
 }
 
-function getSignValue(sign: DiceSign, value: number): number
-{
-	switch(sign) {
+function getSignValue(sign: DiceSign, value: number): number {
+	switch (sign) {
 		case "+":
 			return value;
 
@@ -82,17 +83,22 @@ function getSignValue(sign: DiceSign, value: number): number
 	}
 }
 
-export function calculateDice(dice: DiceWithoutFixed | DiceWithFixed): DiceValue {
+export function calculateDice(
+	dice: DiceWithoutFixed | DiceWithFixed,
+): DiceValue {
 	if (dice.fixed) {
 		return {
 			count: dice.count,
 			sides: dice.sides,
 
+			hasFixed: true,
 			fixedSign: dice.fixedSign,
 			fixedValue: dice.fixedValue,
 
 			minimum: dice.count + getSignValue(dice.fixedSign, dice.fixedValue),
-			maximum: (dice.count * dice.sides) + (getSignValue(dice.fixedSign, dice.fixedValue) * dice.count),
+			maximum:
+				dice.count * dice.sides +
+				getSignValue(dice.fixedSign, dice.fixedValue) * dice.count,
 		};
 	}
 
@@ -100,6 +106,7 @@ export function calculateDice(dice: DiceWithoutFixed | DiceWithFixed): DiceValue
 		count: dice.count,
 		sides: dice.sides,
 
+		hasFixed: false,
 		fixedSign: "+",
 		fixedValue: 0,
 

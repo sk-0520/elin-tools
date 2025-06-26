@@ -18,6 +18,10 @@ describe("parseDice", () => {
 	test.each([
 		[{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed, "1d2"],
 		[{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed, "01d02"],
+		[
+			{ fixed: false, count: 4, sides: 5 } satisfies DiceWithoutFixed,
+			" 4 d 5 ",
+		],
 	])("DiceWithoutFixed: %p, %s", (expected: DiceWithoutFixed, dice: string) => {
 		expect(parseDice(dice)).toStrictEqual(expected);
 	});
@@ -63,6 +67,16 @@ describe("parseDice", () => {
 			} satisfies DiceWithFixed,
 			"01d02-03",
 		],
+		[
+			{
+				fixed: true,
+				count: 4,
+				sides: 5,
+				fixedSign: "+",
+				fixedValue: 6,
+			} satisfies DiceWithFixed,
+			" 4 d 5 + 6",
+		],
 	])("DiceWithFixed: %p, %s", (expected: DiceWithFixed, dice: string) => {
 		expect(parseDice(dice)).toStrictEqual(expected);
 	});
@@ -74,6 +88,7 @@ describe("calculateDice", () => {
 			{
 				count: 1,
 				sides: 2,
+				hasFixed: false,
 				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 1,
@@ -89,6 +104,7 @@ describe("calculateDice", () => {
 			{
 				count: 10,
 				sides: 20,
+				hasFixed: false,
 				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 10,
@@ -109,6 +125,7 @@ describe("calculateDice", () => {
 			{
 				count: 1,
 				sides: 2,
+				hasFixed: true,
 				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 1,
@@ -126,6 +143,7 @@ describe("calculateDice", () => {
 			{
 				count: 1,
 				sides: 2,
+				hasFixed: true,
 				fixedSign: "+",
 				fixedValue: 10,
 				minimum: 11,
