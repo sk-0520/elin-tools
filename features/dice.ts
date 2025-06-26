@@ -62,9 +62,7 @@ export interface DiceValue {
 
 	/** 固定値の有無 */
 	hasFixed: boolean;
-	/** 固定値の正負 */
-	fixedSign: DiceSign;
-	/** 固定値の絶対値 */
+	/** 固定値の値 */
 	fixedValue: number;
 
 	/** 最小値 */
@@ -87,18 +85,16 @@ export function calculateDice(
 	dice: DiceWithoutFixed | DiceWithFixed,
 ): DiceValue {
 	if (dice.fixed) {
+		const fixedValue = getSignValue(dice.fixedSign, dice.fixedValue);
 		return {
 			count: dice.count,
 			sides: dice.sides,
 
 			hasFixed: true,
-			fixedSign: dice.fixedSign,
-			fixedValue: dice.fixedValue,
+			fixedValue: fixedValue,
 
-			minimum: dice.count + getSignValue(dice.fixedSign, dice.fixedValue),
-			maximum:
-				dice.count * dice.sides +
-				getSignValue(dice.fixedSign, dice.fixedValue) * dice.count,
+			minimum: dice.count + fixedValue,
+			maximum: dice.count * dice.sides + dice.count * fixedValue,
 		};
 	}
 
@@ -107,10 +103,36 @@ export function calculateDice(
 		sides: dice.sides,
 
 		hasFixed: false,
-		fixedSign: "+",
 		fixedValue: 0,
 
 		minimum: dice.count,
 		maximum: dice.count * dice.sides,
 	};
+}
+
+type RankProperty = keyof DiceValue &
+	("count" | "sides" | "fixedValue" | "minimum" | "maximum"); // いやぁ、これは違う
+
+export interface RankValue {
+	id: string;
+	value: DiceValue;
+	prevEqual: boolean;
+}
+
+export function rankDice(
+	diceItems: Record<string, DiceValue>,
+	property: RankProperty,
+): Array<RankValue> {
+	const pairs = Object.entries(diceItems);
+
+	const sortedItems = pairs
+		.toSorted(([_ak, av], [_bk, bv]) => bv[property] - av[property])
+		.map(([ak, av], index, array) => ({
+			id: ak,
+			value: av,
+			prevEqual:
+				index === 0 ? false : av[property] === array[index - 1][1][property],
+		}));
+
+	return sortedItems;
 }

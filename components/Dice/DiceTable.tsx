@@ -2,12 +2,14 @@ import {
 	Table,
 	TableBody,
 	TableCell,
+	TableFooter,
 	TableHead,
 	TableRow,
 } from "@mui/material";
 import type { FC } from "react";
 import type { DiceValue } from "@/features/dice";
 import { DiceTableRow } from "./DiceTableRow";
+import { DiceTableSummary } from "./DiceTableSummary";
 
 export type DiceTableProps = {
 	diseEditors: Record<string, string>;
@@ -48,6 +50,9 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 					);
 				})}
 			</TableBody>
+			<TableFooter>
+				<DiceTableSummary values={diseValues} />
+			</TableFooter>
 		</Table>
 	);
 };

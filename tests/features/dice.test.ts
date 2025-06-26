@@ -89,7 +89,6 @@ describe("calculateDice", () => {
 				count: 1,
 				sides: 2,
 				hasFixed: false,
-				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 1,
 				maximum: 2,
@@ -105,7 +104,6 @@ describe("calculateDice", () => {
 				count: 10,
 				sides: 20,
 				hasFixed: false,
-				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 10,
 				maximum: 200,
@@ -126,7 +124,6 @@ describe("calculateDice", () => {
 				count: 1,
 				sides: 2,
 				hasFixed: true,
-				fixedSign: "+",
 				fixedValue: 0,
 				minimum: 1,
 				maximum: 2,
@@ -144,7 +141,6 @@ describe("calculateDice", () => {
 				count: 1,
 				sides: 2,
 				hasFixed: true,
-				fixedSign: "+",
 				fixedValue: 10,
 				minimum: 11,
 				maximum: 12,
@@ -157,7 +153,28 @@ describe("calculateDice", () => {
 				fixedValue: 10,
 			} satisfies DiceWithFixed,
 		],
+		[
+			{
+				count: 1,
+				sides: 2,
+				hasFixed: true,
+				fixedValue: -10,
+				minimum: -9,
+				maximum: -8,
+			} satisfies DiceValue,
+			{
+				fixed: true,
+				count: 1,
+				sides: 2,
+				fixedSign: "-",
+				fixedValue: 10,
+			} satisfies DiceWithFixed,
+		],
 	])("fixed: %p, %p", (expected: DiceValue, dice: DiceWithFixed) => {
 		expect(calculateDice(dice)).toStrictEqual(expected);
 	});
 });
+
+describe("rankDice", () => {
+});
+
