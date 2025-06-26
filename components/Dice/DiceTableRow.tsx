@@ -2,6 +2,7 @@ import { TableCell, TableRow, TextField } from "@mui/material";
 import type { ChangeEvent, FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { DiceValue } from "@/features/dice";
+import { NumericFormat } from "../NumericFormat";
 
 interface InputValues {
 	editor: string;
@@ -54,13 +55,13 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				<TableCell colSpan={5}></TableCell>
 			) : (
 				<>
-					<TableCell>{value.count}</TableCell>
-					<TableCell>{value.sides}</TableCell>
+					<TableCell><NumericFormat value={value.count} /></TableCell>
+					<TableCell><NumericFormat value={value.sides} /></TableCell>
 					<TableCell>
 						{value.hasFixed ? value.fixedValue : "-"}
 					</TableCell>
-					<TableCell>{value.minimum}</TableCell>
-					<TableCell>{value.maximum}</TableCell>
+					<TableCell><NumericFormat value={value.minimum} /></TableCell>
+					<TableCell><NumericFormat value={value.maximum} /></TableCell>
 				</>
 			)}
 		</TableRow>
