@@ -55,13 +55,19 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				<TableCell colSpan={5}></TableCell>
 			) : (
 				<>
-					<TableCell><NumericFormat value={value.count} /></TableCell>
-					<TableCell><NumericFormat value={value.sides} /></TableCell>
 					<TableCell>
-						{value.hasFixed ? value.fixedValue : "-"}
+						<NumericFormat value={value.count} />
 					</TableCell>
-					<TableCell><NumericFormat value={value.minimum} /></TableCell>
-					<TableCell><NumericFormat value={value.maximum} /></TableCell>
+					<TableCell>
+						<NumericFormat value={value.sides} />
+					</TableCell>
+					<TableCell>{value.hasFixed ? value.fixedValue : "-"}</TableCell>
+					<TableCell>
+						<NumericFormat value={value.minimum} />
+					</TableCell>
+					<TableCell>
+						<NumericFormat value={value.maximum} />
+					</TableCell>
 				</>
 			)}
 		</TableRow>

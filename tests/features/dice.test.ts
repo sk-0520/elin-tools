@@ -175,6 +175,4 @@ describe("calculateDice", () => {
 	});
 });
 
-describe("rankDice", () => {
-});
-
+describe("rankDice", () => {});

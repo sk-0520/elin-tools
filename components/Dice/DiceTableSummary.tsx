@@ -1,6 +1,5 @@
-import { TableCell, TableRow, TextField } from "@mui/material";
-import type { ChangeEvent, FC } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { TableCell, TableRow } from "@mui/material";
+import type { FC } from "react";
 import { type DiceValue, rankDice } from "@/features/dice";
 import { DiceRanking } from "./DiceRanking";
 
@@ -22,12 +21,22 @@ export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 	return (
 		<TableRow>
 			<TableCell></TableCell>
-			<TableCell>どっち</TableCell>
-			<TableCell><DiceRanking items={summary.count} /></TableCell>
-			<TableCell><DiceRanking items={summary.sides} /></TableCell>
-			<TableCell><DiceRanking items={summary.fixedValue} /></TableCell>
-			<TableCell><DiceRanking items={summary.minimum} /></TableCell>
-			<TableCell><DiceRanking items={summary.maximum} /></TableCell>
+			<TableCell>どっち?</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.count} />
+			</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.sides} />
+			</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.fixedValue} />
+			</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.minimum} />
+			</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.maximum} />
+			</TableCell>
 		</TableRow>
 	);
 };
