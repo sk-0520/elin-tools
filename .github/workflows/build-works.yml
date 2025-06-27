@@ -2,6 +2,10 @@ name: Build Works
 
 on: push
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: "<Build> Application"
@@ -11,6 +15,22 @@ jobs:
     steps:
       - name: <Checkout> Repository
         uses: actions/checkout@v4
+
+      - name: <Setup> Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
+
+      - name: <Restore> .next/cache
+        if: github.ref != 'refs/heads/master'
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: |
+            ${{ github.job }}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ github.job }}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
       - name: <Add> Node/NPM
         uses: actions/setup-node@v4
@@ -35,9 +55,8 @@ jobs:
         run: npm run test
 
       - name: <Artifact> front-end
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: out
           path: out
 
       - name: <Artifact> coverage
@@ -46,3 +65,25 @@ jobs:
           name: coverage
           path: coverage
 
+  deplay-github-pages:
+    name: "<Deplay> Github Pages"
+    needs:
+      - build
+
+    if: github.ref == 'refs/heads/develop'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: <Deploy> GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
