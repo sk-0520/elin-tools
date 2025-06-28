@@ -1,3 +1,4 @@
+import type { NextPage } from "next";
 import { useEffect } from "react";
 import { DiceChart } from "@/components/Dice/DiceChart";
 import { DiceTable } from "@/components/Dice/DiceTable";
@@ -14,7 +15,7 @@ import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
 
 const Frequency = 10_000;
 
-export default function RootPage() {
+const Page: NextPage = () => {
 	const weponEditorsStore = useWeponEditorsStore();
 	const weponDiceValuesStore = useWeponDiceValuesStore();
 	const weponPointsStore = useWeponPointsStore();
@@ -89,4 +90,6 @@ export default function RootPage() {
 			</DefaultPage>
 		</>
 	);
-}
+};
+
+export default Page;
