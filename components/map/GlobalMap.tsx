@@ -3,7 +3,6 @@
 import Leaflet from "leaflet";
 import type { FC } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import "./GlobalMap.css";
 
 Leaflet.Icon.Default.imagePath =
 	"//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/";

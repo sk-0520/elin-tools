@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
-import { DefaultPage } from "@/components/layout/DefaultPage";
-import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import { DefaultPage } from "@/components/layout/DefaultPage";
 
 const Page: NextPage = () => {
 	const GlobalMap = useMemo(
