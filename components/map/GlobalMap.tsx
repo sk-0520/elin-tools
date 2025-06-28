@@ -1,7 +1,7 @@
 "use client";
 
 import Leaflet from "leaflet";
-import { FC } from "react";
+import type { FC } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "./GlobalMap.css";
 
@@ -13,6 +13,8 @@ export interface GlobalMapProps {
 }
 
 export const GlobalMap: FC<GlobalMapProps> = (props) => {
+	console.debug({ props });
+
 	return (
 		<MapContainer
 			center={[51.505, -0.09]}
