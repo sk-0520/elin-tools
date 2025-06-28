@@ -148,6 +148,13 @@ export function rankDice(
 	return sortedItems;
 }
 
+/**
+ * サイコロをふる
+ * @param dice ダイス値
+ * @param count 試行回数(dice側でふる回数を持っているのでこれはその実行を何度行うか)
+ * @param random 将来的に変更できるように
+ * @returns ふりまくった結果 [0]: 順序, [0][...] その結果
+ */
 export function roll(
 	dice: DiceValue,
 	count: number,

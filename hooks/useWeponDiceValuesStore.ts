@@ -5,8 +5,8 @@ export interface WeponDiceValuesState {
 	readonly errors: Record<string, string>;
 	readonly values: Record<string, DiceValue>;
 
-	setError: (key: string, error: string) => void;
-	setValue: (key: string, dice: DiceValue | undefined) => void;
+	setError: (id: string, error: string) => void;
+	setValue: (id: string, dice: DiceValue | undefined) => void;
 }
 
 export const useWeponDiceValuesStore = create<WeponDiceValuesState>(

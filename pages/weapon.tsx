@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { DiceTable } from "@/components/Dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import { calculateDice, parseDice } from "@/features/dice";
+import { calculateDice, parseDice, roll } from "@/features/dice";
+import { BuiltRandom } from "@/features/random";
 import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
 import {
 	DefaultEditors,
 	useWeponEditorsStore,
 } from "@/hooks/useWeponEditorsStore";
 import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
+
+const Frequency = 10_000;
 
 export default function RootPage() {
 	const weponEditorsStore = useWeponEditorsStore();
@@ -23,6 +26,7 @@ export default function RootPage() {
 		}
 	}, []);
 
+	// ダイス入力
 	useEffect(() => {
 		const editors = weponEditorsStore.editors;
 		console.log({ editors });
@@ -33,11 +37,15 @@ export default function RootPage() {
 				if (!editor.trim()) {
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, undefined);
+					weponPointsStore.remove(key);
 				} else {
 					const dice = parseDice(editor);
 					const value = calculateDice(dice);
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, value);
+					const points = roll(value, Frequency, new BuiltRandom());
+					weponPointsStore.setPoint(key, points);
+					console.table(points);
 				}
 			} catch (ex) {
 				console.error(ex);
@@ -50,6 +58,7 @@ export default function RootPage() {
 		weponDiceValuesStore.setError,
 		weponDiceValuesStore.setValue,
 		weponPointsStore.remove,
+		weponPointsStore.setPoint,
 	]);
 
 	const handleEditorChanged = (id: string, editor: string) => {
@@ -59,18 +68,15 @@ export default function RootPage() {
 
 	return (
 		<>
-		<DefaultPage pageId="weapon">
-			<DiceTable
-				diseEditors={weponEditorsStore.editors}
-				diseErrors={weponDiceValuesStore.errors}
-				diseValues={weponDiceValuesStore.values}
-				callbackEditorChanged={handleEditorChanged}
-			/>
-		</DefaultPage>
-		<pre>
-			{JSON.stringify(weponPointsStore.points, undefined, 2)}
-		</pre>
-
+			<DefaultPage pageId="weapon">
+				<DiceTable
+					diseEditors={weponEditorsStore.editors}
+					diseErrors={weponDiceValuesStore.errors}
+					diseValues={weponDiceValuesStore.values}
+					callbackEditorChanged={handleEditorChanged}
+				/>
+			</DefaultPage>
+			<pre>{JSON.stringify(weponPointsStore.points, undefined, 2)}</pre>
 		</>
 	);
 }

@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
 	"files": {
 		"includes": [
 			"components/**/*",
@@ -17,12 +17,18 @@
 			"complexity": {
 				"noStaticOnlyClass": "off"
 			},
+			"correctness": {
+				"noUnusedVariables": "warn"
+			},
 			"a11y": {
 				"useValidAnchor": "off",
 				"useKeyWithClickEvents": "off",
 				"noSvgWithoutTitle": "off"
 			}
 		}
+	},
+	"formatter": {
+		"useEditorconfig": true
 	},
 	"vcs": {
 		"enabled": true,

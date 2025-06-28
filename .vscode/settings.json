@@ -13,9 +13,9 @@
 		"**/dist/**": true,
 		"*.lnk": true
 	},
+	"editor.formatOnSave":true,
 	"editor.codeActionsOnSave": {
-		"quickfix.biome": "always",
-		"source.organizeImports.biome": "always"
+		"source.organizeImports.biome": "explicit"
 	},
 	"[javascript]": {
 		"editor.defaultFormatter": "biomejs.biome"

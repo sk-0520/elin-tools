@@ -3,26 +3,26 @@ import { create } from "zustand";
 export interface WeponPointsState {
 	readonly points: Record<string, Array<Array<number>>>;
 
-	remove: (key: string) => void;
-	setPoint: (key: string, points: Array<Array<number>>) => void;
+	remove: (id: string) => void;
+	setPoint: (id: string, points: Array<Array<number>>) => void;
 }
 
 export const useWeponPointsStore = create<WeponPointsState>((set, get) => {
 	return {
 		points: {},
 
-		remove: (key: string) => {
+		remove: (id: string) => {
 			const points = { ...get().points };
-			delete points[key];
+			delete points[id];
 			set({ points: points });
 		},
 
-		setPoint: (key: string, points: Array<Array<number>>) => {
+		setPoint: (id: string, points: Array<Array<number>>) => {
 			const current = get().points;
-			if (current[key] === points) {
+			if (current[id] === points) {
 				return;
 			}
-			const items = { ...current, [key]: points };
+			const items = { ...current, [id]: points };
 			set({ points: items });
 		},
 	};

@@ -12,7 +12,7 @@ export interface WeponEditorsState {
 
 	reset: () => void;
 
-	setEditor: (key: string, dice: string) => void;
+	setEditor: (id: string, dice: string) => void;
 }
 
 export const useWeponEditorsStore = create<WeponEditorsState>()(
@@ -27,12 +27,12 @@ export const useWeponEditorsStore = create<WeponEditorsState>()(
 					set({ editors: { ...DefaultEditors }, values: {} });
 				},
 
-				setEditor: (key: string, dice: string) => {
+				setEditor: (id: string, dice: string) => {
 					const current = get().editors;
-					if (current[key] === dice) {
+					if (current[id] === dice) {
 						return;
 					}
-					const ediors = { ...current, [key]: dice };
+					const ediors = { ...current, [id]: dice };
 					set({ editors: ediors });
 				},
 			};
