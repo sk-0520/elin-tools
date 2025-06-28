@@ -1,8 +1,10 @@
 "use client";
-
 import Leaflet, { LatLngBounds, type LatLngExpression } from "leaflet";
 import { type FC, useMemo, useRef, useState } from "react";
 import { ImageOverlay, MapContainer, Marker, Popup } from "react-leaflet";
+import nextConfig from "../../next.config";
+
+const basePath = nextConfig.basePath || "/";
 
 Leaflet.Icon.Default.imagePath =
 	"//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/";
@@ -52,7 +54,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 						[size.height, size.width],
 					])
 				}
-				url="/components/map/GlobalMap/GlobalMap.jpg"
+				url={`${basePath}/components/map/GlobalMap/GlobalMap.jpg`}
 			/>
 			{process.env.NODE_ENV === "development" && (
 				<Marker
