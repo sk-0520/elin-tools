@@ -26,7 +26,9 @@ describe("getValue:Array", () => {
 
 	test("undefined", () => {
 		const input = [10, undefined, 30];
-		expect(() => getValue(input, 1)).toThrow(new OutOfRangeError("index = 1"));
+		expect(() => getValue(input, 1)).toThrow(
+			new OutOfRangeError("index = 1"),
+		);
 	});
 });
 

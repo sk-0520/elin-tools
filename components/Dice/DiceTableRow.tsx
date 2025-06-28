@@ -2,6 +2,7 @@ import { TableCell, TableRow, TextField } from "@mui/material";
 import type { ChangeEvent, FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { DiceValue } from "@/features/dice";
+import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
 import { NumericFormat } from "../NumericFormat";
 
 interface InputValues {
@@ -10,10 +11,10 @@ interface InputValues {
 
 export type DiceTableRowProps = {
 	id: string;
-	editor: string;
+	editor: DiceEditor;
 	error: string | undefined;
 	value: DiceValue | undefined;
-	callbackEditorChanged: (id: string, editor: string) => void;
+	callbackEditorChanged: (id: string, editor: DiceEditor) => void;
 };
 
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
@@ -25,15 +26,18 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 
 	console.debug({ id, editor });
 
-	const handleChange = (
+	const handleDiceChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setValue("editor", event.target.value);
-		callbackEditorChanged(id, event.target.value);
+		callbackEditorChanged(id, {
+			dice: event.target.value,
+			color: editor.color,
+		});
 	};
 
 	return (
-		<TableRow>
+		<TableRow sx={{ background: editor.color }}>
 			<TableCell>{id}</TableCell>
 			<TableCell>
 				<Controller
@@ -43,8 +47,8 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					render={({ field, formState: { errors } }) => (
 						<TextField
 							{...field}
-							defaultValue={editor}
-							onChange={handleChange}
+							defaultValue={editor.dice}
+							onChange={handleDiceChange}
 						/>
 					)}
 				/>
@@ -61,7 +65,9 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					<TableCell>
 						<NumericFormat value={value.sides} />
 					</TableCell>
-					<TableCell>{value.hasFixed ? value.fixedValue : "-"}</TableCell>
+					<TableCell>
+						{value.hasFixed ? value.fixedValue : "-"}
+					</TableCell>
 					<TableCell>
 						<NumericFormat value={value.minimum} />
 					</TableCell>

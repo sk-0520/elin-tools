@@ -1,5 +1,7 @@
-function built_randomInt(min: number, max: number): number {
-	return min + Math.floor(Math.random() * (max - min));
+function builtin_randomInt(min: number, max: number): number {
+	const minCeiled = Math.ceil(min);
+	const maxFloored = Math.floor(max);
+	return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
 export interface Random {
@@ -10,7 +12,7 @@ export interface Random {
 	nextInt(min: number, max: number): number;
 }
 
-export class BuiltRandom implements Random {
+export class BuiltinRandom implements Random {
 	public next(): number {
 		return Math.random();
 	}
@@ -22,10 +24,10 @@ export class BuiltRandom implements Random {
 		if (max === undefined) {
 			if (min === undefined) {
 				// nextInt()
-				return built_randomInt(0, Number.MAX_SAFE_INTEGER);
+				return builtin_randomInt(0, Number.MAX_SAFE_INTEGER);
 			}
 			// nextInt(max: number)
-			return built_randomInt(0, min);
+			return builtin_randomInt(0, min);
 		}
 
 		if (min === undefined) {
@@ -33,6 +35,6 @@ export class BuiltRandom implements Random {
 		}
 
 		// nextInt(min: number, max: number)
-		return built_randomInt(min, max);
+		return builtin_randomInt(min, max);
 	}
 }

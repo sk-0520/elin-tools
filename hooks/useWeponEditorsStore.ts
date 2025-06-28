@@ -1,18 +1,24 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { DiceValue } from "@/features/dice";
 import { getDefaultStorage } from "@/features/storage";
 
-export const DefaultEditors = { A: "", B: "" };
+export interface DiceEditor {
+	dice: string;
+	color: string;
+}
+
+export const DefaultEditors: { [key: string]: DiceEditor } = {
+	A: { dice: "4d2", color: "#5b9bd5" },
+	B: { dice: "3d2+1", color: "#ed7d31" },
+};
 
 export interface WeponEditorsState {
-	readonly editors: Record<string, string>;
+	readonly editors: Record<string, DiceEditor>;
 	readonly errors: Record<string, string>;
-	readonly values: Record<string, DiceValue>;
 
 	reset: () => void;
 
-	setEditor: (id: string, dice: string) => void;
+	setEditor: (id: string, value: DiceEditor) => void;
 }
 
 export const useWeponEditorsStore = create<WeponEditorsState>()(
@@ -21,18 +27,20 @@ export const useWeponEditorsStore = create<WeponEditorsState>()(
 			return {
 				editors: DefaultEditors,
 				errors: {},
-				values: {},
 
 				reset: () => {
-					set({ editors: { ...DefaultEditors }, values: {} });
+					set({ editors: { ...DefaultEditors } });
 				},
 
-				setEditor: (id: string, dice: string) => {
+				setEditor: (id: string, value: DiceEditor) => {
 					const current = get().editors;
-					if (current[id] === dice) {
+					if (
+						current[id].dice === value.dice &&
+						current[id].color === value.color
+					) {
 						return;
 					}
-					const ediors = { ...current, [id]: dice };
+					const ediors = { ...current, [id]: value };
 					set({ editors: ediors });
 				},
 			};

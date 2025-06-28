@@ -8,5 +8,5 @@ export interface NumericFormatProps {
 export const NumericFormat: FC<NumericFormatProps> = (props) => {
 	const { value } = props;
 
-	return <Typography>{value}</Typography>;
+	return <Typography sx={{ textAlign: "right" }}>{value}</Typography>;
 };

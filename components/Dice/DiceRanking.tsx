@@ -4,21 +4,41 @@ import {
 	type ListItemProps,
 	Stack,
 	styled,
+	Typography,
 } from "@mui/material";
 import type { FC } from "react";
 import { Fragment } from "react";
 import type { RankValue } from "@/features/dice";
+import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+import { EditorId } from "./EditorId";
 
-const StyledIdListItem = styled((props: ListItemProps) => {
-	return <ListItem disablePadding {...props} />;
+type StyledIdListItemProps = ListItemProps & {
+	id: string;
+	editors: Record<string, DiceEditor>;
+	isTop: boolean;
+};
+
+const StyledIdListItem = styled((props: StyledIdListItemProps) => {
+	const { id, editors, isTop, ...sourceProps } = props;
+	return (
+		<ListItem disablePadding {...sourceProps}>
+			<EditorId
+				id={id}
+				color={editors[id].color}
+				strong={isTop}
+				size="small"
+			/>
+		</ListItem>
+	);
 })();
 
 export interface DiceRankingProps {
-	items: ReadonlyArray<RankValue>;
+	readonly editors: Record<string, DiceEditor>;
+	readonly items: RankValue[];
 }
 
 export const DiceRanking: FC<DiceRankingProps> = (props) => {
-	const { items } = props;
+	const { items, editors } = props;
 
 	return (
 		<List component={Stack} direction="row" disablePadding>
@@ -26,11 +46,23 @@ export const DiceRanking: FC<DiceRankingProps> = (props) => {
 				return (
 					<Fragment key={a.id}>
 						{index === 0 ? (
-							<StyledIdListItem>{a.id}</StyledIdListItem>
+							<StyledIdListItem
+								id={a.id}
+								editors={editors}
+								isTop={true}
+							/>
 						) : (
 							<>
-								<ListItem disablePadding>{a.prevEqual ? "=" : ">"}</ListItem>
-								<StyledIdListItem>{a.id}</StyledIdListItem>
+								<ListItem disablePadding>
+									<Typography>
+										{a.prevEqual ? "=" : ">"}
+									</Typography>
+								</ListItem>
+								<StyledIdListItem
+									id={a.id}
+									editors={editors}
+									isTop={false}
+								/>
 							</>
 						)}
 					</Fragment>

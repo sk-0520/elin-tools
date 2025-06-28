@@ -142,7 +142,9 @@ export function rankDice(
 			id: ak,
 			value: av,
 			prevEqual:
-				index === 0 ? false : av[property] === array[index - 1][1][property],
+				index === 0
+					? false
+					: av[property] === array[index - 1][1][property],
 		}));
 
 	return sortedItems;
@@ -153,9 +155,9 @@ export function rankDice(
  * @param dice ダイス値
  * @param count 試行回数(dice側でふる回数を持っているのでこれはその実行を何度行うか)
  * @param random 将来的に変更できるように
- * @returns ふりまくった結果 [0]: 順序, [0][...] その結果
+ * @returns ふりまくった結果 [0]: 順序, [0][...] その結果(振り数分の配列で要素は結果)
  */
-export function roll(
+export function rollDice(
 	dice: DiceValue,
 	count: number,
 	random: Random,
@@ -163,12 +165,24 @@ export function roll(
 	const result = new Array<number[]>(count);
 
 	for (let i = 0; i < count; i++) {
-		const diceItems = new Array<number>(dice.count);
+		const points = new Array<number>(dice.count);
 		for (let j = 0; j < dice.count; j++) {
-			const value = random.nextInt(dice.minimum, dice.maximum);
-			diceItems[j] = value;
+			const value = random.nextInt(1, dice.sides) + dice.fixedValue;
+			points[j] = value;
 		}
-		result[i] = diceItems;
+		result[i] = points;
+	}
+
+	return result;
+}
+
+export function sum(points: Array<number[]>) {
+	const result = new Array<number>(points.length);
+
+	for (let i = 0; i < points.length; i++) {
+		const pointValues = points[i];
+		const summary = pointValues.reduce((p, c) => p + c, 0);
+		result[i] = summary;
 	}
 
 	return result;

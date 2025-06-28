@@ -1,0 +1,122 @@
+import type { FC } from "react";
+import {
+	Area,
+	AreaChart,
+	CartesianGrid,
+	Label,
+	Legend,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
+import { type DiceValue, rankDice, sum } from "@/features/dice";
+import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+
+interface ChartData {
+	damage: number;
+	[key: string]: number;
+}
+
+export interface DiceChartProps {
+	readonly editors: Record<string, DiceEditor>;
+	readonly values: Record<string, DiceValue>;
+	readonly points: Record<string, Array<Array<number>>>;
+}
+
+export const DiceChart: FC<DiceChartProps> = (props) => {
+	const { editors, points, values } = props;
+
+	const summary = {
+		minimum: rankDice(values, "minimum"),
+		maximum: rankDice(values, "maximum"),
+	};
+	const rank = {
+		minimum: summary.minimum[summary.minimum.length - 1].value.minimum,
+		maximum: summary.maximum[0].value.maximum,
+	};
+
+	const pointSummary = new Map(
+		Object.entries(points).map(([k, v]) => [k, sum(v)]),
+	);
+
+	const length = rank.maximum - rank.minimum + 1;
+	const data = new Array<ChartData>(length);
+	for (let i = 0; i < length; i++) {
+		const damage = i + rank.minimum;
+
+		const currentData: ChartData = {
+			damage: damage,
+		};
+		for (const [id, pointValues] of pointSummary) {
+			const dice = values[id];
+
+			if (dice.minimum <= damage && damage <= dice.maximum) {
+				const count = pointValues.filter((a) => a === damage).length;
+				currentData[id] = count;
+			} else {
+				currentData[id] = 0;
+			}
+		}
+		data[i] = currentData;
+	}
+
+	// TODO: 高さ制御適当
+	return (
+		<ResponsiveContainer width="100%" height={500}>
+			<AreaChart layout="vertical" data={data}>
+				<defs>
+					{pointSummary.keys().map((a) => {
+						return (
+							<linearGradient
+								key={a}
+								id={`color_${a}`}
+								x1="1"
+								y1="0"
+								x2="0"
+								y2="0"
+							>
+								<stop
+									offset="5%"
+									stopColor={editors[a].color}
+									stopOpacity={0.8}
+								/>
+								<stop
+									offset="95%"
+									stopColor={editors[a].color}
+									stopOpacity={0.1}
+								/>
+							</linearGradient>
+						);
+					})}
+				</defs>
+				<CartesianGrid strokeDasharray="3" />
+				<XAxis type="number">
+					<Label value="頻度" offset={0} position="bottom" />
+				</XAxis>
+				<YAxis dataKey="damage" reversed>
+					<Label
+						value="ダメージ"
+						offset={10}
+						angle={-90}
+						position="insideLeft"
+					/>
+				</YAxis>
+				<Tooltip />
+				<Legend verticalAlign="bottom" align="left" />
+				{pointSummary.keys().map((a) => {
+					return (
+						<Area
+							key={a}
+							type="monotone"
+							dataKey={a}
+							stroke={editors[a].color}
+							fillOpacity={1}
+							fill={`url(#color_${a})`}
+						/>
+					);
+				})}
+			</AreaChart>
+		</ResponsiveContainer>
+	);
+};

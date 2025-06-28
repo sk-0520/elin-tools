@@ -5,7 +5,10 @@ import {
 	type DiceWithFixed,
 	type DiceWithoutFixed,
 	parseDice,
+	rollDice,
+	sum,
 } from "@/features/dice";
+import { BuiltinRandom } from "@/features/random";
 
 describe("parseDice", () => {
 	test.each([[""], ["1"], ["1d"], ["1dA"], ["1d1*"], ["1d1+a"]])(
@@ -16,15 +19,24 @@ describe("parseDice", () => {
 	);
 
 	test.each([
-		[{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed, "1d2"],
-		[{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed, "01d02"],
+		[
+			{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed,
+			"1d2",
+		],
+		[
+			{ fixed: false, count: 1, sides: 2 } satisfies DiceWithoutFixed,
+			"01d02",
+		],
 		[
 			{ fixed: false, count: 4, sides: 5 } satisfies DiceWithoutFixed,
 			" 4 d 5 ",
 		],
-	])("DiceWithoutFixed: %p, %s", (expected: DiceWithoutFixed, dice: string) => {
-		expect(parseDice(dice)).toStrictEqual(expected);
-	});
+	])(
+		"DiceWithoutFixed: %p, %s",
+		(expected: DiceWithoutFixed, dice: string) => {
+			expect(parseDice(dice)).toStrictEqual(expected);
+		},
+	);
 
 	test.each([
 		[
@@ -180,4 +192,58 @@ describe("calculateDice", () => {
 	});
 });
 
-describe("rankDice", () => {});
+// describe("rankDice", () => {
+// 	test("rankDice", () => {});
+// });
+
+describe("rollDice", () => {
+	test.each([
+		[
+			{
+				count: 1,
+				sides: 1,
+				fixedValue: 0,
+				minimum: -1,
+				maximum: -1,
+				hasFixed: false,
+				expected: -1,
+			} satisfies DiceValue,
+			10,
+		],
+		[
+			{
+				count: 10,
+				sides: 5,
+				fixedValue: 2,
+				minimum: -1,
+				hasFixed: false,
+				maximum: -1,
+				expected: -1,
+			} satisfies DiceValue,
+			100,
+		],
+	])("rollDice: %d %d", (dice: DiceValue, count: number) => {
+		const actual = rollDice(dice, count, new BuiltinRandom());
+		expect(actual).toHaveLength(count);
+		for (const actualArray of actual) {
+			expect(actualArray).toHaveLength(dice.count);
+			for (const actualElement of actualArray) {
+				expect(actualElement).toBeGreaterThanOrEqual(dice.fixedValue);
+				expect(actualElement).toBeLessThanOrEqual(
+					dice.count * dice.sides + dice.fixedValue,
+				);
+			}
+		}
+	});
+});
+
+describe("sum", () => {
+	test("sum", () => {
+		expect(
+			sum([
+				[10, 20, 30],
+				[-10, -20, -30],
+			]),
+		).toStrictEqual([60, -60]);
+	});
+});

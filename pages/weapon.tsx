@@ -1,11 +1,13 @@
 import { useEffect } from "react";
+import { DiceChart } from "@/components/Dice/DiceChart";
 import { DiceTable } from "@/components/Dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import { calculateDice, parseDice, roll } from "@/features/dice";
-import { BuiltRandom } from "@/features/random";
+import { calculateDice, parseDice, rollDice } from "@/features/dice";
+import { BuiltinRandom } from "@/features/random";
 import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
 import {
 	DefaultEditors,
+	type DiceEditor,
 	useWeponEditorsStore,
 } from "@/hooks/useWeponEditorsStore";
 import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
@@ -31,21 +33,23 @@ export default function RootPage() {
 		const editors = weponEditorsStore.editors;
 		console.log({ editors });
 		for (const [key, editor] of Object.entries(editors)) {
-			console.debug({ key, editor });
 			try {
 				weponPointsStore.remove(key);
-				if (!editor.trim()) {
+				if (!editor.dice.trim()) {
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, undefined);
 					weponPointsStore.remove(key);
 				} else {
-					const dice = parseDice(editor);
+					const dice = parseDice(editor.dice);
 					const value = calculateDice(dice);
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, value);
-					const points = roll(value, Frequency, new BuiltRandom());
+					const points = rollDice(
+						value,
+						Frequency,
+						new BuiltinRandom(),
+					);
 					weponPointsStore.setPoint(key, points);
-					console.table(points);
 				}
 			} catch (ex) {
 				console.error(ex);
@@ -61,7 +65,7 @@ export default function RootPage() {
 		weponPointsStore.setPoint,
 	]);
 
-	const handleEditorChanged = (id: string, editor: string) => {
+	const handleEditorChanged = (id: string, editor: DiceEditor) => {
 		console.debug({ id, editor });
 		weponEditorsStore.setEditor(id, editor);
 	};
@@ -70,13 +74,19 @@ export default function RootPage() {
 		<>
 			<DefaultPage pageId="weapon">
 				<DiceTable
-					diseEditors={weponEditorsStore.editors}
-					diseErrors={weponDiceValuesStore.errors}
-					diseValues={weponDiceValuesStore.values}
+					editors={weponEditorsStore.editors}
+					errors={weponDiceValuesStore.errors}
+					values={weponDiceValuesStore.values}
 					callbackEditorChanged={handleEditorChanged}
 				/>
+				{0 < Object.keys(weponDiceValuesStore.values).length && (
+					<DiceChart
+						editors={weponEditorsStore.editors}
+						values={weponDiceValuesStore.values}
+						points={weponPointsStore.points}
+					/>
+				)}
 			</DefaultPage>
-			<pre>{JSON.stringify(weponPointsStore.points, undefined, 2)}</pre>
 		</>
 	);
 }

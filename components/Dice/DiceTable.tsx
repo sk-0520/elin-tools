@@ -8,18 +8,19 @@ import {
 } from "@mui/material";
 import type { FC } from "react";
 import type { DiceValue } from "@/features/dice";
+import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
 import { DiceTableRow } from "./DiceTableRow";
 import { DiceTableSummary } from "./DiceTableSummary";
 
 export type DiceTableProps = {
-	diseEditors: Record<string, string>;
-	diseErrors: Record<string, string>;
-	diseValues: Record<string, DiceValue>;
-	callbackEditorChanged: (id: string, editor: string) => void;
+	editors: Record<string, DiceEditor>;
+	errors: Record<string, string>;
+	values: Record<string, DiceValue>;
+	callbackEditorChanged: (id: string, editor: DiceEditor) => void;
 };
 
 export const DiceTable: FC<DiceTableProps> = (props) => {
-	const { diseEditors, diseErrors, diseValues, callbackEditorChanged } = props;
+	const { editors, errors, values, callbackEditorChanged } = props;
 
 	return (
 		<Table>
@@ -36,23 +37,25 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 				</TableRow>
 			</TableHead>
 			<TableBody>
-				{Object.entries(diseEditors).map(([k, v]) => {
-					const error = diseErrors[k];
-					const value = diseValues[k];
-					return (
-						<DiceTableRow
-							key={k}
-							id={k}
-							editor={v}
-							error={error}
-							value={value}
-							callbackEditorChanged={callbackEditorChanged}
-						/>
-					);
-				})}
+				{Object.entries(editors)
+					.toSorted(([a, _av], [b, _bv]) => a.localeCompare(b))
+					.map(([k, v]) => {
+						const error = errors[k];
+						const value = values[k];
+						return (
+							<DiceTableRow
+								key={k}
+								id={k}
+								editor={v}
+								error={error}
+								value={value}
+								callbackEditorChanged={callbackEditorChanged}
+							/>
+						);
+					})}
 			</TableBody>
 			<TableFooter>
-				<DiceTableSummary values={diseValues} />
+				<DiceTableSummary editors={editors} values={values} />
 			</TableFooter>
 		</Table>
 	);
