@@ -1,15 +1,8 @@
 "use client";
 
-import Leaflet, { LatLng, LatLngBounds, LatLngExpression } from "leaflet";
-import { type FC, useEffect, useMemo, useRef, useState } from "react";
-import {
-	ImageOverlay,
-	MapContainer,
-	Marker,
-	MarkerProps,
-	Popup,
-	TileLayer,
-} from "react-leaflet";
+import Leaflet, { LatLngBounds, type LatLngExpression } from "leaflet";
+import { type FC, useMemo, useRef, useState } from "react";
+import { ImageOverlay, MapContainer, Marker, Popup } from "react-leaflet";
 
 Leaflet.Icon.Default.imagePath =
 	"//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/";
@@ -61,16 +54,6 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 				}
 				url="/components/map/GlobalMap/GlobalMap.jpg"
 			/>
-			{/* <TileLayer
-				attribution='&copy;<a href="https://ylvapedia.wiki/wiki/Elin:%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%9E%E3%83%83%E3%83%97">Ylvapedia</a>'
-				bounds={
-					new LatLngBounds([
-						[0, 0],
-						[size.width, size.height],
-					])
-				}
-				url="/components/map/GlobalMap/GlobalMap.jpg"
-			/> */}
 			{process.env.NODE_ENV === "development" && (
 				<Marker
 					ref={refMaker}
