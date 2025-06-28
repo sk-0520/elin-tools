@@ -32,6 +32,7 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 					<TableCell>固定値</TableCell>
 					<TableCell>最小</TableCell>
 					<TableCell>最大</TableCell>
+					<TableCell>期待値</TableCell>
 				</TableRow>
 			</TableHead>
 			<TableBody>

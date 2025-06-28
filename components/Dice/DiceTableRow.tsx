@@ -68,6 +68,9 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					<TableCell>
 						<NumericFormat value={value.maximum} />
 					</TableCell>
+					<TableCell>
+						<NumericFormat value={value.expected} />
+					</TableCell>
 				</>
 			)}
 		</TableRow>

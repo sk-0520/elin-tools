@@ -9,7 +9,7 @@ export interface WeponDiceValuesState {
 	setValue: (key: string, dice: DiceValue | undefined) => void;
 }
 
-export const useWeponDiceValuesStore = create<WeponDiceValuesState>()(
+export const useWeponDiceValuesStore = create<WeponDiceValuesState>(
 	(set, get) => {
 		return {
 			errors: {},

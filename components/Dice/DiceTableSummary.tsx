@@ -16,6 +16,7 @@ export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 		fixedValue: rankDice(values, "fixedValue"),
 		minimum: rankDice(values, "minimum"),
 		maximum: rankDice(values, "maximum"),
+		expected: rankDice(values, "expected"),
 	};
 
 	return (
@@ -36,6 +37,9 @@ export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 			</TableCell>
 			<TableCell>
 				<DiceRanking items={summary.maximum} />
+			</TableCell>
+			<TableCell>
+				<DiceRanking items={summary.expected} />
 			</TableCell>
 		</TableRow>
 	);

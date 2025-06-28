@@ -7,10 +7,12 @@ import {
 	DefaultEditors,
 	useWeponEditorsStore,
 } from "@/hooks/useWeponEditorsStore";
+import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
 
 export default function RootPage() {
 	const weponEditorsStore = useWeponEditorsStore();
 	const weponDiceValuesStore = useWeponDiceValuesStore();
+	const weponPointsStore = useWeponPointsStore();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: 初回
 	useEffect(() => {
@@ -27,6 +29,7 @@ export default function RootPage() {
 		for (const [key, editor] of Object.entries(editors)) {
 			console.debug({ key, editor });
 			try {
+				weponPointsStore.remove(key);
 				if (!editor.trim()) {
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, undefined);
@@ -46,6 +49,7 @@ export default function RootPage() {
 		weponEditorsStore.setEditor,
 		weponDiceValuesStore.setError,
 		weponDiceValuesStore.setValue,
+		weponPointsStore.remove,
 	]);
 
 	const handleEditorChanged = (id: string, editor: string) => {
@@ -54,6 +58,7 @@ export default function RootPage() {
 	};
 
 	return (
+		<>
 		<DefaultPage pageId="weapon">
 			<DiceTable
 				diseEditors={weponEditorsStore.editors}
@@ -62,5 +67,10 @@ export default function RootPage() {
 				callbackEditorChanged={handleEditorChanged}
 			/>
 		</DefaultPage>
+		<pre>
+			{JSON.stringify(weponPointsStore.points, undefined, 2)}
+		</pre>
+
+		</>
 	);
 }

@@ -1,4 +1,5 @@
 import { AppError } from "./error";
+import type { Random } from "./random";
 
 export class DiceError extends AppError {}
 export class DiceFormatError extends DiceError {}
@@ -69,6 +70,8 @@ export interface DiceValue {
 	minimum: number;
 	/** 最大値 */
 	maximum: number;
+	/** 期待値 */
+	expected: number;
 }
 
 function getSignValue(sign: DiceSign, value: number): number {
@@ -79,6 +82,10 @@ function getSignValue(sign: DiceSign, value: number): number {
 		case "-":
 			return -value;
 	}
+}
+
+function getExpectedValue(count: number, sides: number): number {
+	return (count * (sides + 1)) / 2;
 }
 
 export function calculateDice(
@@ -95,6 +102,7 @@ export function calculateDice(
 
 			minimum: dice.count + fixedValue,
 			maximum: dice.count * dice.sides + dice.count * fixedValue,
+			expected: getExpectedValue(dice.count, dice.sides) + fixedValue,
 		};
 	}
 
@@ -107,11 +115,14 @@ export function calculateDice(
 
 		minimum: dice.count,
 		maximum: dice.count * dice.sides,
+		expected: getExpectedValue(dice.count, dice.sides),
 	};
 }
 
-type RankProperty = keyof DiceValue &
-	("count" | "sides" | "fixedValue" | "minimum" | "maximum"); // いやぁ、これは違う
+type RankProperty = Extract<
+	keyof DiceValue,
+	"count" | "sides" | "fixedValue" | "minimum" | "maximum" | "expected"
+>;
 
 export interface RankValue {
 	id: string;
@@ -135,4 +146,23 @@ export function rankDice(
 		}));
 
 	return sortedItems;
+}
+
+export function roll(
+	dice: DiceValue,
+	count: number,
+	random: Random,
+): number[][] {
+	const result = new Array<number[]>(count);
+
+	for (let i = 0; i < count; i++) {
+		const diceItems = new Array<number>(dice.count);
+		for (let j = 0; j < dice.count; j++) {
+			const value = random.nextInt(dice.minimum, dice.maximum);
+			diceItems[j] = value;
+		}
+		result[i] = diceItems;
+	}
+
+	return result;
 }

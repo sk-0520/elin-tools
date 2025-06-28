@@ -92,6 +92,7 @@ describe("calculateDice", () => {
 				fixedValue: 0,
 				minimum: 1,
 				maximum: 2,
+				expected: 1.5,
 			} satisfies DiceValue,
 			{
 				fixed: false,
@@ -107,6 +108,7 @@ describe("calculateDice", () => {
 				fixedValue: 0,
 				minimum: 10,
 				maximum: 200,
+				expected: 105,
 			} satisfies DiceValue,
 			{
 				fixed: false,
@@ -127,6 +129,7 @@ describe("calculateDice", () => {
 				fixedValue: 0,
 				minimum: 1,
 				maximum: 2,
+				expected: 1.5,
 			} satisfies DiceValue,
 			{
 				fixed: true,
@@ -144,6 +147,7 @@ describe("calculateDice", () => {
 				fixedValue: 10,
 				minimum: 11,
 				maximum: 12,
+				expected: 11.5,
 			} satisfies DiceValue,
 			{
 				fixed: true,
@@ -161,6 +165,7 @@ describe("calculateDice", () => {
 				fixedValue: -10,
 				minimum: -9,
 				maximum: -8,
+				expected: -8.5,
 			} satisfies DiceValue,
 			{
 				fixed: true,
