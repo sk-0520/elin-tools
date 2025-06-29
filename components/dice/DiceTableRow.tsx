@@ -47,6 +47,20 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					render={({ field, formState: { errors } }) => (
 						<TextField
 							{...field}
+							size="small"
+							sx={(theme) => ({
+								"&:not(:focus) fieldset": {
+									border: "none",
+								},
+								"& fieldset": {
+									border: "none",
+								},
+								"&:hover fieldset": {
+									border: "none",
+								},
+								backgroundColor: theme.palette.background.default,
+								// borderColor: theme.palette.background.default,
+							})}
 							defaultValue={editor.dice}
 							onChange={handleDiceChange}
 						/>

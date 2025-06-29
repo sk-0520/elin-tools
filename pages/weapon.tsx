@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect } from "react";
-import { DiceChart } from "@/components/Dice2/DiceChart";
-import { DiceTable } from "@/components/Dice2/DiceTable";
+import { DiceChart } from "@/components/dice/DiceChart";
+import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";

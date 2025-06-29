@@ -8,8 +8,8 @@ export interface DiceEditor {
 }
 
 export const DefaultEditors: { [key: string]: DiceEditor } = {
-	A: { dice: "4d2", color: "#5b9bd5" },
-	B: { dice: "3d2+1", color: "#ed7d31" },
+	A: { dice: "6d3", color: "#5b9bd5" },
+	B: { dice: "4d2+1", color: "#ed7d31" },
 };
 
 export interface WeponEditorsState {
