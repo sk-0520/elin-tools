@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useCallback, useMemo } from "react";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import { MapKind } from "@/features/map";
+import type { MapKind } from "@/features/map";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 
 const Page: NextPage = () => {
@@ -10,10 +10,9 @@ const Page: NextPage = () => {
 
 	const handleVisibleChanged = useCallback(
 		(name: MapKind, isVisible: boolean) => {
-			//globalMapStore.setVisible(name, isVisible);
-			console.debug({ name, isVisible });
+			globalMapStore.setVisible(name, isVisible);
 		},
-		[],
+		[globalMapStore.setVisible],
 	);
 
 	const GlobalMap = useMemo(

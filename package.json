@@ -45,6 +45,7 @@
 		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.58.1",
 		"react-leaflet": "^5.0.0-rc.2",
+		"react-leaflet-custom-control": "^1.5.0",
 		"recharts": "^3.0.2",
 		"zustand": "^5.0.5"
 	},

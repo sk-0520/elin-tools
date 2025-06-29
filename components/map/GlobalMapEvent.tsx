@@ -1,11 +1,13 @@
-import { LayersControlEvent, LeafletEvent } from "leaflet";
-import { FC } from "react";
+import type { LeafletEvent } from "leaflet";
+import type { FC } from "react";
 import { useMapEvents } from "react-leaflet";
-import { MapKind } from "@/features/map";
+import type { MapKind } from "@/features/map";
 
 export interface GlobalMapEventProps {
 	callbackChanged: (name: MapKind, isVisible: boolean) => void;
 }
+
+// 対象レイヤーが取得できなくてあきらめ
 
 export const GlobalMapEvent: FC<GlobalMapEventProps> = (props) => {
 	const { callbackChanged } = props;

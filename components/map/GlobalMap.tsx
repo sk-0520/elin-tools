@@ -1,31 +1,29 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Button } from "@mui/material";
+import {
+	Button,
+	Checkbox,
+	Divider,
+	FormControlLabel,
+	List,
+	ListItem,
+	Stack,
+} from "@mui/material";
 import Leaflet, {
-	DragEndEvent,
+	type DragEndEvent,
 	LatLngBounds,
 	type LatLngExpression,
-	LeafletEvent,
-	LeafletEventHandlerFnMap,
 } from "leaflet";
-import {
-	type FC,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import {
 	ImageOverlay,
 	LayerGroup,
-	LayersControl,
 	MapContainer,
 	Marker,
 	Popup,
 } from "react-leaflet";
+import Control from "react-leaflet-custom-control";
 import { GlobalMapItemMapping, type MapKind } from "@/features/map";
 import nextConfig from "../../next.config";
-import { GlobalMapEvent } from "./GlobalMapEvent";
 import { MapLabel } from "./MapLabel";
 
 const basePath = nextConfig.basePath || "";
@@ -39,7 +37,7 @@ const ImageSize = {
 };
 
 // 本気で言うてるのか？ と思ったレイヤー名。名前と表示が一緒て。
-const LayerNames = {
+const _LayerNames = {
 	base: "拠点",
 	nefia: "ネフィア",
 	sample: "初期地点",
@@ -57,6 +55,9 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 		lat: 0,
 		lng: 0,
 	});
+	const [devChecked, setDevChecked] = useState(
+		process.env.NODE_ENV === "development",
+	);
 	const refMap = useRef<Leaflet.Map | null>(null);
 	const refMaker = useRef<Leaflet.Marker | null>(null);
 	const developEventHandlers = useMemo(
@@ -114,12 +115,12 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 				}
 				url={`${basePath}/components/map/GlobalMap/GlobalMap.jpg`}
 			/>
-			<LayersControl position="topright" collapsed={false}>
+			{/* <LayersControl position="topright" collapsed={false}>
 				<LayersControl.Overlay
 					name={LayerNames.base}
 					checked={isVisible.base}
 				>
-					<LayerGroup>
+					<LayerGroup >
 						{GlobalMapItemMapping.items
 							.filter((a) => a.kind === "base")
 							.map((a) => {
@@ -208,8 +209,163 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 						</Marker>
 					</LayerGroup>
 				</LayersControl.Overlay>
-			</LayersControl>
-			<GlobalMapEvent callbackChanged={callbackVisibleChanged} />
+			</LayersControl> */}
+			{isVisible.base && (
+				<LayerGroup>
+					{GlobalMapItemMapping.items
+						.filter((a) => a.kind === "base")
+						.map((a) => {
+							return (
+								<MapLabel
+									key={a.name}
+									color="blue"
+									center={a.position}
+									label={a.name}
+									direction={
+										a.direction ? a.direction : "bottom"
+									}
+								/>
+							);
+						})}
+				</LayerGroup>
+			)}
+			{isVisible.nefia && (
+				<LayerGroup>
+					{GlobalMapItemMapping.items
+						.filter((a) => a.kind === "nefia")
+						.map((a) => {
+							return (
+								<MapLabel
+									key={a.name}
+									color="red"
+									center={a.position}
+									label={a.name}
+									direction={
+										a.direction ? a.direction : "right"
+									}
+								/>
+							);
+						})}
+				</LayerGroup>
+			)}
+			{isVisible.sample && (
+				<LayerGroup>
+					{GlobalMapItemMapping.items
+						.filter((a) => a.kind === "sample")
+						.map((a) => {
+							return (
+								<MapLabel
+									key={a.name}
+									color="yellow"
+									center={a.position}
+									label={a.name}
+									direction={
+										a.direction ? a.direction : "right"
+									}
+								/>
+							);
+						})}
+				</LayerGroup>
+			)}
+			{devChecked && (
+				<LayerGroup>
+					<Marker
+						ref={refMaker}
+						position={position}
+						draggable
+						eventHandlers={developEventHandlers}
+					>
+						<Popup autoClose={false}>
+							<Button
+								variant="outlined"
+								startIcon={<ContentCopyIcon />}
+								onClick={async (_ev) => {
+									await navigator.clipboard.writeText(
+										JSON.stringify(position),
+									);
+								}}
+							>
+								{JSON.stringify(position)}
+							</Button>
+						</Popup>
+					</Marker>
+				</LayerGroup>
+			)}
+
+			<Control prepend position="topright">
+				<Stack>
+					<List>
+						<ListItem>
+							<FormControlLabel
+								label="拠点"
+								control={
+									<Checkbox
+										checked={isVisible.base}
+										onChange={(ev) =>
+											callbackVisibleChanged(
+												"base",
+												ev.target.checked,
+											)
+										}
+									/>
+								}
+							/>
+						</ListItem>
+						<ListItem>
+							<FormControlLabel
+								label="ネフィア"
+								control={
+									<Checkbox
+										checked={isVisible.nefia}
+										onChange={(ev) =>
+											callbackVisibleChanged(
+												"nefia",
+												ev.target.checked,
+											)
+										}
+									/>
+								}
+							/>
+						</ListItem>
+						<ListItem>
+							<FormControlLabel
+								label="初期地点"
+								control={
+									<Checkbox
+										checked={isVisible.sample}
+										onChange={(ev) =>
+											callbackVisibleChanged(
+												"sample",
+												ev.target.checked,
+											)
+										}
+									/>
+								}
+							/>
+						</ListItem>
+					</List>
+
+					<Divider />
+
+					<List>
+						<ListItem>
+							<FormControlLabel
+								label="座標確認用マーカー(↙)"
+								control={
+									<Checkbox
+										checked={devChecked}
+										onChange={(ev) =>
+											setDevChecked(ev.target.checked)
+										}
+									/>
+								}
+							/>
+						</ListItem>
+					</List>
+				</Stack>
+			</Control>
+
+			{/* <GlobalMapEvent callbackChanged={callbackVisibleChanged} /> */}
 		</MapContainer>
 	);
 };

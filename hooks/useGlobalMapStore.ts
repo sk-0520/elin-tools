@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { MapKind } from "@/features/map";
+import type { MapKind } from "@/features/map";
 import { getDefaultStorage } from "@/features/storage";
 
 export const DefaultVisible: Record<MapKind, boolean> = {
