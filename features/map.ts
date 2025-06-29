@@ -201,6 +201,7 @@ export const GlobalMapItemMapping = {
 			name: "山道への入り口",
 			kind: "nefia",
 			position: { lat: 480, lng: 1207.9997073314282 },
+			direction: "left",
 		},
 		{
 			name: "ミフの里",

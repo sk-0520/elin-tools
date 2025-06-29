@@ -1,11 +1,13 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
+	Box,
 	Button,
 	Checkbox,
 	Divider,
 	FormControlLabel,
 	List,
 	ListItem,
+	Paper,
 	Stack,
 } from "@mui/material";
 import Leaflet, {
@@ -20,6 +22,7 @@ import {
 	MapContainer,
 	Marker,
 	Popup,
+	type TooltipProps,
 } from "react-leaflet";
 import Control from "react-leaflet-custom-control";
 import { GlobalMapItemMapping, type MapKind } from "@/features/map";
@@ -36,13 +39,31 @@ const ImageSize = {
 	height: 1926,
 };
 
-// 本気で言うてるのか？ と思ったレイヤー名。名前と表示が一緒て。
-const _LayerNames = {
-	base: "拠点",
-	nefia: "ネフィア",
-	sample: "初期地点",
-	develop: "座標確認用マーカー(↙)",
-};
+const LayerGroupNameMapKinds: Array<{
+	kind: MapKind;
+	display: string;
+	color: string;
+	direction: Exclude<TooltipProps["direction"], undefined>;
+}> = [
+	{
+		kind: "base",
+		display: "拠点",
+		color: "blue",
+		direction: "bottom",
+	},
+	{
+		kind: "nefia",
+		display: "ネフィア",
+		color: "red",
+		direction: "right",
+	},
+	{
+		kind: "sample",
+		display: "初期地点",
+		color: "yellow",
+		direction: "right",
+	},
+];
 
 export interface GlobalMapProps {
 	readonly isVisible: Record<MapKind, boolean>;
@@ -210,7 +231,32 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 					</LayerGroup>
 				</LayersControl.Overlay>
 			</LayersControl> */}
-			{isVisible.base && (
+			{LayerGroupNameMapKinds.map((a) => {
+				return (
+					isVisible[a.kind] && (
+						<LayerGroup key={a.kind}>
+							{GlobalMapItemMapping.items
+								.filter((b) => b.kind === a.kind)
+								.map((b) => {
+									return (
+										<MapLabel
+											key={b.name}
+											color={a.color}
+											center={b.position}
+											label={b.name}
+											direction={
+												b.direction
+													? b.direction
+													: a.direction
+											}
+										/>
+									);
+								})}
+						</LayerGroup>
+					)
+				);
+			})}
+			{/* {isVisible.base && (
 				<LayerGroup>
 					{GlobalMapItemMapping.items
 						.filter((a) => a.kind === "base")
@@ -266,7 +312,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 							);
 						})}
 				</LayerGroup>
-			)}
+			)} */}
 			{devChecked && (
 				<LayerGroup>
 					<Marker
@@ -293,76 +339,52 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 			)}
 
 			<Control prepend position="topright">
-				<Stack>
-					<List>
-						<ListItem>
-							<FormControlLabel
-								label="拠点"
-								control={
-									<Checkbox
-										checked={isVisible.base}
-										onChange={(ev) =>
-											callbackVisibleChanged(
-												"base",
-												ev.target.checked,
-											)
-										}
-									/>
-								}
-							/>
-						</ListItem>
-						<ListItem>
-							<FormControlLabel
-								label="ネフィア"
-								control={
-									<Checkbox
-										checked={isVisible.nefia}
-										onChange={(ev) =>
-											callbackVisibleChanged(
-												"nefia",
-												ev.target.checked,
-											)
-										}
-									/>
-								}
-							/>
-						</ListItem>
-						<ListItem>
-							<FormControlLabel
-								label="初期地点"
-								control={
-									<Checkbox
-										checked={isVisible.sample}
-										onChange={(ev) =>
-											callbackVisibleChanged(
-												"sample",
-												ev.target.checked,
-											)
-										}
-									/>
-								}
-							/>
-						</ListItem>
-					</List>
+				<Paper>
+					<Stack>
+						<List>
+							{LayerGroupNameMapKinds.map((a) => {
+								return (
+									<ListItem key={a.kind}>
+										<FormControlLabel
+											label={a.display}
+											control={
+												<Checkbox
+													checked={isVisible[a.kind]}
+													onChange={(ev) =>
+														callbackVisibleChanged(
+															a.kind,
+															ev.target.checked,
+														)
+													}
+												/>
+											}
+										/>
+									</ListItem>
+								);
+							})}
+						</List>
 
-					<Divider />
+						<Divider />
 
-					<List>
-						<ListItem>
-							<FormControlLabel
-								label="座標確認用マーカー(↙)"
-								control={
-									<Checkbox
-										checked={devChecked}
-										onChange={(ev) =>
-											setDevChecked(ev.target.checked)
-										}
-									/>
-								}
-							/>
-						</ListItem>
-					</List>
-				</Stack>
+						<Divider />
+
+						<List>
+							<ListItem>
+								<FormControlLabel
+									label="座標確認用マーカー(↙)"
+									control={
+										<Checkbox
+											checked={devChecked}
+											onChange={(ev) =>
+												setDevChecked(ev.target.checked)
+											}
+										/>
+									}
+								/>
+							</ListItem>
+						</List>
+					</Stack>
+				</Paper>
 			</Control>
 
 			{/* <GlobalMapEvent callbackChanged={callbackVisibleChanged} /> */}
