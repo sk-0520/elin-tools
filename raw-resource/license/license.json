@@ -1,0 +1,10 @@
+{
+  "library": {
+    "module": "module",
+    "version": "version",
+    "publisher": "publisher",
+    "licenses": "licenses",
+    "licenseNote": "licenseNote",
+    "repository": "http://localhost"
+  }
+}

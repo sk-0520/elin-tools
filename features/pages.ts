@@ -1,4 +1,4 @@
-export type PageId = "root" | "weapon" | "map";
+export type PageId = "root" | "weapon" | "map" | "about-library";
 
 export interface PageInfo {
 	id: PageId;
@@ -21,5 +21,10 @@ export const Pages: Array<PageInfo> = [
 		id: "map",
 		href: "/map",
 		title: "マップ",
+	},
+	{
+		id: "about-library",
+		href: "about/library",
+		title: "ライブラリ",
 	},
 ];
