@@ -30,8 +30,7 @@ export const SideMenu: FC<SideMenuProps> = (props) => {
 					component={Link}
 					href={a.href}
 					sx={{
-						fontWeight:
-							a.id === selectedPageId ? "bold" : undefined,
+						fontWeight: a.id === selectedPageId ? "bold" : undefined,
 					}}
 				>
 					{a.title}

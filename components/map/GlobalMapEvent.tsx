@@ -11,7 +11,6 @@ export interface GlobalMapEventProps {
 
 export const GlobalMapEvent: FC<GlobalMapEventProps> = (props) => {
 	const { callbackChanged } = props;
-	// biome-ignore lint/correctness/noUnusedVariables: この処理特有のあれこれなので無視してOK
 	const map = useMapEvents({
 		layeradd: (ev: LeafletEvent) => {
 			console.debug(ev);

@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import type { Direction, LatLngExpression, PointExpression } from "leaflet";
 import type { FC } from "react";
 import { Circle, Tooltip, type TooltipProps } from "react-leaflet";
@@ -17,10 +18,11 @@ export interface MapLabelProps {
 	center: LatLngExpression;
 	direction: TooltipProps["direction"];
 	festival?: number;
+	riskLevel?: number;
 }
 
 export const MapLabel: FC<MapLabelProps> = (props) => {
-	const { label, color, center, direction, festival } = props;
+	const { label, color, center, direction, festival, riskLevel } = props;
 	return (
 		<>
 			<Circle
@@ -34,9 +36,34 @@ export const MapLabel: FC<MapLabelProps> = (props) => {
 					opacity={1}
 					permanent
 				>
-					{festival === undefined
-						? label
-						: `${label} (お祭:${festival}月)`}
+					<Typography
+						variant="body2"
+						sx={{
+							fontSize: 10,
+						}}
+					>
+						{label}
+						{festival !== undefined && (
+							<Typography
+								component="span"
+								sx={{
+									fontSize: 10,
+								}}
+							>
+								{`(お祭:${festival}月)`}
+							</Typography>
+						)}
+						{riskLevel !== undefined && 0 < riskLevel && (
+							<Typography
+								component="span"
+								sx={{
+									fontSize: 10,
+								}}
+							>
+								{`[危険度:${riskLevel}]`}
+							</Typography>
+						)}
+					</Typography>
 				</Tooltip>
 			</Circle>
 		</>

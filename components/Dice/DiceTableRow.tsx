@@ -65,9 +65,7 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					<TableCell>
 						<NumericFormat value={value.sides} />
 					</TableCell>
-					<TableCell>
-						{value.hasFixed ? value.fixedValue : "-"}
-					</TableCell>
+					<TableCell>{value.hasFixed ? value.fixedValue : "-"}</TableCell>
 					<TableCell>
 						<NumericFormat value={value.minimum} />
 					</TableCell>

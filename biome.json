@@ -19,7 +19,7 @@
 				"noStaticOnlyClass": "off"
 			},
 			"correctness": {
-				"noUnusedVariables": "warn"
+				"noUnusedVariables": "off"
 			},
 			"a11y": {
 				"useValidAnchor": "off",

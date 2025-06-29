@@ -45,11 +45,7 @@ const Page: NextPage = () => {
 					const value = calculateDice(dice);
 					weponEditorsStore.setEditor(key, editor);
 					weponDiceValuesStore.setValue(key, value);
-					const points = rollDice(
-						value,
-						Frequency,
-						new BuiltinRandom(),
-					);
+					const points = rollDice(value, Frequency, new BuiltinRandom());
 					weponPointsStore.setPoint(key, points);
 				}
 			} catch (ex) {

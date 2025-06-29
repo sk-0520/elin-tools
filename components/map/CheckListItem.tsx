@@ -1,9 +1,4 @@
-import {
-	Checkbox,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-} from "@mui/material";
+import { Checkbox, ListItemButton, ListItemText } from "@mui/material";
 import { type FC, type MouseEventHandler, type ReactNode, useId } from "react";
 
 export interface CheckListItemProps {
@@ -20,6 +15,7 @@ export const CheckListItem: FC<CheckListItemProps> = (props) => {
 		<ListItemButton dense onClick={onClick}>
 			<Checkbox
 				edge="start"
+				size="small"
 				checked={isChecked}
 				tabIndex={-1}
 				disableRipple

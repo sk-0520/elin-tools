@@ -14,7 +14,6 @@ export const DefaultEditors: { [key: string]: DiceEditor } = {
 
 export interface WeponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
-	readonly errors: Record<string, string>;
 
 	reset: () => void;
 
@@ -26,7 +25,6 @@ export const useWeponEditorsStore = create<WeponEditorsState>()(
 		(set, get) => {
 			return {
 				editors: DefaultEditors,
-				errors: {},
 
 				reset: () => {
 					set({ editors: { ...DefaultEditors } });

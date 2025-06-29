@@ -12,6 +12,8 @@ interface GlobalMapItem {
 	name: string;
 	/** 種類 */
 	kind: MapKind;
+	/** 危険度 */
+	riskLevel?: number;
 	/** 位置 */
 	position: LatLngExpression;
 	/** 吹き出し表示位置 */
@@ -24,6 +26,20 @@ interface GlobalMapItem {
 	closed?: boolean;
 }
 
+interface GlobalMapBaseItem extends GlobalMapItem {
+	kind: "base";
+	festival?: number;
+}
+
+interface GlobalMapNefiaItem extends GlobalMapItem {
+	kind: "nefia";
+	riskLevel: number;
+}
+
+interface GlobalMapSmapleItem extends GlobalMapItem {
+	kind: "sample";
+}
+
 // 気持ち左上から右へ進める感じ
 export const GlobalMapItemMapping = {
 	items: [
@@ -34,7 +50,7 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "闘技場",
-			kind: "nefia",
+			kind: "base",
 			position: { lat: 1517.75, lng: 1136.4976952349966 },
 		},
 		{
@@ -56,12 +72,14 @@ export const GlobalMapItemMapping = {
 		{
 			name: "すくつ",
 			kind: "nefia",
+			riskLevel: 51,
 			position: { lat: 1225, lng: 1136.00197551286 },
 			return: true,
 		},
 		{
 			name: "永久凍土",
 			kind: "nefia",
+			riskLevel: 30,
 			position: { lat: 1212, lng: 1954.0598507229477 },
 		},
 
@@ -78,6 +96,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "ピラミッド",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 1063, lng: 117.48620799355058 },
 			direction: "right",
 			closed: true,
@@ -98,6 +117,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "呪われた館",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 919.5, lng: 318.00007316714294 },
 		},
 		{
@@ -113,6 +133,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "死者の洞窟",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 882, lng: 717.0199746300302 },
 			closed: true,
 		},
@@ -144,22 +165,24 @@ export const GlobalMapItemMapping = {
 			direction: "left",
 		},
 		{
-			// ここ行ったことないわ 拠点？
 			name: "ハウスドーム",
 			kind: "base",
 			position: { lat: 773, lng: 681.7500548753573 },
 			direction: "top",
+			closed: true,
 		},
 		{
 			name: "レシマス",
 			kind: "nefia",
+			riskLevel: 1,
 			position: { lat: 734.5, lng: 464.4840861464045 },
 		},
 		{
 			name: "イークの洞窟",
 			kind: "nefia",
+			riskLevel: 5,
 			position: { lat: 698, lng: 735.0332178829074 },
-			direction: "left",
+			direction: "top",
 		},
 		{
 			name: "墓所",
@@ -169,6 +192,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "竜窟",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 681, lng: 281.48661041283685 },
 			direction: "left",
 			closed: true,
@@ -182,6 +206,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "混沌の城",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 679, lng: 971.9899761014134 },
 			closed: true,
 		},
@@ -192,9 +217,9 @@ export const GlobalMapItemMapping = {
 			direction: "top",
 		},
 		{
-			// 拠点・・・？
 			name: "ルミエスト・クレーター",
-			kind: "base",
+			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 646, lng: 1135.4987195749982 },
 		},
 		{
@@ -213,10 +238,10 @@ export const GlobalMapItemMapping = {
 			position: { lat: 482, lng: 243.97065997566983 },
 			return: true,
 		},
-
 		{
 			name: "山道への入り口",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 480, lng: 1207.9997073314282 },
 			direction: "left",
 			closed: true,
@@ -229,12 +254,14 @@ export const GlobalMapItemMapping = {
 		{
 			name: "子犬の洞窟",
 			kind: "nefia",
+			riskLevel: 2,
 			position: { lat: 446.5, lng: 553.9956099714219 },
 			direction: "left",
 		},
 		{
 			name: "リサナス",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 426, lng: 1972.5003292521433 },
 			return: true,
 		},
@@ -246,6 +273,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "ラーナ",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 410, lng: 1208 },
 			direction: "left",
 			closed: true,
@@ -258,8 +286,14 @@ export const GlobalMapItemMapping = {
 		{
 			name: "ナイミール",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 336.5, lng: 699.000073167143 },
 			direction: "left",
+		},
+		{
+			name: "贖罪の村",
+			kind: "base",
+			position: { lat: 281.5, lng: 1481.5 },
 		},
 		{
 			name: "ミシリア",
@@ -268,18 +302,15 @@ export const GlobalMapItemMapping = {
 			direction: "top",
 		},
 		{
-			name: "ここらにあった気がする",
+			name: "ルーリエ海底神殿",
 			kind: "nefia",
-			position: { lat: 262, lng: 1724.0115604085888 },
-		},
-		{
-			name: "ここら辺に新しいのあった気がする",
-			kind: "base",
-			position: { lat: 177, lng: 1251.988585925697 },
+			riskLevel: 19,
+			position: { lat: 186, lng: 1701.4986464078552 },
 		},
 		{
 			name: "古城",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 212, lng: 498.9853665714064 },
 			closed: true,
 		},
@@ -297,6 +328,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "風の眠る場所",
 			kind: "nefia",
+			riskLevel: -1,
 			position: { lat: 118, lng: 1407.999853665714 },
 		},
 		{
@@ -304,5 +336,9 @@ export const GlobalMapItemMapping = {
 			kind: "base",
 			position: { lat: 61, lng: 845.015950437167 },
 		},
-	] satisfies GlobalMapItem[],
+	] satisfies (
+		| GlobalMapBaseItem
+		| GlobalMapNefiaItem
+		| GlobalMapSmapleItem
+	)[],
 };

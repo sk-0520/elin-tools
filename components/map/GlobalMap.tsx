@@ -1,18 +1,12 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
 	Button,
-	Checkbox,
 	createTheme,
 	Divider,
-	FormControlLabel,
 	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
 	Paper,
 	Stack,
-	Theme,
+	type Theme,
 	ThemeProvider,
 } from "@mui/material";
 import Leaflet, {
@@ -32,7 +26,7 @@ import {
 import Control from "react-leaflet-custom-control";
 import {
 	GlobalMapItemMapping,
-	MapCondition,
+	type MapCondition,
 	type MapKind,
 } from "@/features/map";
 import nextConfig from "../../next.config";
@@ -297,6 +291,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 												b.direction ? b.direction : a.direction
 											}
 											festival={b.festival}
+											riskLevel={b.riskLevel}
 										/>
 									);
 								})}

@@ -54,9 +54,7 @@ export const DiceRanking: FC<DiceRankingProps> = (props) => {
 						) : (
 							<>
 								<ListItem disablePadding>
-									<Typography>
-										{a.prevEqual ? "=" : ">"}
-									</Typography>
+									<Typography>{a.prevEqual ? "=" : ">"}</Typography>
 								</ListItem>
 								<StyledIdListItem
 									id={a.id}
