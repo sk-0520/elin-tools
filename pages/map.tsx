@@ -2,17 +2,24 @@ import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useCallback, useMemo } from "react";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import type { MapKind } from "@/features/map";
+import type { MapCondition, MapKind } from "@/features/map";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 
 const Page: NextPage = () => {
 	const globalMapStore = useGlobalMapStore();
 
 	const handleVisibleChanged = useCallback(
-		(name: MapKind, isVisible: boolean) => {
-			globalMapStore.setVisible(name, isVisible);
+		(kind: MapKind, isVisible: boolean) => {
+			globalMapStore.setVisible(kind, isVisible);
 		},
 		[globalMapStore.setVisible],
+	);
+
+	const handleConditionChanged = useCallback(
+		(condition: MapCondition, isEnabled: boolean) => {
+			globalMapStore.setCondition(condition, isEnabled);
+		},
+		[globalMapStore.setCondition],
 	);
 
 	const GlobalMap = useMemo(
@@ -27,8 +34,10 @@ const Page: NextPage = () => {
 	return (
 		<DefaultPage pageId="map">
 			<GlobalMap
-				isVisible={globalMapStore.isVisible}
+				isVisibles={globalMapStore.isVisibles}
+				conditions={globalMapStore.conditions}
 				callbackVisibleChanged={handleVisibleChanged}
+				callbackConditionChanged={handleConditionChanged}
 			/>
 		</DefaultPage>
 	);

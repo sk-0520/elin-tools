@@ -1,14 +1,19 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
-	Box,
 	Button,
 	Checkbox,
+	createTheme,
 	Divider,
 	FormControlLabel,
 	List,
 	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
 	Paper,
 	Stack,
+	Theme,
+	ThemeProvider,
 } from "@mui/material";
 import Leaflet, {
 	type DragEndEvent,
@@ -25,8 +30,13 @@ import {
 	type TooltipProps,
 } from "react-leaflet";
 import Control from "react-leaflet-custom-control";
-import { GlobalMapItemMapping, type MapKind } from "@/features/map";
+import {
+	GlobalMapItemMapping,
+	MapCondition,
+	type MapKind,
+} from "@/features/map";
 import nextConfig from "../../next.config";
+import { CheckListItem } from "./CheckListItem";
 import { MapLabel } from "./MapLabel";
 
 const basePath = nextConfig.basePath || "";
@@ -65,13 +75,41 @@ const LayerGroupNameMapKinds: Array<{
 	},
 ];
 
+const MapConditions: Array<{
+	condition: MapCondition;
+	display: string;
+}> = [
+	{
+		condition: "return",
+		display: "帰還先に限定",
+	},
+	{
+		condition: "ignoreClosed",
+		display: "未実装ネフィアを無視",
+	},
+	{
+		condition: "festival",
+		display: "お祭り開催地に限定",
+	},
+];
+
 export interface GlobalMapProps {
-	readonly isVisible: Record<MapKind, boolean>;
-	callbackVisibleChanged: (name: MapKind, isVisible: boolean) => void;
+	readonly isVisibles: Record<MapKind, boolean>;
+	readonly conditions: Record<MapCondition, boolean>;
+	callbackVisibleChanged: (kind: MapKind, isVisible: boolean) => void;
+	callbackConditionChanged: (
+		condition: MapCondition,
+		isEnabled: boolean,
+	) => void;
 }
 
 export const GlobalMap: FC<GlobalMapProps> = (props) => {
-	const { isVisible, callbackVisibleChanged } = props;
+	const {
+		isVisibles,
+		conditions,
+		callbackVisibleChanged,
+		callbackConditionChanged,
+	} = props;
 	const [position, setPosition] = useState<LatLngExpression>({
 		lat: 0,
 		lng: 0,
@@ -233,10 +271,21 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 			</LayersControl> */}
 			{LayerGroupNameMapKinds.map((a) => {
 				return (
-					isVisible[a.kind] && (
+					isVisibles[a.kind] && (
 						<LayerGroup key={a.kind}>
 							{GlobalMapItemMapping.items
 								.filter((b) => b.kind === a.kind)
+								.filter((b) =>
+									conditions.return ? b.return === true : true,
+								)
+								.filter((b) =>
+									conditions.festival
+										? b.festival !== undefined
+										: true,
+								)
+								.filter((b) =>
+									conditions.ignoreClosed ? b.closed !== true : true,
+								)
 								.map((b) => {
 									return (
 										<MapLabel
@@ -245,10 +294,9 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 											center={b.position}
 											label={b.name}
 											direction={
-												b.direction
-													? b.direction
-													: a.direction
+												b.direction ? b.direction : a.direction
 											}
+											festival={b.festival}
 										/>
 									);
 								})}
@@ -339,52 +387,80 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 			)}
 
 			<Control prepend position="topright">
-				<Paper>
-					<Stack>
-						<List>
-							{LayerGroupNameMapKinds.map((a) => {
-								return (
-									<ListItem key={a.kind}>
-										<FormControlLabel
-											label={a.display}
-											control={
-												<Checkbox
-													checked={isVisible[a.kind]}
-													onChange={(ev) =>
-														callbackVisibleChanged(
-															a.kind,
-															ev.target.checked,
-														)
-													}
-												/>
+				<ThemeProvider
+					theme={(theme: Theme) =>
+						createTheme({
+							...theme,
+							typography: {
+								...theme.typography,
+								fontSize: 10,
+							},
+						})
+					}
+				>
+					<Paper
+						sx={{
+							opacity: 0.6,
+
+							"&:hover": {
+								opacity: 1,
+							},
+						}}
+					>
+						<Stack>
+							<List>
+								{LayerGroupNameMapKinds.map((a) => {
+									return (
+										<CheckListItem
+											key={a.kind}
+											isChecked={isVisibles[a.kind]}
+											onClick={() => {
+												callbackVisibleChanged(
+													a.kind,
+													!isVisibles[a.kind],
+												);
+											}}
+										>
+											{a.display}
+										</CheckListItem>
+									);
+								})}
+							</List>
+
+							<Divider />
+
+							<List>
+								{MapConditions.map((a) => {
+									return (
+										<CheckListItem
+											key={a.condition}
+											isChecked={conditions[a.condition]}
+											onClick={() =>
+												callbackConditionChanged(
+													a.condition,
+													!conditions[a.condition],
+												)
 											}
-										/>
-									</ListItem>
-								);
-							})}
-						</List>
+										>
+											{a.display}
+										</CheckListItem>
+									);
+								})}
+							</List>
 
-						<Divider />
+							<Divider />
 
-						<Divider />
-
-						<List>
-							<ListItem>
-								<FormControlLabel
-									label="座標確認用マーカー(↙)"
-									control={
-										<Checkbox
-											checked={devChecked}
-											onChange={(ev) =>
-												setDevChecked(ev.target.checked)
-											}
-										/>
-									}
-								/>
-							</ListItem>
-						</List>
-					</Stack>
-				</Paper>
+							<List>
+								<CheckListItem
+									isChecked={devChecked}
+									onClick={() => setDevChecked((a) => !a)}
+								>
+									座標確認用マーカー(↙)
+								</CheckListItem>
+							</List>
+						</Stack>
+					</Paper>
+				</ThemeProvider>
 			</Control>
 
 			{/* <GlobalMapEvent callbackChanged={callbackVisibleChanged} /> */}

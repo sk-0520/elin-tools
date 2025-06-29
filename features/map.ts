@@ -4,6 +4,9 @@ import type { TooltipProps } from "react-leaflet";
 export const MapKinds = ["base", "nefia", "sample"] as const;
 export type MapKind = (typeof MapKinds)[number];
 
+export const MapConditions = ["return", "festival", "ignoreClosed"] as const;
+export type MapCondition = (typeof MapConditions)[number];
+
 interface GlobalMapItem {
 	/** 表示名 */
 	name: string;
@@ -15,6 +18,10 @@ interface GlobalMapItem {
 	direction?: TooltipProps["direction"];
 	/** 帰還可能 */
 	return?: boolean;
+	/** お祭り(月) */
+	festival?: number;
+	/** 未実装ネフィア  */
+	closed?: boolean;
 }
 
 // 気持ち左上から右へ進める感じ
@@ -50,6 +57,7 @@ export const GlobalMapItemMapping = {
 			name: "すくつ",
 			kind: "nefia",
 			position: { lat: 1225, lng: 1136.00197551286 },
+			return: true,
 		},
 		{
 			name: "永久凍土",
@@ -72,17 +80,20 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			position: { lat: 1063, lng: 117.48620799355058 },
 			direction: "right",
+			closed: true,
 		},
 		{
 			name: "ノイエル",
 			kind: "base",
 			position: { lat: 1010, lng: 1681.000365835715 },
+			festival: 12,
 		},
 		{
 			name: "ポート・カプール",
 			kind: "base",
 			position: { lat: 990, lng: 98.99026876998528 },
 			direction: "top",
+			festival: 6,
 		},
 		{
 			name: "呪われた館",
@@ -103,6 +114,7 @@ export const GlobalMapItemMapping = {
 			name: "死者の洞窟",
 			kind: "nefia",
 			position: { lat: 882, lng: 717.0199746300302 },
+			closed: true,
 		},
 		{
 			name: "パルミア大使館",
@@ -136,6 +148,7 @@ export const GlobalMapItemMapping = {
 			name: "ハウスドーム",
 			kind: "base",
 			position: { lat: 773, lng: 681.7500548753573 },
+			direction: "top",
 		},
 		{
 			name: "レシマス",
@@ -158,16 +171,19 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			position: { lat: 681, lng: 281.48661041283685 },
 			direction: "left",
+			closed: true,
 		},
 		{
 			name: "ヨウィン",
 			kind: "base",
 			position: { lat: 680, lng: 826.0012438414304 },
+			festival: 9,
 		},
 		{
 			name: "混沌の城",
 			kind: "nefia",
 			position: { lat: 679, lng: 971.9899761014134 },
+			closed: true,
 		},
 		{
 			name: "ルミエスト",
@@ -195,6 +211,7 @@ export const GlobalMapItemMapping = {
 			name: "リトルガーデン",
 			kind: "base",
 			position: { lat: 482, lng: 243.97065997566983 },
+			return: true,
 		},
 
 		{
@@ -202,6 +219,7 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			position: { lat: 480, lng: 1207.9997073314282 },
 			direction: "left",
+			closed: true,
 		},
 		{
 			name: "ミフの里",
@@ -218,6 +236,7 @@ export const GlobalMapItemMapping = {
 			name: "リサナス",
 			kind: "nefia",
 			position: { lat: 426, lng: 1972.5003292521433 },
+			return: true,
 		},
 		{
 			name: "野原",
@@ -229,6 +248,7 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			position: { lat: 410, lng: 1208 },
 			direction: "left",
+			closed: true,
 		},
 		{
 			name: "孤児院",
@@ -248,6 +268,11 @@ export const GlobalMapItemMapping = {
 			direction: "top",
 		},
 		{
+			name: "ここらにあった気がする",
+			kind: "nefia",
+			position: { lat: 262, lng: 1724.0115604085888 },
+		},
+		{
 			name: "ここら辺に新しいのあった気がする",
 			kind: "base",
 			position: { lat: 177, lng: 1251.988585925697 },
@@ -256,6 +281,7 @@ export const GlobalMapItemMapping = {
 			name: "古城",
 			kind: "nefia",
 			position: { lat: 212, lng: 498.9853665714064 },
+			closed: true,
 		},
 		{
 			name: "商人ギルド",
@@ -266,6 +292,7 @@ export const GlobalMapItemMapping = {
 			name: "オルヴィナ",
 			kind: "base",
 			position: { lat: 171, lng: 626.9787083613963 },
+			festival: 9,
 		},
 		{
 			name: "風の眠る場所",

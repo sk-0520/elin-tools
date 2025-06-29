@@ -16,10 +16,11 @@ export interface MapLabelProps {
 	color: string;
 	center: LatLngExpression;
 	direction: TooltipProps["direction"];
+	festival?: number;
 }
 
 export const MapLabel: FC<MapLabelProps> = (props) => {
-	const { label, color, center, direction } = props;
+	const { label, color, center, direction, festival } = props;
 	return (
 		<>
 			<Circle
@@ -33,7 +34,9 @@ export const MapLabel: FC<MapLabelProps> = (props) => {
 					opacity={1}
 					permanent
 				>
-					{label}
+					{festival === undefined
+						? label
+						: `${label} (お祭:${festival}月)`}
 				</Tooltip>
 			</Circle>
 		</>
