@@ -10,7 +10,9 @@ import {
 	Toolbar,
 	Typography,
 } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 import type { FC, ReactNode } from "react";
+import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { type PageId, Pages } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { SideMenu } from "../SideMenu";
@@ -34,58 +36,60 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	}
 
 	return (
-		<Box sx={{ display: "flex" }}>
-			{/** biome-ignore lint/nursery/useUniqueElementIds: id は header 固定 */}
-			<AppBar
-				id="header"
-				position="fixed"
-				sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })}
-			>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						onClick={sidebarStore.toggle}
-						edge="start"
-						sx={{
-							marginRight: "1ch",
-						}}
-					>
-						{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
-					</IconButton>
-					<Typography variant="h6" noWrap component="h1">
-						{page.title}
-					</Typography>
-				</Toolbar>
-			</AppBar>
-			<Drawer
-				sx={{
-					width: sidebarWidth,
-					flexShrink: 0,
-					"& .MuiDrawer-paper": {
+		<ThemeProvider theme={DefaultTheme}>
+			<Box sx={{ display: "flex" }}>
+				{/** biome-ignore lint/nursery/useUniqueElementIds: id は header 固定 */}
+				<AppBar
+					id="header"
+					position="fixed"
+					sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })}
+				>
+					<Toolbar>
+						<IconButton
+							color="inherit"
+							aria-label="open drawer"
+							onClick={sidebarStore.toggle}
+							edge="start"
+							sx={{
+								marginRight: "1ch",
+							}}
+						>
+							{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
+						</IconButton>
+						<Typography variant="h6" noWrap component="h1">
+							{page.title}
+						</Typography>
+					</Toolbar>
+				</AppBar>
+				<Drawer
+					sx={{
 						width: sidebarWidth,
-						boxSizing: "border-box",
-					},
-					display: sidebarStore.isOpen ? undefined : "none",
-				}}
-				variant="permanent"
-				anchor="left"
-			>
-				<Offset />
-				<Divider />
-				<SideMenu selectedPageId={pageId} />
-			</Drawer>
+						flexShrink: 0,
+						"& .MuiDrawer-paper": {
+							width: sidebarWidth,
+							boxSizing: "border-box",
+						},
+						display: sidebarStore.isOpen ? undefined : "none",
+					}}
+					variant="permanent"
+					anchor="left"
+				>
+					<Offset />
+					<Divider />
+					<SideMenu selectedPageId={pageId} />
+				</Drawer>
 
-			<Box
-				sx={{
-					flexGrow: 1,
-					bgcolor: "background.default",
-					margin: "1em 3ch 10em 2ch",
-				}}
-			>
-				<Offset />
-				<Box component="main">{children}</Box>
+				<Box
+					sx={{
+						flexGrow: 1,
+						bgcolor: "background.default",
+						margin: "1em 3ch 10em 2ch",
+					}}
+				>
+					<Offset />
+					<Box component="main">{children}</Box>
+				</Box>
 			</Box>
-		</Box>
+		</ThemeProvider>
 	);
 };
