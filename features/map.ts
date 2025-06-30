@@ -4,12 +4,21 @@ import type { TooltipProps } from "react-leaflet";
 export const MapKinds = ["base", "nefia", "sample"] as const;
 export type MapKind = (typeof MapKinds)[number];
 
-export const MapConditions = ["return", "festival", "ignoreClosed"] as const;
+export const MapConditions = ["return", "festival", "implementation"] as const;
 export type MapCondition = (typeof MapConditions)[number];
+
+export const MapImplementations = [
+	"notImplemented",
+	"inProgress",
+	"completed",
+] as const;
+export type MapImplementation = (typeof MapImplementations)[number];
 
 interface GlobalMapItem {
 	/** 表示名 */
 	name: string;
+	/** 実装状態 */
+	implementation: MapImplementation;
 	/** 種類 */
 	kind: MapKind;
 	/** 危険度 */
@@ -22,8 +31,6 @@ interface GlobalMapItem {
 	return?: boolean;
 	/** お祭り(月) */
 	festival?: number;
-	/** 未実装ネフィア  */
-	closed?: boolean;
 }
 
 interface GlobalMapBaseItem extends GlobalMapItem {
@@ -45,32 +52,38 @@ export const GlobalMapItemMapping = {
 	items: [
 		{
 			name: "どこか",
+			implementation: "inProgress",
 			kind: "base",
 			position: { lat: 1518, lng: 1117.2499451246429 },
 		},
 		{
 			name: "闘技場",
+			implementation: "inProgress",
 			kind: "base",
 			position: { lat: 1517.75, lng: 1136.4976952349966 },
 		},
 		{
 			name: "探究者の孤城",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1370, lng: 118.99890249285548 },
 		},
 		{
 			name: "ネフの里",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1390, lng: 1098.4986464078552 },
 		},
 		{
 			name: "妹の館",
+			implementation: "inProgress",
 			kind: "base",
 			position: { lat: 1223.25, lng: 371.7507133796439 },
 			return: true,
 		},
 		{
 			name: "すくつ",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: 51,
 			position: { lat: 1225, lng: 1136.00197551286 },
@@ -78,6 +91,7 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "永久凍土",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: 30,
 			position: { lat: 1212, lng: 1954.0598507229477 },
@@ -85,30 +99,34 @@ export const GlobalMapItemMapping = {
 
 		{
 			name: "スペクウィング",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1116, lng: 1173.5147065957365 },
 		},
 		{
 			name: "神々の休戦地",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1100.5, lng: 972.5000365835715 },
 		},
 		{
 			name: "ピラミッド",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 1063, lng: 117.48620799355058 },
 			direction: "right",
-			closed: true,
 		},
 		{
 			name: "ノイエル",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1010, lng: 1681.000365835715 },
 			festival: 12,
 		},
 		{
 			name: "ポート・カプール",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 990, lng: 98.99026876998528 },
 			direction: "top",
@@ -116,69 +134,79 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "呪われた館",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 919.5, lng: 318.00007316714294 },
 		},
 		{
 			name: "静かな砂浜",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 899, lng: 100.49301253784654 },
 		},
 		{
 			name: "丘の洞窟",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 881, lng: 443.99370762570476 },
 		},
 		{
 			name: "死者の洞窟",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 882, lng: 717.0199746300302 },
-			closed: true,
 		},
 		{
 			name: "パルミア大使館",
+			implementation: "completed",
 			position: { lat: 882, lng: 1008.5072069635823 },
 			kind: "base",
 			direction: "top",
 		},
 		{
 			name: "ヴェルニース",
+			implementation: "completed",
 			kind: "sample",
 			position: { lat: 845.5, lng: 517.5002560850004 },
 		},
 		{
 			name: "パルミア",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 825.25, lng: 1008.7499451246427 },
 		},
 		{
 			name: "工房ミラル・ガロク",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 809.5, lng: 1645.5134261707346 },
 		},
 		{
 			name: "アクリ・テオラ",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 772, lng: 426.9972928157102 },
 			direction: "left",
 		},
 		{
 			name: "ハウスドーム",
+			implementation: "notImplemented",
 			kind: "base",
 			position: { lat: 773, lng: 681.7500548753573 },
 			direction: "top",
-			closed: true,
 		},
 		{
 			name: "レシマス",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: 1,
 			position: { lat: 734.5, lng: 464.4840861464045 },
 		},
 		{
 			name: "イークの洞窟",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: 5,
 			position: { lat: 698, lng: 735.0332178829074 },
@@ -186,73 +214,82 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "墓所",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 701, lng: 1389.018584454314 },
 		},
 		{
 			name: "竜窟",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 681, lng: 281.48661041283685 },
 			direction: "left",
-			closed: true,
 		},
 		{
 			name: "ヨウィン",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 680, lng: 826.0012438414304 },
 			festival: 9,
 		},
 		{
 			name: "混沌の城",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 679, lng: 971.9899761014134 },
-			closed: true,
 		},
 		{
 			name: "ルミエスト",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 684, lng: 1153.0239256557504 },
 			direction: "top",
 		},
 		{
 			name: "ルミエスト・クレーター",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 646, lng: 1135.4987195749982 },
 		},
 		{
 			name: "ダルフィ",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 627, lng: 299.0059265385804 },
 		},
 		{
 			name: "旅商人の停泊地",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 498, lng: 645.0253158314669 },
 		},
 		{
 			name: "リトルガーデン",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 482, lng: 243.97065997566983 },
 			return: true,
 		},
 		{
 			name: "山道への入り口",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 480, lng: 1207.9997073314282 },
 			direction: "left",
-			closed: true,
 		},
 		{
 			name: "ミフの里",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 464, lng: 1279.5006950878583 },
 		},
 		{
 			name: "子犬の洞窟",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: 2,
 			position: { lat: 446.5, lng: 553.9956099714219 },
@@ -260,6 +297,7 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "リサナス",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 426, lng: 1972.5003292521433 },
@@ -267,24 +305,27 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "野原",
+			implementation: "completed",
 			kind: "sample",
 			position: { lat: 408, lng: 590.0052680342936 },
 		},
 		{
 			name: "ラーナ",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 410, lng: 1208 },
 			direction: "left",
-			closed: true,
 		},
 		{
 			name: "孤児院",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 354, lng: 806.9653919413763 },
 		},
 		{
 			name: "ナイミール",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 336.5, lng: 699.000073167143 },
@@ -292,47 +333,54 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "贖罪の村",
+			implementation: "inProgress",
 			kind: "base",
 			position: { lat: 281.5, lng: 1481.5 },
 		},
 		{
 			name: "ミシリア",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 244, lng: 935.0093653943 },
 			direction: "top",
 		},
 		{
 			name: "ルーリエ海底神殿",
+			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: 19,
 			position: { lat: 186, lng: 1701.4986464078552 },
 		},
 		{
 			name: "古城",
+			implementation: "notImplemented",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 212, lng: 498.9853665714064 },
-			closed: true,
 		},
 		{
 			name: "商人ギルド",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 210, lng: 917.9987561585696 },
 		},
 		{
 			name: "オルヴィナ",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 171, lng: 626.9787083613963 },
 			festival: 9,
 		},
 		{
 			name: "風の眠る場所",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: -1,
 			position: { lat: 118, lng: 1407.999853665714 },
 		},
 		{
 			name: "ウィロウ",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 61, lng: 845.015950437167 },
 		},

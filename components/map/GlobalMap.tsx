@@ -1,20 +1,24 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
 	Button,
+	Collapse,
 	createTheme,
 	Divider,
 	List,
+	ListItemText,
+	Tooltip as MuiTooltip,
 	Paper,
 	Stack,
 	type Theme,
 	ThemeProvider,
+	Typography,
 } from "@mui/material";
 import Leaflet, {
 	type DragEndEvent,
 	LatLngBounds,
 	type LatLngExpression,
 } from "leaflet";
-import { type FC, useEffect, useMemo, useRef, useState } from "react";
+import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
 	ImageOverlay,
 	LayerGroup,
@@ -22,11 +26,13 @@ import {
 	Marker,
 	Popup,
 	type TooltipProps,
+	useMap,
 } from "react-leaflet";
 import Control from "react-leaflet-custom-control";
 import {
 	GlobalMapItemMapping,
 	type MapCondition,
+	type MapImplementation,
 	type MapKind,
 } from "@/features/map";
 import nextConfig from "../../next.config";
@@ -42,6 +48,8 @@ const ImageSize = {
 	width: 2217,
 	height: 1926,
 };
+
+const BoundsPadding = 80;
 
 const LayerGroupNameMapKinds: Array<{
 	kind: MapKind;
@@ -78,21 +86,45 @@ const MapConditions: Array<{
 		display: "帰還先に限定",
 	},
 	{
-		condition: "ignoreClosed",
-		display: "未実装ネフィアを無視",
-	},
-	{
 		condition: "festival",
 		display: "お祭り開催地に限定",
+	},
+	{
+		condition: "implementation",
+		display: "実装度合いで限定",
+	},
+];
+
+const MapImplementations: Array<{
+	implementation: MapImplementation;
+	display: string;
+}> = [
+	{
+		implementation: "completed",
+		display: "実装済み",
+	},
+	{
+		implementation: "inProgress",
+		display: "実装途中",
+	},
+	{
+		implementation: "notImplemented",
+		display: "未実装",
 	},
 ];
 
 export interface GlobalMapProps {
 	readonly isVisibles: Record<MapKind, boolean>;
 	readonly conditions: Record<MapCondition, boolean>;
+	readonly implementations: Record<MapImplementation, boolean>;
+
 	callbackVisibleChanged: (kind: MapKind, isVisible: boolean) => void;
 	callbackConditionChanged: (
 		condition: MapCondition,
+		isEnabled: boolean,
+	) => void;
+	callbackImplementationChanged: (
+		implementation: MapImplementation,
 		isEnabled: boolean,
 	) => void;
 }
@@ -101,8 +133,10 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 	const {
 		isVisibles,
 		conditions,
+		implementations,
 		callbackVisibleChanged,
 		callbackConditionChanged,
+		callbackImplementationChanged,
 	} = props;
 	const [position, setPosition] = useState<LatLngExpression>({
 		lat: 0,
@@ -139,14 +173,15 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 	// 	};
 	// }, [callbackVisibleChanged]);
 
-	useEffect(() => {
-		const map = refMap.current;
-		if (map) {
-			map.fitBounds(
-				new LatLngBounds([0, 0], [ImageSize.height, ImageSize.width]),
-			);
-		}
-	}, []);
+	// useEffect(() => {
+	// 	const map = refMap.current;
+	// 	if (map) {
+	// 		alert(1);
+	// 		map.fitBounds(
+	// 			new LatLngBounds([0, 0], [ImageSize.height, ImageSize.width]),
+	// 		);
+	// 	}
+	// }, []);
 
 	return (
 		<MapContainer
@@ -156,6 +191,15 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 			maxZoom={3}
 			zoom={-1}
 			scrollWheelZoom={true}
+			maxBounds={
+				new LatLngBounds(
+					[0 - BoundsPadding, 0 - BoundsPadding],
+					[
+						ImageSize.height + BoundsPadding,
+						ImageSize.width + BoundsPadding,
+					],
+				)
+			}
 			ref={refMap}
 		>
 			<ImageOverlay
@@ -278,7 +322,14 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 										: true,
 								)
 								.filter((b) =>
-									conditions.ignoreClosed ? b.closed !== true : true,
+									conditions.implementation
+										? (implementations.completed &&
+												b.implementation === "completed") ||
+											(implementations.inProgress &&
+												b.implementation === "inProgress") ||
+											(implementations.notImplemented &&
+												b.implementation === "notImplemented")
+										: true,
 								)
 								.map((b) => {
 									return (
@@ -427,18 +478,59 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 							<List>
 								{MapConditions.map((a) => {
 									return (
-										<CheckListItem
-											key={a.condition}
-											isChecked={conditions[a.condition]}
-											onClick={() =>
-												callbackConditionChanged(
-													a.condition,
-													!conditions[a.condition],
-												)
-											}
-										>
-											{a.display}
-										</CheckListItem>
+										<Fragment key={a.condition}>
+											<CheckListItem
+												isChecked={conditions[a.condition]}
+												onClick={() =>
+													callbackConditionChanged(
+														a.condition,
+														!conditions[a.condition],
+													)
+												}
+											>
+												{a.display}
+											</CheckListItem>
+											{a.condition === "implementation" && (
+												<MuiTooltip
+													title={
+														<Typography>
+															EAであることと主観による判断ため実装済みと実装途中は曖昧
+														</Typography>
+													}
+													placement="top"
+												>
+													<Collapse in={conditions[a.condition]}>
+														<List disablePadding>
+															{MapImplementations.map((b) => {
+																return (
+																	<CheckListItem
+																		key={b.implementation}
+																		isChecked={
+																			implementations[
+																				b.implementation
+																			]
+																		}
+																		onClick={() =>
+																			callbackImplementationChanged(
+																				b.implementation,
+																				!implementations[
+																					b.implementation
+																				],
+																			)
+																		}
+																		sx={{
+																			paddingLeft: "4ch",
+																		}}
+																	>
+																		{b.display}
+																	</CheckListItem>
+																);
+															})}
+														</List>
+													</Collapse>
+												</MuiTooltip>
+											)}
+										</Fragment>
 									);
 								})}
 							</List>

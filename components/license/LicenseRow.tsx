@@ -60,7 +60,7 @@ export const LicenseRow: FC<LicenseRowProps> = (props) => {
 							overflow: "hidden",
 						}}
 					>
-						<Collapse in={isOpen} timeout="auto" unmountOnExit>
+						<Collapse in={isOpen}>
 							<Paper
 								sx={{
 									overflow: "scroll",
