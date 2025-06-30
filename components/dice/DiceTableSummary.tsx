@@ -1,16 +1,17 @@
 import { TableCell, TableRow } from "@mui/material";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { type DiceValue, rankDice } from "@/features/dice";
 import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
 import { DiceRanking } from "./DiceRanking";
 
 export type DiceTableSummaryProps = {
+	readonly children?: ReactNode;
 	readonly editors: Record<string, DiceEditor>;
 	readonly values: Record<string, DiceValue>;
 };
 
 export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
-	const { editors, values } = props;
+	const { children, editors, values } = props;
 
 	const summary = {
 		count: rankDice(values, "count"),
@@ -23,8 +24,7 @@ export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 
 	return (
 		<TableRow>
-			<TableCell></TableCell>
-			<TableCell>どっち?</TableCell>
+			<TableCell colSpan={2}>{children}</TableCell>
 			<TableCell>
 				<DiceRanking editors={editors} items={summary.count} />
 			</TableCell>

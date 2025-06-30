@@ -5,8 +5,9 @@ export class DiceError extends AppError {}
 export class DiceFormatError extends DiceError {}
 
 export type DiceSign = "+" | "-";
+// 大文字小文字くらいは許容する
 const DiceRegex =
-	/^\s*(?<COUNT>\d+)\s*d\s*(?<SIDES>\d+)(\s*(?<FIXED_SIGN>\+|-)\s*(?<FIXED_VALUE>\d+))?\s*$/;
+	/^\s*(?<COUNT>\d+)\s*d\s*(?<SIDES>\d+)(\s*(?<FIXED_SIGN>\+|-)\s*(?<FIXED_VALUE>\d+))?\s*$/i;
 
 export interface DiceUnknownDice {
 	/** 振り数 */

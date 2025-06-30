@@ -12,12 +12,16 @@ export const DefaultEditors: { [key: string]: DiceEditor } = {
 	B: { dice: "4d2+1", color: "#ed7d31" },
 };
 
+const DefaultFrequency = 10_000;
+
 export interface WeponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
+	readonly frequency: number;
 
 	reset: () => void;
 
 	setEditor: (id: string, value: DiceEditor) => void;
+	setFrequency: (frequency: number) => void;
 }
 
 export const useWeponEditorsStore = create<WeponEditorsState>()(
@@ -25,9 +29,13 @@ export const useWeponEditorsStore = create<WeponEditorsState>()(
 		(set, get) => {
 			return {
 				editors: DefaultEditors,
+				frequency: DefaultFrequency,
 
 				reset: () => {
-					set({ editors: { ...DefaultEditors } });
+					set({
+						editors: { ...DefaultEditors },
+						frequency: DefaultFrequency,
+					});
 				},
 
 				setEditor: (id: string, value: DiceEditor) => {
@@ -40,6 +48,10 @@ export const useWeponEditorsStore = create<WeponEditorsState>()(
 					}
 					const ediors = { ...current, [id]: value };
 					set({ editors: ediors });
+				},
+
+				setFrequency: (frequency: number) => {
+					set({ frequency: frequency });
 				},
 			};
 		},

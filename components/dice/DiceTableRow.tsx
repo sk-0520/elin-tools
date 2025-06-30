@@ -4,6 +4,9 @@ import { Controller, useForm } from "react-hook-form";
 import type { DiceValue } from "@/features/dice";
 import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
 import { NumericFormat } from "../NumericFormat";
+import { EditorId } from "./EditorId";
+
+const ErrorColSpan = 6;
 
 interface InputValues {
 	dice: string;
@@ -37,8 +40,15 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	};
 
 	return (
-		<TableRow sx={{ background: editor.color }}>
-			<TableCell>{id}</TableCell>
+		<TableRow sx={{ background: `${editor.color}99` }}>
+			<TableCell sx={{ color: "red" }}>
+				<EditorId
+					id={id}
+					color={editor.color}
+					strong={true}
+					size="medium"
+				></EditorId>
+			</TableCell>
 			<TableCell>
 				<Controller
 					control={control}
@@ -59,7 +69,8 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 									border: "none",
 								},
 								backgroundColor: theme.palette.background.default,
-								// borderColor: theme.palette.background.default,
+								width: "100%",
+								minWidth: "12ch",
 							})}
 							defaultValue={editor.dice}
 							onChange={handleDiceChange}
@@ -68,9 +79,9 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				/>
 			</TableCell>
 			{error ? (
-				<TableCell colSpan={5}>{error}</TableCell>
+				<TableCell colSpan={ErrorColSpan}>{error}</TableCell>
 			) : value === undefined ? (
-				<TableCell colSpan={5}></TableCell>
+				<TableCell colSpan={ErrorColSpan}></TableCell>
 			) : (
 				<>
 					<TableCell>
@@ -79,7 +90,11 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					<TableCell>
 						<NumericFormat value={value.sides} />
 					</TableCell>
-					<TableCell>{value.hasFixed ? value.fixedValue : "-"}</TableCell>
+					<TableCell>
+						<NumericFormat
+							value={value.hasFixed ? value.fixedValue : undefined}
+						/>
+					</TableCell>
 					<TableCell>
 						<NumericFormat value={value.minimum} />
 					</TableCell>

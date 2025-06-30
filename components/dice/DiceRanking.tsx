@@ -53,7 +53,13 @@ export const DiceRanking: FC<DiceRankingProps> = (props) => {
 							/>
 						) : (
 							<>
-								<ListItem disablePadding>
+								<ListItem
+									sx={{
+										padding: 0,
+										display: "inline-block",
+										textAlign: "center",
+									}}
+								>
 									<Typography>{a.prevEqual ? "=" : ">"}</Typography>
 								</ListItem>
 								<StyledIdListItem
