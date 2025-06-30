@@ -12,7 +12,13 @@ export const LicenseTable: FC<LicenseTableProps> = (props) => {
 	const { licenseItems } = props;
 
 	return (
-		<Table sx={{ tableLayout: "fixed", width: "100%" }}>
+		<Table
+			stickyHeader
+			sx={{
+				tableLayout: "fixed",
+				width: "100%",
+			}}
+		>
 			<LicenseHeader />
 			<TableBody>
 				{licenseItems.map((a) => (

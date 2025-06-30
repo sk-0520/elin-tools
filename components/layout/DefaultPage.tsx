@@ -6,6 +6,7 @@ import {
 	Divider,
 	Drawer,
 	IconButton,
+	styled,
 	Toolbar,
 	Typography,
 } from "@mui/material";
@@ -15,6 +16,8 @@ import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { SideMenu } from "../SideMenu";
 
 const sidebarWidth = "200px";
+
+const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 export interface DefaultPageProps {
 	pageId: PageId;
@@ -36,7 +39,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 			<AppBar
 				id="header"
 				position="fixed"
-				sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })}
 			>
 				<Toolbar>
 					<IconButton
@@ -68,7 +71,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 				variant="permanent"
 				anchor="left"
 			>
-				<Toolbar />
+				<Offset />
 				<Divider />
 				<SideMenu selectedPageId={pageId} />
 			</Drawer>
@@ -80,8 +83,8 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 					margin: "1em 3ch 10em 2ch",
 				}}
 			>
-				<Toolbar />
-				<main>{children}</main>
+				<Offset />
+				<Box component="main">{children}</Box>
 			</Box>
 		</Box>
 	);
