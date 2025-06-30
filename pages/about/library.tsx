@@ -1,8 +1,6 @@
-import { Table, TableBody } from "@mui/material";
 import type { NextPage } from "next";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import { LicenseHeader } from "@/components/license/LicenseHeader";
-import { LicenseRow } from "@/components/license/LicenseRow";
+import { LicenseTable } from "@/components/license/LicenseTable";
 import type { License } from "@/features/license";
 import license from "@/raw-resource/license/license.json";
 
@@ -27,14 +25,7 @@ const Page: NextPage = () => {
 
 	return (
 		<DefaultPage pageId="about-library">
-			<Table>
-				<LicenseHeader />
-				<TableBody>
-					{licenseItems.map((a) => (
-						<LicenseRow key={a.module} license={a} />
-					))}
-				</TableBody>
-			</Table>
+			<LicenseTable licenseItems={licenseItems} />
 		</DefaultPage>
 	);
 };

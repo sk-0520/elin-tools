@@ -5,9 +5,9 @@ export const LicenseHeader: FC = () => {
 	return (
 		<TableHead>
 			<TableRow>
-				<TableCell>モジュール</TableCell>
-				<TableCell>作者</TableCell>
-				<TableCell>ライセンス</TableCell>
+				<TableCell align="center">モジュール</TableCell>
+				<TableCell align="center">作者</TableCell>
+				<TableCell align="center">ライセンス</TableCell>
 			</TableRow>
 		</TableHead>
 	);

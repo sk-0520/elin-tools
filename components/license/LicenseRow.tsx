@@ -1,4 +1,12 @@
-import { Button, Link, TableCell, TableRow } from "@mui/material";
+import {
+	Button,
+	Collapse,
+	Link,
+	Paper,
+	TableCell,
+	TableRow,
+	Typography,
+} from "@mui/material";
 import { type FC, useState } from "react";
 import type { License } from "@/features/license";
 
@@ -16,9 +24,20 @@ export const LicenseRow: FC<LicenseRowProps> = (props) => {
 
 	return (
 		<>
-			<TableRow>
+			<TableRow
+				sx={
+					isOpen
+						? {
+								//borderBottom: undefined,
+								"& > *": {
+									borderBottom: "transparent",
+								},
+							}
+						: undefined
+				}
+			>
 				<TableCell>
-					<Link href={license.repository} target={license.module}>
+					<Link href={license.repository} target="_blank">
 						{license.module}
 					</Link>
 				</TableCell>
@@ -35,8 +54,28 @@ export const LicenseRow: FC<LicenseRowProps> = (props) => {
 			</TableRow>
 			{license.licenseNote && isOpen && (
 				<TableRow>
-					<TableCell colSpan={3}>
-						<pre>{license.licenseNote}</pre>
+					<TableCell
+						colSpan={3}
+						sx={{
+							overflow: "hidden",
+						}}
+					>
+						<Collapse in={isOpen} timeout="auto" unmountOnExit>
+							<Paper
+								sx={{
+									overflow: "scroll",
+									maxHeight: "60vh",
+									padding: "1em",
+								}}
+							>
+								<Typography
+									component="pre"
+									sx={{ fontFamily: "monospace" }}
+								>
+									{license.licenseNote}
+								</Typography>
+							</Paper>
+						</Collapse>
 					</TableCell>
 				</TableRow>
 			)}
