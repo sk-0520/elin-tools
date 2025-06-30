@@ -74,7 +74,7 @@ const Page: NextPage = () => {
 					editors={weponEditorsStore.editors}
 					errors={weponDiceValuesStore.errors}
 					values={weponDiceValuesStore.values}
-					callbackEditorChanged={handleEditorChanged}
+					onEditorChanged={handleEditorChanged}
 				/>
 				{0 < Object.keys(weponDiceValuesStore.values).length && (
 					<DiceChart

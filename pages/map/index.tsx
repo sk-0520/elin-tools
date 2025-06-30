@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useCallback, useMemo } from "react";
@@ -7,6 +8,13 @@ import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 
 const Page: NextPage = () => {
 	const globalMapStore = useGlobalMapStore();
+
+	const handleControllerChanged = useCallback(
+		(isVisible: boolean) => {
+			globalMapStore.setController(isVisible);
+		},
+		[globalMapStore.setController],
+	);
 
 	const handleVisibleChanged = useCallback(
 		(kind: MapKind, isVisible: boolean) => {
@@ -32,7 +40,7 @@ const Page: NextPage = () => {
 	const GlobalMap = useMemo(
 		() =>
 			dynamic(() => import("@/components/map/GlobalMap"), {
-				loading: () => <p>A map is loading</p>,
+				loading: () => <CircularProgress size={200} />,
 				ssr: false,
 			}),
 		[],
@@ -41,12 +49,14 @@ const Page: NextPage = () => {
 	return (
 		<DefaultPage pageId="map">
 			<GlobalMap
+				controller={globalMapStore.controller}
 				isVisibles={globalMapStore.isVisibles}
 				conditions={globalMapStore.conditions}
 				implementations={globalMapStore.implementations}
-				callbackVisibleChanged={handleVisibleChanged}
-				callbackConditionChanged={handleConditionChanged}
-				callbackImplementationChanged={handleImplementationChanged}
+				onControllerChanged={handleControllerChanged}
+				onVisibleChanged={handleVisibleChanged}
+				onConditionChanged={handleConditionChanged}
+				onImplementationChanged={handleImplementationChanged}
 			/>
 		</DefaultPage>
 	);

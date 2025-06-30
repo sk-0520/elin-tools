@@ -3,32 +3,36 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import type { MapCondition, MapImplementation, MapKind } from "@/features/map";
 import { getDefaultStorage } from "@/features/storage";
 
-export const DefaultVisible: Record<MapKind, boolean> = {
+const DefaultController = true;
+
+const DefaultVisible: Record<MapKind, boolean> = {
 	base: true,
 	nefia: true,
 	sample: false,
 };
 
-export const DefaultConditions: Record<MapCondition, boolean> = {
+const DefaultConditions: Record<MapCondition, boolean> = {
 	return: false,
 	festival: false,
 	implementation: false,
 };
 
-export const DefaultImplementations: Record<MapImplementation, boolean> = {
+const DefaultImplementations: Record<MapImplementation, boolean> = {
 	notImplemented: false,
 	inProgress: true,
 	completed: true,
 };
 
 export interface GlobalMapState {
+	readonly controller: boolean;
 	readonly isVisibles: Record<MapKind, boolean>;
 	readonly conditions: Record<MapCondition, boolean>;
 	readonly implementations: Record<MapImplementation, boolean>;
 
 	reset: () => void;
 
-	setVisible: (kind: MapKind, visible: boolean) => void;
+	setController: (isVisible: boolean) => void;
+	setVisible: (kind: MapKind, isVisible: boolean) => void;
 	setCondition: (condition: MapCondition, isEnabled: boolean) => void;
 	setImplementation: (
 		implementation: MapImplementation,
@@ -39,21 +43,27 @@ export interface GlobalMapState {
 export const useGlobalMapStore = create<GlobalMapState>()(
 	persist(
 		(set, get) => ({
+			controller: DefaultController,
 			isVisibles: DefaultVisible,
 			conditions: DefaultConditions,
 			implementations: DefaultImplementations,
 
 			reset: () => {
 				set({
+					controller: DefaultController,
 					isVisibles: DefaultVisible,
 					conditions: DefaultConditions,
 					implementations: DefaultImplementations,
 				});
 			},
 
-			setVisible: (kind, visible) => {
-				const isVisible = { ...get().isVisibles, [kind]: visible };
-				set({ isVisibles: isVisible });
+			setController: (isVisible: boolean) => {
+				set({ controller: isVisible });
+			},
+
+			setVisible: (kind: MapKind, isVisible: boolean) => {
+				const isVisibles = { ...get().isVisibles, [kind]: isVisible };
+				set({ isVisibles: isVisibles });
 			},
 
 			setCondition: (condition: MapCondition, isEnabled: boolean) => {

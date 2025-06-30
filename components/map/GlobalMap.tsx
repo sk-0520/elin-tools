@@ -1,3 +1,5 @@
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
 	Button,
@@ -5,7 +7,7 @@ import {
 	createTheme,
 	Divider,
 	List,
-	ListItemText,
+	ListItemButton,
 	Tooltip as MuiTooltip,
 	Paper,
 	Stack,
@@ -18,7 +20,7 @@ import Leaflet, {
 	LatLngBounds,
 	type LatLngExpression,
 } from "leaflet";
-import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { type FC, Fragment, useMemo, useRef, useState } from "react";
 import {
 	ImageOverlay,
 	LayerGroup,
@@ -26,7 +28,6 @@ import {
 	Marker,
 	Popup,
 	type TooltipProps,
-	useMap,
 } from "react-leaflet";
 import Control from "react-leaflet-custom-control";
 import {
@@ -114,16 +115,16 @@ const MapImplementations: Array<{
 ];
 
 export interface GlobalMapProps {
+	readonly controller: boolean;
 	readonly isVisibles: Record<MapKind, boolean>;
 	readonly conditions: Record<MapCondition, boolean>;
 	readonly implementations: Record<MapImplementation, boolean>;
 
-	callbackVisibleChanged: (kind: MapKind, isVisible: boolean) => void;
-	callbackConditionChanged: (
-		condition: MapCondition,
-		isEnabled: boolean,
-	) => void;
-	callbackImplementationChanged: (
+	onControllerChanged: (isVisible: boolean) => void;
+
+	onVisibleChanged: (kind: MapKind, isVisible: boolean) => void;
+	onConditionChanged: (condition: MapCondition, isEnabled: boolean) => void;
+	onImplementationChanged: (
 		implementation: MapImplementation,
 		isEnabled: boolean,
 	) => void;
@@ -131,12 +132,14 @@ export interface GlobalMapProps {
 
 export const GlobalMap: FC<GlobalMapProps> = (props) => {
 	const {
+		controller,
 		isVisibles,
 		conditions,
 		implementations,
-		callbackVisibleChanged,
-		callbackConditionChanged,
-		callbackImplementationChanged,
+		onControllerChanged,
+		onVisibleChanged,
+		onConditionChanged,
+		onImplementationChanged,
 	} = props;
 	const [position, setPosition] = useState<LatLngExpression>({
 		lat: 0,
@@ -158,30 +161,6 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 		}),
 		[],
 	);
-
-	// const groupEventHandlers = useMemo<LeafletEventHandlerFnMap>(() => {
-	// 	return {
-	// 		layeradd: (ev: LeafletEvent) => {
-	// 			console.debug({ groupEventHandlers: ev });
-	// 			callbackVisibleChanged("base", true);
-	// 		},
-	// 		layerremove: (ev: LeafletEvent) => {
-	// 			console.debug({ groupEventHandlers: ev });
-
-	// 			callbackVisibleChanged("base", false);
-	// 		},
-	// 	};
-	// }, [callbackVisibleChanged]);
-
-	// useEffect(() => {
-	// 	const map = refMap.current;
-	// 	if (map) {
-	// 		alert(1);
-	// 		map.fitBounds(
-	// 			new LatLngBounds([0, 0], [ImageSize.height, ImageSize.width]),
-	// 		);
-	// 	}
-	// }, []);
 
 	return (
 		<MapContainer
@@ -212,101 +191,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 				}
 				url={`${basePath}/components/map/GlobalMap/GlobalMap.jpg`}
 			/>
-			{/* <LayersControl position="topright" collapsed={false}>
-				<LayersControl.Overlay
-					name={LayerNames.base}
-					checked={isVisible.base}
-				>
-					<LayerGroup >
-						{GlobalMapItemMapping.items
-							.filter((a) => a.kind === "base")
-							.map((a) => {
-								return (
-									<MapLabel
-										key={a.name}
-										color="blue"
-										center={a.position}
-										label={a.name}
-										direction={
-											a.direction ? a.direction : "bottom"
-										}
-									/>
-								);
-							})}
-					</LayerGroup>
-				</LayersControl.Overlay>
-				<LayersControl.Overlay
-					name={LayerNames.nefia}
-					checked={isVisible.nefia}
-				>
-					<LayerGroup>
-						{GlobalMapItemMapping.items
-							.filter((a) => a.kind === "nefia")
-							.map((a) => {
-								return (
-									<MapLabel
-										key={a.name}
-										color="red"
-										center={a.position}
-										label={a.name}
-										direction={
-											a.direction ? a.direction : "right"
-										}
-									/>
-								);
-							})}
-					</LayerGroup>
-				</LayersControl.Overlay>
-				<LayersControl.Overlay
-					name={LayerNames.sample}
-					checked={isVisible.sample}
-				>
-					<LayerGroup>
-						{GlobalMapItemMapping.items
-							.filter((a) => a.kind === "sample")
-							.map((a) => {
-								return (
-									<MapLabel
-										key={a.name}
-										color="yellow"
-										center={a.position}
-										label={a.name}
-										direction={
-											a.direction ? a.direction : "right"
-										}
-									/>
-								);
-							})}
-					</LayerGroup>
-				</LayersControl.Overlay>
-				<LayersControl.Overlay
-					name={LayerNames.develop}
-					checked={process.env.NODE_ENV === "development"}
-				>
-					<LayerGroup>
-						<Marker
-							ref={refMaker}
-							position={position}
-							draggable
-							eventHandlers={developEventHandlers}
-						>
-							<Popup autoClose={false}>
-								<Button
-									variant="outlined"
-									startIcon={<ContentCopyIcon />}
-									onClick={async (_ev) => {
-										await navigator.clipboard.writeText(
-											JSON.stringify(position),
-										);
-									}}
-								>
-									{JSON.stringify(position)}
-								</Button>
-							</Popup>
-						</Marker>
-					</LayerGroup>
-				</LayersControl.Overlay>
-			</LayersControl> */}
+
 			{LayerGroupNameMapKinds.map((a) => {
 				return (
 					isVisibles[a.kind] && (
@@ -350,63 +235,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 					)
 				);
 			})}
-			{/* {isVisible.base && (
-				<LayerGroup>
-					{GlobalMapItemMapping.items
-						.filter((a) => a.kind === "base")
-						.map((a) => {
-							return (
-								<MapLabel
-									key={a.name}
-									color="blue"
-									center={a.position}
-									label={a.name}
-									direction={
-										a.direction ? a.direction : "bottom"
-									}
-								/>
-							);
-						})}
-				</LayerGroup>
-			)}
-			{isVisible.nefia && (
-				<LayerGroup>
-					{GlobalMapItemMapping.items
-						.filter((a) => a.kind === "nefia")
-						.map((a) => {
-							return (
-								<MapLabel
-									key={a.name}
-									color="red"
-									center={a.position}
-									label={a.name}
-									direction={
-										a.direction ? a.direction : "right"
-									}
-								/>
-							);
-						})}
-				</LayerGroup>
-			)}
-			{isVisible.sample && (
-				<LayerGroup>
-					{GlobalMapItemMapping.items
-						.filter((a) => a.kind === "sample")
-						.map((a) => {
-							return (
-								<MapLabel
-									key={a.name}
-									color="yellow"
-									center={a.position}
-									label={a.name}
-									direction={
-										a.direction ? a.direction : "right"
-									}
-								/>
-							);
-						})}
-				</LayerGroup>
-			)} */}
+
 			{devChecked && (
 				<LayerGroup>
 					<Marker
@@ -454,97 +283,118 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 						}}
 					>
 						<Stack>
-							<List>
-								{LayerGroupNameMapKinds.map((a) => {
-									return (
-										<CheckListItem
-											key={a.kind}
-											isChecked={isVisibles[a.kind]}
-											onClick={() => {
-												callbackVisibleChanged(
-													a.kind,
-													!isVisibles[a.kind],
-												);
-											}}
-										>
-											{a.display}
-										</CheckListItem>
-									);
-								})}
-							</List>
+							<ListItemButton
+								onClick={() => {
+									onControllerChanged(!controller);
+								}}
+							>
+								{controller ? (
+									<ArrowCircleUpIcon />
+								) : (
+									<ArrowCircleDownIcon />
+								)}
+								<Typography sx={{ marginLeft: "1ch" }}>
+									コントローラー
+								</Typography>
+							</ListItemButton>
+							<Collapse in={controller}>
+								<Divider />
 
-							<Divider />
-
-							<List>
-								{MapConditions.map((a) => {
-									return (
-										<Fragment key={a.condition}>
+								<List>
+									{LayerGroupNameMapKinds.map((a) => {
+										return (
 											<CheckListItem
-												isChecked={conditions[a.condition]}
-												onClick={() =>
-													callbackConditionChanged(
-														a.condition,
-														!conditions[a.condition],
-													)
-												}
+												key={a.kind}
+												isChecked={isVisibles[a.kind]}
+												onClick={() => {
+													onVisibleChanged(
+														a.kind,
+														!isVisibles[a.kind],
+													);
+												}}
 											>
 												{a.display}
 											</CheckListItem>
-											{a.condition === "implementation" && (
-												<MuiTooltip
-													title={
-														<Typography>
-															EAであることと主観による判断ため実装済みと実装途中は曖昧
-														</Typography>
+										);
+									})}
+								</List>
+
+								<Divider />
+
+								<List>
+									{MapConditions.map((a) => {
+										return (
+											<Fragment key={a.condition}>
+												<CheckListItem
+													isChecked={conditions[a.condition]}
+													onClick={() =>
+														onConditionChanged(
+															a.condition,
+															!conditions[a.condition],
+														)
 													}
-													placement="top"
 												>
-													<Collapse in={conditions[a.condition]}>
-														<List disablePadding>
-															{MapImplementations.map((b) => {
-																return (
-																	<CheckListItem
-																		key={b.implementation}
-																		isChecked={
-																			implementations[
-																				b.implementation
-																			]
-																		}
-																		onClick={() =>
-																			callbackImplementationChanged(
-																				b.implementation,
-																				!implementations[
+													{a.display}
+												</CheckListItem>
+												{a.condition === "implementation" && (
+													<MuiTooltip
+														title={
+															<Typography>
+																EAであることと主観による判断ため実装済みと実装途中は曖昧
+															</Typography>
+														}
+														placement="top"
+													>
+														<Collapse
+															in={conditions[a.condition]}
+														>
+															<List disablePadding>
+																{MapImplementations.map((b) => {
+																	return (
+																		<CheckListItem
+																			key={b.implementation}
+																			isChecked={
+																				implementations[
 																					b.implementation
-																				],
-																			)
-																		}
-																		sx={{
-																			paddingLeft: "4ch",
-																		}}
-																	>
-																		{b.display}
-																	</CheckListItem>
-																);
-															})}
-														</List>
-													</Collapse>
-												</MuiTooltip>
-											)}
-										</Fragment>
-									);
-								})}
-							</List>
+																				]
+																			}
+																			onClick={() =>
+																				onImplementationChanged(
+																					b.implementation,
+																					!implementations[
+																						b
+																							.implementation
+																					],
+																				)
+																			}
+																			sx={{
+																				paddingLeft: "4ch",
+																			}}
+																		>
+																			{b.display}
+																		</CheckListItem>
+																	);
+																})}
+															</List>
+														</Collapse>
+													</MuiTooltip>
+												)}
+											</Fragment>
+										);
+									})}
+								</List>
 
-							<Divider />
+								<Divider />
 
-							<List>
-								<CheckListItem
-									isChecked={devChecked}
-									onClick={() => setDevChecked((a) => !a)}
-								>
-									座標確認用マーカー(↙)
-								</CheckListItem>
-							</List>
+								<List>
+									<CheckListItem
+										isChecked={devChecked}
+										onClick={() => setDevChecked((a) => !a)}
+									>
+										座標確認用マーカー(↙)
+									</CheckListItem>
+								</List>
+							</Collapse>
 						</Stack>
 					</Paper>
 				</ThemeProvider>

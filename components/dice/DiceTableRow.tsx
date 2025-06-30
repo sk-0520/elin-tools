@@ -6,7 +6,7 @@ import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
 import { NumericFormat } from "../NumericFormat";
 
 interface InputValues {
-	editor: string;
+	dice: string;
 }
 
 export type DiceTableRowProps = {
@@ -14,11 +14,11 @@ export type DiceTableRowProps = {
 	editor: DiceEditor;
 	error: string | undefined;
 	value: DiceValue | undefined;
-	callbackEditorChanged: (id: string, editor: DiceEditor) => void;
+	onEditorChanged: (id: string, editor: DiceEditor) => void;
 };
 
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
-	const { id, editor, error, value, callbackEditorChanged } = props;
+	const { id, editor, error, value, onEditorChanged } = props;
 	const { control, setValue } = useForm<InputValues>({
 		mode: "onChange",
 		reValidateMode: "onChange",
@@ -29,8 +29,8 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	const handleDiceChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		setValue("editor", event.target.value);
-		callbackEditorChanged(id, {
+		setValue("dice", event.target.value);
+		onEditorChanged(id, {
 			dice: event.target.value,
 			color: editor.color,
 		});
@@ -42,7 +42,7 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 			<TableCell>
 				<Controller
 					control={control}
-					name="editor"
+					name="dice"
 					// biome-ignore lint/correctness/noUnusedFunctionParameters: あとでー
 					render={({ field, formState: { errors } }) => (
 						<TextField

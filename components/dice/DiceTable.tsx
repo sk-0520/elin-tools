@@ -16,11 +16,11 @@ export type DiceTableProps = {
 	editors: Record<string, DiceEditor>;
 	errors: Record<string, string>;
 	values: Record<string, DiceValue>;
-	callbackEditorChanged: (id: string, editor: DiceEditor) => void;
+	onEditorChanged: (id: string, editor: DiceEditor) => void;
 };
 
 export const DiceTable: FC<DiceTableProps> = (props) => {
-	const { editors, errors, values, callbackEditorChanged } = props;
+	const { editors, errors, values, onEditorChanged } = props;
 
 	return (
 		<Table>
@@ -49,7 +49,7 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 								editor={v}
 								error={error}
 								value={value}
-								callbackEditorChanged={callbackEditorChanged}
+								onEditorChanged={onEditorChanged}
 							/>
 						);
 					})}

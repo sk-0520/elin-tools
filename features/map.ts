@@ -61,6 +61,7 @@ export const GlobalMapItemMapping = {
 			implementation: "inProgress",
 			kind: "base",
 			position: { lat: 1517.75, lng: 1136.4976952349966 },
+			direction: "top",
 		},
 		{
 			name: "探究者の孤城",
@@ -259,6 +260,13 @@ export const GlobalMapItemMapping = {
 			implementation: "completed",
 			kind: "base",
 			position: { lat: 627, lng: 299.0059265385804 },
+		},
+		{
+			name: "ミノタウロスの巣",
+			implementation: "notImplemented",
+			kind: "nefia",
+			riskLevel: -1,
+			position: { lat: 554.25, lng: 826.7480974966951 },
 		},
 		{
 			name: "旅商人の停泊地",
