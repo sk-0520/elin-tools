@@ -28,7 +28,10 @@
 			]
 		},
 		"testMatch": [
-			"**/tests/**/*"
+			"**/tests/**/*.test.ts"
+		],
+		"setupFiles": [
+			"<rootDir>/tests/helper.ts"
 		],
 		"moduleNameMapper": {
 			"@/(.*)$": "<rootDir>/$1"
