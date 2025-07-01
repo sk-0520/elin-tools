@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Tooltip, Typography } from "@mui/material";
 import type { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DiceChart } from "@/components/dice/DiceChart";
 import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
@@ -20,6 +20,8 @@ const Page: NextPage = () => {
 	const weponEditorsStore = useWeponEditorsStore();
 	const weponDiceValuesStore = useWeponDiceValuesStore();
 	const weponPointsStore = useWeponPointsStore();
+	// 💩再計算用フラグ。そもそもほかの値をストア管理する必要なかった疑惑まである(本来は全部の値を見れるようにするつもりだったけど意味なさ過ぎてやめた経緯あり)
+	const [slacker, setSlacker] = useState<object>({});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: 初回
 	useEffect(() => {
@@ -32,6 +34,7 @@ const Page: NextPage = () => {
 
 	// ダイス入力
 	useEffect(() => {
+		console.assert(slacker);
 		const editors = weponEditorsStore.editors;
 		console.log({ editors });
 		for (const [key, editor] of Object.entries(editors)) {
@@ -66,6 +69,7 @@ const Page: NextPage = () => {
 		weponDiceValuesStore.setValue,
 		weponPointsStore.remove,
 		weponPointsStore.setPoint,
+		slacker,
 	]);
 
 	const handleEditorChanged = (id: string, editor: DiceEditor) => {
@@ -125,16 +129,17 @@ const Page: NextPage = () => {
 							marginLeft: "2ch",
 						}}
 						onClick={() => {
-							for (const [key, value] of Object.entries(
-								weponDiceValuesStore.values,
-							)) {
-								const points = rollDice(
-									value,
-									weponEditorsStore.frequency,
-									new BuiltinRandom(),
-								);
-								weponPointsStore.setPoint(key, points);
-							}
+							// for (const [key, value] of Object.entries(
+							// 	weponDiceValuesStore.values,
+							// )) {
+							// 	const points = rollDice(
+							// 		value,
+							// 		weponEditorsStore.frequency,
+							// 		new BuiltinRandom(),
+							// 	);
+							// 	weponPointsStore.setPoint(key, points);
+							// }
+							setSlacker({});
 						}}
 					>
 						再計算
