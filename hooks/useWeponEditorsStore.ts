@@ -7,35 +7,36 @@ export interface DiceEditor {
 	color: string;
 }
 
-export const DefaultEditors: { [key: string]: DiceEditor } = {
-	A: { dice: "6d3", color: "#5b9bd5" },
-	B: { dice: "4d2+1", color: "#ed7d31" },
+const DefaultState: WeponEditorsState = {
+	editors: {
+		A: { dice: "6d3", color: "#5b9bd5" },
+		B: { dice: "4d2+1", color: "#ed7d31" },
+	},
+	frequency: 1000,
 };
 
-const DefaultFrequency = 1000;
-
-export interface WeponEditorsState {
+interface WeponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
 	readonly frequency: number;
+}
 
+interface WeponEditorsAction {
 	reset: () => void;
 
 	setEditor: (id: string, value: DiceEditor) => void;
 	setFrequency: (frequency: number) => void;
 }
 
-export const useWeponEditorsStore = create<WeponEditorsState>()(
+export const useWeponEditorsStore = create<
+	WeponEditorsState & WeponEditorsAction
+>()(
 	persist(
 		(set, get) => {
 			return {
-				editors: DefaultEditors,
-				frequency: DefaultFrequency,
+				...DefaultState,
 
 				reset: () => {
-					set({
-						editors: { ...DefaultEditors },
-						frequency: DefaultFrequency,
-					});
+					set(DefaultState);
 				},
 
 				setEditor: (id: string, value: DiceEditor) => {

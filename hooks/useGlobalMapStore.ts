@@ -3,32 +3,33 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import type { MapCondition, MapImplementation, MapKind } from "@/features/map";
 import { getDefaultStorage } from "@/features/storage";
 
-const DefaultController = true;
-
-const DefaultVisible: Record<MapKind, boolean> = {
-	base: true,
-	nefia: true,
-	sample: false,
+const DefaultState: GlobalMapState = {
+	controller: true,
+	isVisibles: {
+		base: true,
+		nefia: true,
+		sample: false,
+	},
+	conditions: {
+		return: false,
+		festival: false,
+		implementation: false,
+	},
+	implementations: {
+		notImplemented: false,
+		inProgress: true,
+		completed: true,
+	},
 };
 
-const DefaultConditions: Record<MapCondition, boolean> = {
-	return: false,
-	festival: false,
-	implementation: false,
-};
-
-const DefaultImplementations: Record<MapImplementation, boolean> = {
-	notImplemented: false,
-	inProgress: true,
-	completed: true,
-};
-
-export interface GlobalMapState {
+interface GlobalMapState {
 	readonly controller: boolean;
 	readonly isVisibles: Record<MapKind, boolean>;
 	readonly conditions: Record<MapCondition, boolean>;
 	readonly implementations: Record<MapImplementation, boolean>;
+}
 
+interface GlobalMapAction {
 	reset: () => void;
 
 	setController: (isVisible: boolean) => void;
@@ -40,21 +41,13 @@ export interface GlobalMapState {
 	) => void;
 }
 
-export const useGlobalMapStore = create<GlobalMapState>()(
+export const useGlobalMapStore = create<GlobalMapState & GlobalMapState>()(
 	persist(
 		(set, get) => ({
-			controller: DefaultController,
-			isVisibles: DefaultVisible,
-			conditions: DefaultConditions,
-			implementations: DefaultImplementations,
+			...DefaultState,
 
 			reset: () => {
-				set({
-					controller: DefaultController,
-					isVisibles: DefaultVisible,
-					conditions: DefaultConditions,
-					implementations: DefaultImplementations,
-				});
+				set(DefaultState);
 			},
 
 			setController: (isVisible: boolean) => {

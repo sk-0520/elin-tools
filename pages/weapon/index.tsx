@@ -9,7 +9,6 @@ import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";
 import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
 import {
-	DefaultEditors,
 	type DiceEditor,
 	useWeponEditorsStore,
 } from "@/hooks/useWeponEditorsStore";
@@ -25,7 +24,7 @@ const Page: NextPage = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: 初回
 	useEffect(() => {
 		const editors = weponEditorsStore.editors;
-		if (Object.keys(editors).length < Object.keys(DefaultEditors).length) {
+		if (Object.keys(editors).length === 0) {
 			console.info("リセット");
 			weponEditorsStore.reset();
 		}
