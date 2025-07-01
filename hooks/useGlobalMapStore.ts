@@ -41,7 +41,7 @@ interface GlobalMapAction {
 	) => void;
 }
 
-export const useGlobalMapStore = create<GlobalMapState & GlobalMapState>()(
+export const useGlobalMapStore = create<GlobalMapState & GlobalMapAction>()(
 	persist(
 		(set, get) => ({
 			...DefaultState,
