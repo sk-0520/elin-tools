@@ -24,48 +24,46 @@ export interface MapLabelProps {
 export const MapLabel: FC<MapLabelProps> = (props) => {
 	const { label, color, center, direction, festival, riskLevel } = props;
 	return (
-		<>
-			<Circle
-				center={center}
-				pathOptions={{ fillColor: color, color: color }}
-				radius={10}
+		<Circle
+			center={center}
+			pathOptions={{ fillColor: color, color: color }}
+			radius={10}
+		>
+			<Tooltip
+				direction={direction}
+				offset={direction ? OffsetMap[direction] : undefined}
+				opacity={1}
+				permanent
 			>
-				<Tooltip
-					direction={direction}
-					offset={direction ? OffsetMap[direction] : undefined}
-					opacity={1}
-					permanent
+				<Typography
+					variant="body2"
+					sx={{
+						fontSize: 10,
+					}}
 				>
-					<Typography
-						variant="body2"
-						sx={{
-							fontSize: 10,
-						}}
-					>
-						{label}
-						{festival !== undefined && (
-							<Typography
-								component="span"
-								sx={{
-									fontSize: 10,
-								}}
-							>
-								{`(お祭:${festival}月)`}
-							</Typography>
-						)}
-						{riskLevel !== undefined && 0 < riskLevel && (
-							<Typography
-								component="span"
-								sx={{
-									fontSize: 10,
-								}}
-							>
-								{`[危険度:${riskLevel}]`}
-							</Typography>
-						)}
-					</Typography>
-				</Tooltip>
-			</Circle>
-		</>
+					{label}
+					{festival !== undefined && (
+						<Typography
+							component="span"
+							sx={{
+								fontSize: 10,
+							}}
+						>
+							{`(お祭:${festival}月)`}
+						</Typography>
+					)}
+					{riskLevel !== undefined && 0 < riskLevel && (
+						<Typography
+							component="span"
+							sx={{
+								fontSize: 10,
+							}}
+						>
+							{`[危険度:${riskLevel}]`}
+						</Typography>
+					)}
+				</Typography>
+			</Tooltip>
+		</Circle>
 	);
 };

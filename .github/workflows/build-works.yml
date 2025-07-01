@@ -16,13 +16,8 @@ jobs:
       - name: <Checkout> Repository
         uses: actions/checkout@v4
 
-      - name: <Setup> Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
-
       - name: <Restore> .next/cache
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/develop' && github.ref == 'refs/heads/master'
         uses: actions/cache@v4
         with:
           path: |
@@ -46,13 +41,44 @@ jobs:
         shell: bash
         run: npm run lint
 
-      - name: <Build> front-end
-        shell: bash
-        run: npm run build
-
       - name: <Test> front-end
         shell: bash
         run: npm run test
+
+      - name: <Env> default
+        if: github.ref != 'refs/heads/develop' && github.ref == 'refs/heads/master'
+        shell: bash
+        run: |
+          echo "NODE_ENV=development" >> ${GITHUB_ENV}
+          cp .env.template .env.development
+
+      - name: <Env> develop
+        if: github.ref == 'refs/heads/develop'
+        shell: bash
+        run: |
+          echo "NODE_ENV=production" >> ${GITHUB_ENV}
+          echo "#staging" > .env.production
+          echo "NEXT_PUBLIC_EXECUTION=staging" >> .env
+          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env
+
+      - name: <Env> prodction
+        if: github.ref == 'refs/heads/master'
+        shell: bash
+        run: |
+          echo "NODE_ENV=production" >> ${GITHUB_ENV}
+          echo "#prodction" > .env.production
+          echo "NEXT_PUBLIC_EXECUTION=prodction" >> .env
+          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env
+
+      - name: <Build> front-end
+        shell: bash
+        run: |
+          echo "env.NODE_ENV:${{ env.NODE_ENV }}"
+          echo "NODE_ENV: $NODE_ENV"
+          npm run build
+        env:
+          NODE_ENV: ${{ env.NODE_ENV }}
+
 
       - name: <Artifact> front-end
         uses: actions/upload-pages-artifact@v3

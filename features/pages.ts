@@ -28,3 +28,16 @@ export const Pages: Array<PageInfo> = [
 		title: "ライブラリ",
 	},
 ];
+
+export function getExecution(): "prodction" | "staging" | "development" {
+	switch (process.env.NEXT_PUBLIC_DEFAULT_STORAGE) {
+		case "prodction":
+			return "prodction";
+
+		case "staging":
+			return "staging";
+
+		default:
+			return "development";
+	}
+}

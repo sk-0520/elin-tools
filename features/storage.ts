@@ -1,9 +1,9 @@
 export function getDefaultStorageName(): "session" | "local" {
-	if (process.env.NEXT_PUBLIC_DEFAULT_STORAGE === "session") {
-		return "session";
+	if (process.env.NEXT_PUBLIC_DEFAULT_STORAGE === "local") {
+		return "local";
 	}
 
-	return "local";
+	return "session";
 }
 
 export function getDefaultStorage(): Storage {

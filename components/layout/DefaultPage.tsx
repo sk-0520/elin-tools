@@ -13,7 +13,7 @@ import {
 import { ThemeProvider } from "@mui/material/styles";
 import type { FC, ReactNode } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
-import { type PageId, Pages } from "@/features/pages";
+import { getExecution, type PageId, Pages } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { SideMenu } from "../SideMenu";
 
@@ -21,6 +21,12 @@ const sidebarWidth = "200px";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
+const ExecutionDisplayNames: Record<ReturnType<typeof getExecution>, string> = {
+	development: "開発",
+	staging: "ステージング",
+	prodction: "本番",
+} as const;
+const execution = getExecution();
 export interface DefaultPageProps {
 	pageId: PageId;
 	children: ReactNode;
@@ -38,7 +44,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	return (
 		<ThemeProvider theme={DefaultTheme}>
 			<Box sx={{ display: "flex" }}>
-				{/** biome-ignore lint/nursery/useUniqueElementIds: id は header 固定 */}
 				<AppBar
 					id="header"
 					position="fixed"
@@ -59,6 +64,11 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						<Typography variant="h6" noWrap component="h1">
 							{page.title}
 						</Typography>
+						{execution !== "prodction" && (
+							<Typography sx={{ opacity: 0.9, marginLeft: "2ch" }}>
+								({ExecutionDisplayNames[execution]})
+							</Typography>
+						)}
 					</Toolbar>
 				</AppBar>
 				<Drawer

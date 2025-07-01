@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
 
 	basePath: process.env.NODE_ENV === "production" ? '/elin-tools': undefined, // サブディレクトリ名
 
+	images: {
+		unoptimized: true
+	},
+
 	compiler: {
 		removeConsole:
 			process.env.NODE_ENV === "production"

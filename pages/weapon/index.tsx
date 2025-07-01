@@ -91,86 +91,84 @@ const Page: NextPage = () => {
 	};
 
 	return (
-		<>
-			<DefaultPage pageId="weapon">
-				<DiceTable
-					editors={weponEditorsStore.editors}
-					errors={weponDiceValuesStore.errors}
-					values={weponDiceValuesStore.values}
-					onEditorChanged={handleEditorChanged}
+		<DefaultPage pageId="weapon">
+			<DiceTable
+				editors={weponEditorsStore.editors}
+				errors={weponDiceValuesStore.errors}
+				values={weponDiceValuesStore.values}
+				onEditorChanged={handleEditorChanged}
+			>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "left",
+						alignItems: "center",
+					}}
 				>
-					<Box
-						sx={{
-							display: "flex",
-							justifyContent: "left",
-							alignItems: "center",
+					<Button
+						variant="contained"
+						onClick={() => {
+							for (const [key, value] of Object.entries(
+								weponDiceValuesStore.values,
+							)) {
+								const points = rollDice(
+									value,
+									weponEditorsStore.frequency,
+									new BuiltinRandom(),
+								);
+								weponPointsStore.setPoint(key, points);
+							}
 						}}
 					>
-						<Button
-							variant="contained"
-							onClick={() => {
-								for (const [key, value] of Object.entries(
-									weponDiceValuesStore.values,
-								)) {
-									const points = rollDice(
-										value,
-										weponEditorsStore.frequency,
-										new BuiltinRandom(),
-									);
-									weponPointsStore.setPoint(key, points);
-								}
-							}}
-						>
-							再計算
-						</Button>
+						再計算
+					</Button>
 
-						{/* こんな頑張らんでもプルダウンとかシークバーでいい気がしてきた */}
-						<Controller
-							control={control}
-							name="frequency"
-							rules={{
-								required: true,
-								validate: (value: unknown) => {
-									if (typeof value !== "string") {
-										return false;
-									}
-									const numValue = Number.parseInt(value);
-									return !Number.isNaN(numValue);
-								},
-							}}
-							// biome-ignore lint/correctness/noUnusedFunctionParameters: あとでー
-							render={({ field, formState: { errors } }) => (
-								<TextField
-									label="頻度"
-									{...field}
-									size="small"
-									type="number"
-									sx={{
-										textAlign: "right",
-										width: "20ch",
-									}}
-									// inputMode="numeric"
-									// slotProps={{
-									// 	htmlInput: {
-									// 		pattern: "^[1-9][0-9]*$",
-									// 	},
-									// }}
-									defaultValue={weponEditorsStore.frequency}
-									onBlur={handleSubmit(handleFrequencyChange)}
-								/>
-							)}
-						/>
-					</Box>
-				</DiceTable>
-				{0 < Object.keys(weponDiceValuesStore.values).length && (
-					<DiceChart
-						editors={weponEditorsStore.editors}
-						values={weponDiceValuesStore.values}
-						points={weponPointsStore.points}
+					{/* こんな頑張らんでもプルダウンとかシークバーでいい気がしてきた */}
+					<Controller
+						control={control}
+						name="frequency"
+						rules={{
+							required: true,
+							validate: (value: unknown) => {
+								if (typeof value !== "string") {
+									return false;
+								}
+								const numValue = Number.parseInt(value);
+								return !Number.isNaN(numValue);
+							},
+						}}
+						// biome-ignore lint/correctness/noUnusedFunctionParameters: あとでー
+						render={({ field, formState: { errors } }) => (
+							<TextField
+								label="頻度"
+								{...field}
+								size="small"
+								type="number"
+								sx={{
+									textAlign: "right",
+									width: "20ch",
+								}}
+								// inputMode="numeric"
+								// slotProps={{
+								// 	htmlInput: {
+								// 		pattern: "^[1-9][0-9]*$",
+								// 	},
+								// }}
+								defaultValue={weponEditorsStore.frequency}
+								onBlur={handleSubmit(handleFrequencyChange)}
+							/>
+						)}
 					/>
-				)}
-			</DefaultPage>
-		</>
+				</Box>
+			</DiceTable>
+			{0 < Object.keys(weponDiceValuesStore.values).length && (
+				<DiceChart
+					editors={weponEditorsStore.editors}
+					values={weponDiceValuesStore.values}
+					points={weponPointsStore.points}
+				/>
+			)}
+		</DefaultPage>
 	);
 };
 
