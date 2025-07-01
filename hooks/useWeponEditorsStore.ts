@@ -12,7 +12,7 @@ export const DefaultEditors: { [key: string]: DiceEditor } = {
 	B: { dice: "4d2+1", color: "#ed7d31" },
 };
 
-const DefaultFrequency = 10_000;
+const DefaultFrequency = 1000;
 
 export interface WeponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
