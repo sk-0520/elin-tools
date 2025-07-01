@@ -49,8 +49,7 @@ jobs:
         if: github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/master'
         shell: bash
         run: |
-          echo "NODE_ENV=development" >> ${GITHUB_ENV}
-          cp .env.template .env.development
+          cp .env.template .env
 
       - name: <Env> develop
         if: github.ref == 'refs/heads/develop'
