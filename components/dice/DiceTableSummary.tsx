@@ -1,17 +1,19 @@
 import { TableCell, TableRow } from "@mui/material";
 import type { FC, ReactNode } from "react";
-import { type DiceValue, rankDice } from "@/features/dice";
-import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+import { rankDice } from "@/features/dice";
+import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
 import { DiceRanking } from "./DiceRanking";
 
 export type DiceTableSummaryProps = {
 	readonly children?: ReactNode;
-	readonly editors: Record<string, DiceEditor>;
-	readonly values: Record<string, DiceValue>;
+	// readonly editors: Record<string, DiceEditor>;
+	// readonly values: Record<string, DiceValue>;
 };
 
 export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
-	const { children, editors, values } = props;
+	// const { children, editors, values } = props;
+	const { children } = props;
+	const values = useWeponDiceValuesStore((a) => a.values);
 
 	const summary = {
 		count: rankDice(values, "count"),
@@ -26,22 +28,22 @@ export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 		<TableRow>
 			<TableCell colSpan={2}>{children}</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.count} />
+				<DiceRanking items={summary.count} />
 			</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.sides} />
+				<DiceRanking items={summary.sides} />
 			</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.fixedValue} />
+				<DiceRanking items={summary.fixedValue} />
 			</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.minimum} />
+				<DiceRanking items={summary.minimum} />
 			</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.maximum} />
+				<DiceRanking items={summary.maximum} />
 			</TableCell>
 			<TableCell>
-				<DiceRanking editors={editors} items={summary.expected} />
+				<DiceRanking items={summary.expected} />
 			</TableCell>
 		</TableRow>
 	);

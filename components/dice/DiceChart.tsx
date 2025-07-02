@@ -10,22 +10,31 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { type DiceValue, rankDice, sum } from "@/features/dice";
-import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+import { rankDice, sum } from "@/features/dice";
+import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
+import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
+import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
 
 interface ChartData {
 	damage: number;
 	[key: string]: number;
 }
 
-export interface DiceChartProps {
-	readonly editors: Record<string, DiceEditor>;
-	readonly values: Record<string, DiceValue>;
-	readonly points: Record<string, Array<Array<number>>>;
-}
+// export interface DiceChartProps {
+// 	readonly editors: Record<string, DiceEditor>;
+// 	readonly values: Record<string, DiceValue>;
+// 	readonly points: Record<string, Array<Array<number>>>;
+// }
 
-export const DiceChart: FC<DiceChartProps> = (props) => {
-	const { editors, points, values } = props;
+export const DiceChart: FC = () => {
+	//const { editors, points, values } = props;
+	const editors = useWeponEditorsStore((a) => a.editors);
+	const points = useWeponPointsStore((a) => a.points);
+	const values = useWeponDiceValuesStore((a) => a.values);
+
+	if (Object.keys(values).length === 0) {
+		return undefined;
+	}
 
 	const summary = {
 		minimum: rankDice(values, "minimum"),

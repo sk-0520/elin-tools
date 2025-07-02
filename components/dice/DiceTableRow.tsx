@@ -1,8 +1,9 @@
 import { TableCell, TableRow, TextField } from "@mui/material";
 import type { ChangeEvent, FC } from "react";
 import { Controller, useForm } from "react-hook-form";
-import type { DiceValue } from "@/features/dice";
-import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+
+import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
+import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
 import { NumericFormat } from "../NumericFormat";
 import { EditorId } from "./EditorId";
 
@@ -14,26 +15,32 @@ interface InputValues {
 
 export type DiceTableRowProps = {
 	id: string;
-	editor: DiceEditor;
-	error: string | undefined;
-	value: DiceValue | undefined;
-	onEditorChanged: (id: string, editor: DiceEditor) => void;
+	// editor: DiceEditor;
+	// error: string | undefined;
+	// value: DiceValue | undefined;
+	// onEditorChanged: (id: string, editor: DiceEditor) => void;
 };
 
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
-	const { id, editor, error, value, onEditorChanged } = props;
+	//const { id, editor, error, value, onEditorChanged } = props;
+	const { id } = props;
+	const editor = useWeponEditorsStore((a) => a.editors[id]);
+	const setEditor = useWeponEditorsStore((a) => a.setEditor);
+	const value = useWeponDiceValuesStore((a) => a.values[id]);
+	const error = useWeponDiceValuesStore((a) => a.errors[id]);
+
 	const { control, setValue } = useForm<InputValues>({
 		mode: "onChange",
 		reValidateMode: "onChange",
 	});
 
-	console.debug({ id, editor });
+	console.debug({ id });
 
 	const handleDiceChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setValue("dice", event.target.value);
-		onEditorChanged(id, {
+		setEditor(id, {
 			dice: event.target.value,
 			color: editor.color,
 		});
