@@ -2,6 +2,7 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
+	Box,
 	Button,
 	Collapse,
 	createTheme,
@@ -229,17 +230,46 @@ export const GlobalMap: FC = () => {
 						eventHandlers={developEventHandlers}
 					>
 						<Popup autoClose={false}>
-							<Button
-								variant="outlined"
-								startIcon={<ContentCopyIcon />}
-								onClick={async (_ev) => {
-									await navigator.clipboard.writeText(
-										JSON.stringify(position),
-									);
-								}}
-							>
-								{JSON.stringify(position)}
-							</Button>
+							<Stack>
+								<Typography
+									variant="body1"
+									fontSize="small"
+									sx={{ whiteSpace: "pre" }}
+								>
+									{JSON.stringify(position, undefined, 2)}
+								</Typography>
+
+								<Box
+									sx={{
+										display: "flex",
+										justifyItems: "center",
+										alignItems: "center",
+									}}
+								>
+									<Button
+										variant="outlined"
+										startIcon={<ContentCopyIcon />}
+										onClick={async (_ev) => {
+											await navigator.clipboard.writeText(
+												JSON.stringify(position),
+											);
+										}}
+									>
+										LatLng
+									</Button>
+									<Button
+										variant="outlined"
+										startIcon={<ContentCopyIcon />}
+										onClick={async (_ev) => {
+											await navigator.clipboard.writeText(
+												`position: ${JSON.stringify(position)}`,
+											);
+										}}
+									>
+										{"position:{...}"}
+									</Button>
+								</Box>
+							</Stack>
 						</Popup>
 					</Marker>
 				</LayerGroup>
