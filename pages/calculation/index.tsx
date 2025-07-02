@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import type { NextPage } from "next";
+import { PickpocketWeightCalculator } from "@/components/calculation/PickpocketWeightCalculator";
 import { DefaultPage } from "@/components/layout/DefaultPage";
-import { PickpocketWeightCalculator } from "@/components/pages/calculation/PickpocketWeightCalculator";
 
 const Page: NextPage = () => {
 	return (

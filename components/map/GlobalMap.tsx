@@ -36,6 +36,7 @@ import {
 	type MapImplementation,
 	type MapKind,
 } from "@/features/map";
+import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 import nextConfig from "../../next.config";
 import { CheckListItem } from "./CheckListItem";
 import { MapLabel } from "./MapLabel";
@@ -114,33 +115,16 @@ const MapImplementations: Array<{
 	},
 ];
 
-export interface GlobalMapProps {
-	readonly controller: boolean;
-	readonly isVisibles: Record<MapKind, boolean>;
-	readonly conditions: Record<MapCondition, boolean>;
-	readonly implementations: Record<MapImplementation, boolean>;
+export const GlobalMap: FC = () => {
+	const controller = useGlobalMapStore((a) => a.controller);
+	const isVisibles = useGlobalMapStore((a) => a.isVisibles);
+	const conditions = useGlobalMapStore((a) => a.conditions);
+	const implementations = useGlobalMapStore((a) => a.implementations);
+	const setController = useGlobalMapStore((a) => a.setController);
+	const setVisible = useGlobalMapStore((a) => a.setVisible);
+	const setCondition = useGlobalMapStore((a) => a.setCondition);
+	const setImplementation = useGlobalMapStore((a) => a.setImplementation);
 
-	onControllerChanged: (isVisible: boolean) => void;
-
-	onVisibleChanged: (kind: MapKind, isVisible: boolean) => void;
-	onConditionChanged: (condition: MapCondition, isEnabled: boolean) => void;
-	onImplementationChanged: (
-		implementation: MapImplementation,
-		isEnabled: boolean,
-	) => void;
-}
-
-export const GlobalMap: FC<GlobalMapProps> = (props) => {
-	const {
-		controller,
-		isVisibles,
-		conditions,
-		implementations,
-		onControllerChanged,
-		onVisibleChanged,
-		onConditionChanged,
-		onImplementationChanged,
-	} = props;
 	const [position, setPosition] = useState<LatLngExpression>({
 		lat: 0,
 		lng: 0,
@@ -285,7 +269,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 						<Stack>
 							<ListItemButton
 								onClick={() => {
-									onControllerChanged(!controller);
+									setController(!controller);
 								}}
 							>
 								{controller ? (
@@ -307,10 +291,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 												key={a.kind}
 												isChecked={isVisibles[a.kind]}
 												onClick={() => {
-													onVisibleChanged(
-														a.kind,
-														!isVisibles[a.kind],
-													);
+													setVisible(a.kind, !isVisibles[a.kind]);
 												}}
 											>
 												{a.display}
@@ -328,7 +309,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 												<CheckListItem
 													isChecked={conditions[a.condition]}
 													onClick={() =>
-														onConditionChanged(
+														setCondition(
 															a.condition,
 															!conditions[a.condition],
 														)
@@ -359,7 +340,7 @@ export const GlobalMap: FC<GlobalMapProps> = (props) => {
 																				]
 																			}
 																			onClick={() =>
-																				onImplementationChanged(
+																				setImplementation(
 																					b.implementation,
 																					!implementations[
 																						b

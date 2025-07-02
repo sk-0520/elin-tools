@@ -9,7 +9,7 @@
 		"build": "npm-run-all --sequential build:license build:app",
 		"test": "jest",
 		"lint:type": "tsc",
-		"lint:script": "biome check .",
+		"lint:code": "biome check .",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint-fix": "biome check --write .",
 		"lint-fix-unsafe": "biome check --write --unsafe .",

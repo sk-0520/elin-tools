@@ -9,7 +9,10 @@ import {
 import type { FC } from "react";
 import { Fragment } from "react";
 import type { RankValue } from "@/features/dice";
-import type { DiceEditor } from "@/hooks/useWeponEditorsStore";
+import {
+	type DiceEditor,
+	useWeponEditorsStore,
+} from "@/hooks/useWeponEditorsStore";
 import { EditorId } from "./EditorId";
 
 type StyledIdListItemProps = ListItemProps & {
@@ -33,12 +36,12 @@ const StyledIdListItem = styled((props: StyledIdListItemProps) => {
 })();
 
 export interface DiceRankingProps {
-	readonly editors: Record<string, DiceEditor>;
 	readonly items: RankValue[];
 }
 
 export const DiceRanking: FC<DiceRankingProps> = (props) => {
-	const { items, editors } = props;
+	const { items } = props;
+	const editors = useWeponEditorsStore((a) => a.editors);
 
 	return (
 		<List component={Stack} direction="row" disablePadding>

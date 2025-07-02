@@ -1,95 +1,27 @@
 import { Box, Button, ButtonGroup, Tooltip, Typography } from "@mui/material";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DiceChart } from "@/components/dice/DiceChart";
 import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { NumericFormat } from "@/components/NumericFormat";
 import { ReferenceLink } from "@/components/ReferenceLink";
-import { calculateDice, parseDice, rollDice } from "@/features/dice";
-import { BuiltinRandom } from "@/features/random";
-import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
-import {
-	type DiceEditor,
-	useWeponEditorsStore,
-} from "@/hooks/useWeponEditorsStore";
-import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
+import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
 
 const Frequencies = [100, 1000, 10000, 100000] as const;
 
 const Page: NextPage = () => {
-	const weponEditorsStore = useWeponEditorsStore();
-	const weponDiceValuesStore = useWeponDiceValuesStore();
-	const weponPointsStore = useWeponPointsStore();
-	// 💩再計算用フラグ。そもそもほかの値をストア管理する必要なかった疑惑まである(本来は全部の値を見れるようにするつもりだったけど意味なさ過ぎてやめた経緯あり)
-	const [slacker, setSlacker] = useState<object>({});
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: 初回
-	useEffect(() => {
-		const editors = weponEditorsStore.editors;
-		if (Object.keys(editors).length === 0) {
-			console.info("リセット");
-			weponEditorsStore.reset();
-		}
-	}, []);
-
-	// ダイス入力
-	useEffect(() => {
-		console.assert(slacker);
-		const editors = weponEditorsStore.editors;
-		console.log({ editors });
-		for (const [key, editor] of Object.entries(editors)) {
-			try {
-				weponPointsStore.remove(key);
-				if (!editor.dice.trim()) {
-					weponEditorsStore.setEditor(key, editor);
-					weponDiceValuesStore.setValue(key, undefined);
-					weponPointsStore.remove(key);
-				} else {
-					const dice = parseDice(editor.dice);
-					const value = calculateDice(dice);
-					weponEditorsStore.setEditor(key, editor);
-					weponDiceValuesStore.setValue(key, value);
-					const points = rollDice(
-						value,
-						weponEditorsStore.frequency,
-						new BuiltinRandom(),
-					);
-					weponPointsStore.setPoint(key, points);
-				}
-			} catch (ex) {
-				console.error(ex);
-				weponDiceValuesStore.setError(key, `${ex}`);
-			}
-		}
-	}, [
-		weponEditorsStore.editors,
-		weponEditorsStore.frequency,
-		weponEditorsStore.setEditor,
-		weponDiceValuesStore.setError,
-		weponDiceValuesStore.setValue,
-		weponPointsStore.remove,
-		weponPointsStore.setPoint,
-		slacker,
-	]);
-
-	const handleEditorChanged = (id: string, editor: DiceEditor) => {
-		console.debug({ id, editor });
-		weponEditorsStore.setEditor(id, editor);
-	};
+	const frequency = useWeponEditorsStore((a) => a.frequency);
+	const setFrequency = useWeponEditorsStore((a) => a.setFrequency);
+	const [slacker, setSlacker] = useState({}); // 💩再計算処理
 
 	const handleFrequencyClick = (frequency: number) => {
-		weponEditorsStore.setFrequency(frequency);
+		setFrequency(frequency);
 	};
 
 	return (
 		<DefaultPage pageId="weapon">
-			<DiceTable
-				editors={weponEditorsStore.editors}
-				errors={weponDiceValuesStore.errors}
-				values={weponDiceValuesStore.values}
-				onEditorChanged={handleEditorChanged}
-			>
+			<DiceTable slacker={slacker}>
 				<Box
 					sx={{
 						display: "flex",
@@ -108,9 +40,7 @@ const Page: NextPage = () => {
 								<Tooltip key={a} title={<NumericFormat value={a} />}>
 									<Button
 										variant={
-											weponEditorsStore.frequency === a
-												? "contained"
-												: undefined
+											frequency === a ? "contained" : undefined
 										}
 										onClick={(_e) => handleFrequencyClick(a)}
 									>
@@ -130,16 +60,6 @@ const Page: NextPage = () => {
 							marginLeft: "2ch",
 						}}
 						onClick={() => {
-							// for (const [key, value] of Object.entries(
-							// 	weponDiceValuesStore.values,
-							// )) {
-							// 	const points = rollDice(
-							// 		value,
-							// 		weponEditorsStore.frequency,
-							// 		new BuiltinRandom(),
-							// 	);
-							// 	weponPointsStore.setPoint(key, points);
-							// }
 							setSlacker({});
 						}}
 					>
@@ -147,13 +67,7 @@ const Page: NextPage = () => {
 					</Button>
 				</Box>
 			</DiceTable>
-			{0 < Object.keys(weponDiceValuesStore.values).length && (
-				<DiceChart
-					editors={weponEditorsStore.editors}
-					values={weponDiceValuesStore.values}
-					points={weponPointsStore.points}
-				/>
-			)}
+			<DiceChart />
 			<ReferenceLink href="https://elins-inn.wikiru.jp/?%E6%AD%A6%E5%99%A8%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0">
 				武器システム - Elin 攻略有志wiki
 			</ReferenceLink>
