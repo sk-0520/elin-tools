@@ -19,9 +19,9 @@ type StyledIdListItemProps = ListItemProps & {
 };
 
 const StyledIdListItem = styled((props: StyledIdListItemProps) => {
-	const { id, editors, isTop, ...sourceProps } = props;
+	const { id, editors, isTop, ...originProps } = props;
 	return (
-		<ListItem disablePadding {...sourceProps}>
+		<ListItem disablePadding {...originProps}>
 			<EditorId
 				id={id}
 				color={editors[id].color}

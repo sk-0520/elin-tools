@@ -57,7 +57,7 @@ export const useWeponEditorsStore = create<
 			};
 		},
 		{
-			name: "weapon-dice",
+			name: "weapon-editors",
 			storage: createJSONStorage(() => getDefaultStorage()),
 		},
 	),

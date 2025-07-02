@@ -5,6 +5,7 @@ import { DiceChart } from "@/components/dice/DiceChart";
 import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { NumericFormat } from "@/components/NumericFormat";
+import { ReferenceLink } from "@/components/ReferenceLink";
 import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";
 import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
@@ -153,6 +154,9 @@ const Page: NextPage = () => {
 					points={weponPointsStore.points}
 				/>
 			)}
+			<ReferenceLink href="https://elins-inn.wikiru.jp/?%E6%AD%A6%E5%99%A8%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0">
+				武器システム - Elin 攻略有志wiki
+			</ReferenceLink>
 		</DefaultPage>
 	);
 };

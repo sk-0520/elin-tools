@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: <Restore> .next/cache
-        if: github.ref != 'refs/heads/develop' && github.ref == 'refs/heads/master'
+        if: github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/master'
         uses: actions/cache@v4
         with:
           path: |
@@ -46,11 +46,10 @@ jobs:
         run: npm run test
 
       - name: <Env> default
-        if: github.ref != 'refs/heads/develop' && github.ref == 'refs/heads/master'
+        if: github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/master'
         shell: bash
         run: |
-          echo "NODE_ENV=development" >> ${GITHUB_ENV}
-          cp .env.template .env.development
+          cp .env.template .env
 
       - name: <Env> develop
         if: github.ref == 'refs/heads/develop'
@@ -78,7 +77,6 @@ jobs:
           npm run build
         env:
           NODE_ENV: ${{ env.NODE_ENV }}
-
 
       - name: <Artifact> front-end
         uses: actions/upload-pages-artifact@v3
