@@ -40,7 +40,7 @@ export const Pages: Array<PageInfo> = [
 ];
 
 export function getExecution(): "prodction" | "staging" | "development" {
-	switch (process.env.NEXT_PUBLIC_DEFAULT_STORAGE) {
+	switch (process.env.NEXT_PUBLIC_EXECUTION) {
 		case "prodction":
 			return "prodction";
 

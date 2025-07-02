@@ -51,14 +51,14 @@ jobs:
         run: |
           cp .env.template .env
 
-      - name: <Env> develop
+      - name: <Env> staging
         if: github.ref == 'refs/heads/develop'
         shell: bash
         run: |
           echo "NODE_ENV=production" >> ${GITHUB_ENV}
           echo "#staging" > .env.production
-          echo "NEXT_PUBLIC_EXECUTION=staging" >> .env
-          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env
+          echo "NEXT_PUBLIC_EXECUTION=staging" >> .env.production
+          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
 
       - name: <Env> prodction
         if: github.ref == 'refs/heads/master'
@@ -66,15 +66,12 @@ jobs:
         run: |
           echo "NODE_ENV=production" >> ${GITHUB_ENV}
           echo "#prodction" > .env.production
-          echo "NEXT_PUBLIC_EXECUTION=prodction" >> .env
-          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env
+          echo "NEXT_PUBLIC_EXECUTION=prodction" >> .env.production
+          echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
 
       - name: <Build> front-end
         shell: bash
-        run: |
-          echo "env.NODE_ENV:${{ env.NODE_ENV }}"
-          echo "NODE_ENV: $NODE_ENV"
-          npm run build
+        run: npm run build
         env:
           NODE_ENV: ${{ env.NODE_ENV }}
 
