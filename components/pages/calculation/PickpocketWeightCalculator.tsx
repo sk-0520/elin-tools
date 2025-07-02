@@ -1,15 +1,16 @@
 import FitnessCenterOutlinedIcon from "@mui/icons-material/FitnessCenterOutlined";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { type FC, useState } from "react";
+import type { FC } from "react";
 import { AnswerTextField } from "@/components/calculation/AnswerTextField";
 import { InputTextField } from "@/components/calculation/InputTextField";
 import { GroupElement } from "@/components/GroupElement";
 import { ReferenceLink } from "@/components/ReferenceLink";
 import { convertFloatChain, toDisplayFloat } from "@/features/calculation";
+import { usePickpocketWeightCalculationStore } from "@/hooks/calculation/usePickpocketWeightCalculationStore";
 
-export const PickpocketCalculator: FC = () => {
-	const [strength, setStrength] = useState(20);
-	const [pickpocket, setPickpocket] = useState(10);
+export const PickpocketWeightCalculator: FC = () => {
+	const { strength, pickpocket, setStrength, setPickpocket } =
+		usePickpocketWeightCalculationStore();
 
 	const weight = strength * 0.1 + pickpocket * 0.2 + 1;
 
