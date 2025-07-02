@@ -6,12 +6,9 @@ import { DiceRanking } from "./DiceRanking";
 
 export type DiceTableSummaryProps = {
 	readonly children?: ReactNode;
-	// readonly editors: Record<string, DiceEditor>;
-	// readonly values: Record<string, DiceValue>;
 };
 
 export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
-	// const { children, editors, values } = props;
 	const { children } = props;
 	const values = useWeponDiceValuesStore((a) => a.values);
 

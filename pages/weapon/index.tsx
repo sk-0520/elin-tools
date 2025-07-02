@@ -1,5 +1,6 @@
 import { Box, Button, ButtonGroup, Tooltip, Typography } from "@mui/material";
 import type { NextPage } from "next";
+import { useState } from "react";
 import { DiceChart } from "@/components/dice/DiceChart";
 import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
@@ -10,66 +11,9 @@ import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
 const Frequencies = [100, 1000, 10000, 100000] as const;
 
 const Page: NextPage = () => {
-	// // biome-ignore lint/correctness/useExhaustiveDependencies: 初回
-	// useEffect(() => {
-	// 	const editors = weponEditorsStore.editors;
-	// 	if (Object.keys(editors).length === 0) {
-	// 		console.info("リセット");
-	// 		weponEditorsStore.reset();
-	// 	}
-	// }, []);
-
-	// // ダイス入力
-	// useEffect(() => {
-	// 	console.assert(slacker);
-	// 	const editors = weponEditorsStore.editors;
-	// 	console.log({ editors });
-	// 	for (const [key, editor] of Object.entries(editors)) {
-	// 		try {
-	// 			weponPointsStore.remove(key);
-	// 			if (!editor.dice.trim()) {
-	// 				weponEditorsStore.setEditor(key, editor);
-	// 				weponDiceValuesStore.setValue(key, undefined);
-	// 				weponPointsStore.remove(key);
-	// 			} else {
-	// 				const dice = parseDice(editor.dice);
-	// 				const value = calculateDice(dice);
-	// 				weponEditorsStore.setEditor(key, editor);
-	// 				weponDiceValuesStore.setValue(key, value);
-	// 				const points = rollDice(
-	// 					value,
-	// 					weponEditorsStore.frequency,
-	// 					new BuiltinRandom(),
-	// 				);
-	// 				weponPointsStore.setPoint(key, points);
-	// 			}
-	// 		} catch (ex) {
-	// 			console.error(ex);
-	// 			weponDiceValuesStore.setError(key, `${ex}`);
-	// 		}
-	// 	}
-	// }, [
-	// 	weponEditorsStore.editors,
-	// 	weponEditorsStore.frequency,
-	// 	weponEditorsStore.setEditor,
-	// 	weponDiceValuesStore.setError,
-	// 	weponDiceValuesStore.setValue,
-	// 	weponPointsStore.remove,
-	// 	weponPointsStore.setPoint,
-	// 	slacker,
-	// ]);
-
-	// const handleEditorChanged = (id: string, editor: DiceEditor) => {
-	// 	console.debug({ id, editor });
-	// 	weponEditorsStore.setEditor(id, editor);
-	// };
-
-	// const editorIds = useWeponEditorsStore(
-	// 	useShallow((a) => Object.keys(a.editors)),
-	// );
-
 	const frequency = useWeponEditorsStore((a) => a.frequency);
 	const setFrequency = useWeponEditorsStore((a) => a.setFrequency);
+	const [slacker, setSlacker] = useState({}); // 💩再計算処理
 
 	const handleFrequencyClick = (frequency: number) => {
 		setFrequency(frequency);
@@ -77,7 +21,7 @@ const Page: NextPage = () => {
 
 	return (
 		<DefaultPage pageId="weapon">
-			<DiceTable>
+			<DiceTable slacker={slacker}>
 				<Box
 					sx={{
 						display: "flex",
@@ -116,19 +60,7 @@ const Page: NextPage = () => {
 							marginLeft: "2ch",
 						}}
 						onClick={() => {
-							// for (const [key, value] of Object.entries(
-							// 	weponDiceValuesStore.values,
-							// )) {
-							// 	const points = rollDice(
-							// 		value,
-							// 		weponEditorsStore.frequency,
-							// 		new BuiltinRandom(),
-							// 	);
-							// 	weponPointsStore.setPoint(key, points);
-							// }
-							/*
 							setSlacker({});
-							*/
 						}}
 					>
 						再計算

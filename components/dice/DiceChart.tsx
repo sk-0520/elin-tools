@@ -10,6 +10,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+import { getValue } from "@/features/access";
 import { rankDice, sum } from "@/features/dice";
 import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
 import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
@@ -20,14 +21,7 @@ interface ChartData {
 	[key: string]: number;
 }
 
-// export interface DiceChartProps {
-// 	readonly editors: Record<string, DiceEditor>;
-// 	readonly values: Record<string, DiceValue>;
-// 	readonly points: Record<string, Array<Array<number>>>;
-// }
-
 export const DiceChart: FC = () => {
-	//const { editors, points, values } = props;
 	const editors = useWeponEditorsStore((a) => a.editors);
 	const points = useWeponPointsStore((a) => a.points);
 	const values = useWeponDiceValuesStore((a) => a.values);
@@ -41,7 +35,10 @@ export const DiceChart: FC = () => {
 		maximum: rankDice(values, "maximum"),
 	};
 	const rank = {
-		minimum: summary.minimum[summary.minimum.length - 1].value.minimum,
+		minimum:
+			summary.minimum[
+				summary.minimum.length === 1 ? 0 : summary.minimum.length - 1
+			].value.minimum,
 		maximum: summary.maximum[0].value.maximum,
 	};
 
@@ -57,7 +54,8 @@ export const DiceChart: FC = () => {
 		const currentData: ChartData = {
 			damage: damage,
 		};
-		for (const [id, pointValues] of pointSummary) {
+		for (const id of Object.keys(values)) {
+			const pointValues = getValue(pointSummary, id);
 			const dice = values[id];
 
 			if (dice.minimum <= damage && damage <= dice.maximum) {

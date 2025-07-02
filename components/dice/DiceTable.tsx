@@ -16,17 +16,11 @@ const DiceValueWidth = 45;
 
 export type DiceTableProps = {
 	children?: ReactNode;
-	/*
-	editorIds: Record<string, DiceEditor>;
-	errors: Record<string, string>;
-	values: Record<string, DiceValue>;
-	onEditorChanged: (id: string, editor: DiceEditor) => void;
-	*/
+	slacker: object;
 };
 
 export const DiceTable: FC<DiceTableProps> = (props) => {
-	// const { children, editors, errors, values, onEditorChanged } = props;
-	const { children } = props;
+	const { children, slacker } = props;
 
 	const editorIds = useWeponEditorsStore(
 		useShallow((a) =>
@@ -49,24 +43,8 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 				</TableRow>
 			</TableHead>
 			<TableBody>
-				{/* {Object.entries(editors)
-					.toSorted(([a, _av], [b, _bv]) => a.localeCompare(b))
-					.map(([k, v]) => {
-						const error = errors[k];
-						const value = values[k];
-						return (
-							<DiceTableRow
-								key={k}
-								id={k}
-								editor={v}
-								error={error}
-								value={value}
-								onEditorChanged={onEditorChanged}
-							/>
-						);
-					})} */}
 				{editorIds.map((a) => (
-					<DiceTableRow key={a} id={a} />
+					<DiceTableRow key={a} id={a} slacker={slacker} />
 				))}
 			</TableBody>
 			<TableFooter>

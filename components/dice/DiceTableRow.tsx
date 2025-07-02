@@ -17,15 +17,11 @@ interface InputValues {
 
 export type DiceTableRowProps = {
 	id: string;
-	// editor: DiceEditor;
-	// error: string | undefined;
-	// value: DiceValue | undefined;
-	// onEditorChanged: (id: string, editor: DiceEditor) => void;
+	slacker: object;
 };
 
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
-	//const { id, editor, error, value, onEditorChanged } = props;
-	const { id } = props;
+	const { id, slacker } = props;
 	const frequency = useWeponEditorsStore((a) => a.frequency);
 	const editor = useWeponEditorsStore((a) => a.editors[id]);
 	const setEditor = useWeponEditorsStore((a) => a.setEditor);
@@ -44,6 +40,7 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	console.debug({ id });
 
 	useEffect(() => {
+		console.assert(slacker);
 		if (!editor.dice.trim()) {
 			setDiceValue(id, undefined);
 			remove(id);
@@ -59,7 +56,16 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				setError(id, `${ex}`);
 			}
 		}
-	}, [id, editor.dice, frequency, setError, setDiceValue, remove, setPoint]);
+	}, [
+		id,
+		slacker,
+		editor.dice,
+		frequency,
+		setError,
+		setDiceValue,
+		remove,
+		setPoint,
+	]);
 
 	const handleDiceChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
