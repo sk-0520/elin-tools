@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
+		"dev-win": "set NODE_OPTIONS=--inspect && next dev --turbopack",
 		"build:license": "ts-node --project tsconfig.local.json ./tools/license/license-entry.ts",
 		"build:app": "next build",
 		"build": "npm-run-all --sequential build:license build:app",
