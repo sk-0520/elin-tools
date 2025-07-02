@@ -11,11 +11,14 @@ import {
 	Typography,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
+import Head from "next/head";
 import type { FC, ReactNode } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { getExecution, type PageId, Pages } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { SideMenu } from "../SideMenu";
+
+const BaseTitle = "elin tools";
 
 const sidebarWidth = "200px";
 
@@ -43,6 +46,12 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 
 	return (
 		<ThemeProvider theme={DefaultTheme}>
+			<Head>
+				<title>
+					{pageId !== "root" ? `${page.title} - ` : ""}
+					{BaseTitle}
+				</title>
+			</Head>
 			<Box sx={{ display: "flex" }}>
 				<AppBar
 					id="header"
