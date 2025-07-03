@@ -13,7 +13,7 @@ import type { NextPage } from "next";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { getDefaultStorage, getDefaultStorageName } from "@/features/storage";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
-import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
+import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 
 const StyledListItemButton = styled(ListItem)();
 const StyledListItemText = styled(ListItemText)({
@@ -24,7 +24,7 @@ const StyledListItemText = styled(ListItemText)({
 });
 
 const Page: NextPage = () => {
-	const weponEditorsStore = useWeponEditorsStore();
+	const weaponEditorsStore = useWeaponEditorsStore();
 	const globalMapStore = useGlobalMapStore();
 
 	const defaultStorageName = getDefaultStorageName();
@@ -69,14 +69,14 @@ const Page: NextPage = () => {
 					<Divider sx={{ marginBlock: 1 }} />
 
 					<ListItem>
-						<Button onClick={() => weponEditorsStore.reset()}>
+						<Button onClick={() => weaponEditorsStore.reset()}>
 							武器初期化
 						</Button>
 					</ListItem>
 					<StyledListItemText
 						primary={
 							<pre>
-								{JSON.stringify(weponEditorsStore, undefined, 2)}
+								{JSON.stringify(weaponEditorsStore, undefined, 2)}
 							</pre>
 						}
 					/>

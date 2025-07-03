@@ -3,9 +3,9 @@ import { type ChangeEvent, type FC, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";
-import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
-import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
-import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
+import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
+import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
+import { useWeaponPointsStore } from "@/hooks/useWeaponPointsStore";
 import { NumericFormat } from "../NumericFormat";
 import { EditorId } from "./EditorId";
 
@@ -22,15 +22,15 @@ export type DiceTableRowProps = {
 
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	const { id, slacker } = props;
-	const frequency = useWeponEditorsStore((a) => a.frequency);
-	const editor = useWeponEditorsStore((a) => a.editors[id]);
-	const setEditor = useWeponEditorsStore((a) => a.setEditor);
-	const value = useWeponDiceValuesStore((a) => a.values[id]);
-	const error = useWeponDiceValuesStore((a) => a.errors[id]);
-	const setDiceValue = useWeponDiceValuesStore((a) => a.setValue);
-	const setError = useWeponDiceValuesStore((a) => a.setError);
-	const remove = useWeponPointsStore((a) => a.remove);
-	const setPoint = useWeponPointsStore((a) => a.setPoint);
+	const frequency = useWeaponEditorsStore((a) => a.frequency);
+	const editor = useWeaponEditorsStore((a) => a.editors[id]);
+	const setEditor = useWeaponEditorsStore((a) => a.setEditor);
+	const value = useWeaponDiceValuesStore((a) => a.values[id]);
+	const error = useWeaponDiceValuesStore((a) => a.errors[id]);
+	const setDiceValue = useWeaponDiceValuesStore((a) => a.setValue);
+	const setError = useWeaponDiceValuesStore((a) => a.setError);
+	const remove = useWeaponPointsStore((a) => a.remove);
+	const setPoint = useWeaponPointsStore((a) => a.setPoint);
 
 	const { control, setValue } = useForm<InputValues>({
 		mode: "onChange",

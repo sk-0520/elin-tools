@@ -11,8 +11,8 @@ import { Fragment } from "react";
 import type { RankValue } from "@/features/dice";
 import {
 	type DiceEditor,
-	useWeponEditorsStore,
-} from "@/hooks/useWeponEditorsStore";
+	useWeaponEditorsStore,
+} from "@/hooks/useWeaponEditorsStore";
 import { EditorId } from "./EditorId";
 
 type StyledIdListItemProps = ListItemProps & {
@@ -41,7 +41,7 @@ export interface DiceRankingProps {
 
 export const DiceRanking: FC<DiceRankingProps> = (props) => {
 	const { items } = props;
-	const editors = useWeponEditorsStore((a) => a.editors);
+	const editors = useWeaponEditorsStore((a) => a.editors);
 
 	return (
 		<List component={Stack} direction="row" disablePadding>

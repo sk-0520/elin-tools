@@ -12,9 +12,9 @@ import {
 } from "recharts";
 import { getValue } from "@/features/access";
 import { rankDice, sum } from "@/features/dice";
-import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
-import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
-import { useWeponPointsStore } from "@/hooks/useWeponPointsStore";
+import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
+import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
+import { useWeaponPointsStore } from "@/hooks/useWeaponPointsStore";
 
 interface ChartData {
 	damage: number;
@@ -22,9 +22,9 @@ interface ChartData {
 }
 
 export const DiceChart: FC = () => {
-	const editors = useWeponEditorsStore((a) => a.editors);
-	const points = useWeponPointsStore((a) => a.points);
-	const values = useWeponDiceValuesStore((a) => a.values);
+	const editors = useWeaponEditorsStore((a) => a.editors);
+	const points = useWeaponPointsStore((a) => a.points);
+	const values = useWeaponDiceValuesStore((a) => a.values);
 
 	if (Object.keys(values).length === 0) {
 		return undefined;

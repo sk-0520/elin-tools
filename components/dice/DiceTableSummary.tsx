@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@mui/material";
 import type { FC, ReactNode } from "react";
 import { rankDice } from "@/features/dice";
-import { useWeponDiceValuesStore } from "@/hooks/useWeponDiceValuesStore";
+import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
 import { DiceRanking } from "./DiceRanking";
 
 export type DiceTableSummaryProps = {
@@ -10,7 +10,7 @@ export type DiceTableSummaryProps = {
 
 export const DiceTableSummary: FC<DiceTableSummaryProps> = (props) => {
 	const { children } = props;
-	const values = useWeponDiceValuesStore((a) => a.values);
+	const values = useWeaponDiceValuesStore((a) => a.values);
 
 	const summary = {
 		count: rankDice(values, "count"),

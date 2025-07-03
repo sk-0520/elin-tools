@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import type { FC, ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
+import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 import { DiceTableRow } from "./DiceTableRow";
 import { DiceTableSummary } from "./DiceTableSummary";
 
@@ -22,7 +22,7 @@ export type DiceTableProps = {
 export const DiceTable: FC<DiceTableProps> = (props) => {
 	const { children, slacker } = props;
 
-	const editorIds = useWeponEditorsStore(
+	const editorIds = useWeaponEditorsStore(
 		useShallow((a) =>
 			Object.keys(a.editors).toSorted((aa, bb) => aa.localeCompare(bb)),
 		),

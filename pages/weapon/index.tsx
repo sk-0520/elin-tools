@@ -6,13 +6,13 @@ import { DiceTable } from "@/components/dice/DiceTable";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { NumericFormat } from "@/components/NumericFormat";
 import { ReferenceLink } from "@/components/ReferenceLink";
-import { useWeponEditorsStore } from "@/hooks/useWeponEditorsStore";
+import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 
 const Frequencies = [100, 1000, 10000, 100000] as const;
 
 const Page: NextPage = () => {
-	const frequency = useWeponEditorsStore((a) => a.frequency);
-	const setFrequency = useWeponEditorsStore((a) => a.setFrequency);
+	const frequency = useWeaponEditorsStore((a) => a.frequency);
+	const setFrequency = useWeaponEditorsStore((a) => a.setFrequency);
 	const [slacker, setSlacker] = useState({}); // 💩再計算処理
 
 	const handleFrequencyClick = (frequency: number) => {

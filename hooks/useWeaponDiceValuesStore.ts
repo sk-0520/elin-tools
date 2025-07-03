@@ -1,23 +1,23 @@
 import { create } from "zustand";
 import type { DiceValue } from "@/features/dice";
 
-const DefaultState: WeponDiceValuesState = {
+const DefaultState: WeaponDiceValuesState = {
 	errors: {},
 	values: {},
 };
 
-interface WeponDiceValuesState {
+interface WeaponDiceValuesState {
 	readonly errors: Record<string, string>;
 	readonly values: Record<string, DiceValue>;
 }
 
-interface WeponDiceValuesAction {
+interface WeaponDiceValuesAction {
 	setError: (id: string, error: string) => void;
 	setValue: (id: string, dice: DiceValue | undefined) => void;
 }
 
-export const useWeponDiceValuesStore = create<
-	WeponDiceValuesState & WeponDiceValuesAction
+export const useWeaponDiceValuesStore = create<
+	WeaponDiceValuesState & WeaponDiceValuesAction
 >((set, get) => {
 	return {
 		...DefaultState,
