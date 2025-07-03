@@ -59,15 +59,18 @@ jobs:
           echo "#staging" > .env.production
           echo "NEXT_PUBLIC_EXECUTION=staging" >> .env.production
           echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
+          echo "NEXT_PUBLIC_TRACKING=true" >> .env.production
 
       - name: <Env> prodction
-        if: github.ref == 'refs/heads/master'
+        #if: github.ref == 'refs/heads/master'
+        if: false
         shell: bash
         run: |
           echo "NODE_ENV=production" >> ${GITHUB_ENV}
           echo "#prodction" > .env.production
           echo "NEXT_PUBLIC_EXECUTION=prodction" >> .env.production
           echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
+          echo "NEXT_PUBLIC_TRACKING=true" >> .env.production
 
       - name: <Build> front-end
         shell: bash
