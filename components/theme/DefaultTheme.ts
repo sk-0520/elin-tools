@@ -10,8 +10,8 @@ export const DefaultTheme = createTheme({
 			dark: "#1B5E20",
 		},
 		secondary: {
-			main: "#FF6B6B",
-			light: "#FF8A8A",
+			main: "#8080ff",
+			light: "#8080ff",
 			dark: "#D32F2F",
 		},
 		error: {
@@ -65,12 +65,12 @@ export const DefaultTheme = createTheme({
 		},
 	},
 	typography: {
-		button: {
-			textTransform: "none",
-		},
 		fontFamily: DefaultFontFamily,
 		h1: {
 			fontWeight: 600,
+		},
+		button: {
+			textTransform: "none",
 		},
 	},
 	shape: {

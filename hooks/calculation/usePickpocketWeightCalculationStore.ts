@@ -13,6 +13,7 @@ interface PickpocketWeightCalculationState {
 }
 
 interface PickpocketWeightCalculationAction {
+	reset: () => void;
 	setStrength: (value: number) => void;
 	setPickpocket: (value: number) => void;
 }
@@ -23,6 +24,8 @@ export const usePickpocketWeightCalculationStore = create<
 	persist(
 		(set, _get) => ({
 			...DefaultState,
+
+			reset: () => set(DefaultState),
 
 			setStrength: (value: number) => set({ strength: value }),
 			setPickpocket: (value: number) => set({ pickpocket: value }),

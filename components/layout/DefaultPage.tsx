@@ -14,7 +14,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import Head from "next/head";
 import type { FC, ReactNode } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
-import { getExecution, type PageId, Pages } from "@/features/pages";
+import { getExecution, getPage, type PageId } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { SideMenu } from "../SideMenu";
 
@@ -27,7 +27,7 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 const ExecutionDisplayNames: Record<ReturnType<typeof getExecution>, string> = {
 	development: "開発",
 	staging: "ステージング",
-	prodction: "本番",
+	production: "本番",
 } as const;
 const execution = getExecution();
 export interface DefaultPageProps {
@@ -39,10 +39,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
 	const sidebarStore = useSidebarStore();
 
-	const page = Pages.find((a) => a.id === pageId);
-	if (!page) {
-		throw new Error(pageId);
-	}
+	const page = getPage(pageId);
 
 	return (
 		<ThemeProvider theme={DefaultTheme}>
@@ -73,7 +70,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						<Typography variant="h6" noWrap component="h1">
 							{page.title}
 						</Typography>
-						{execution !== "prodction" && (
+						{execution !== "production" && (
 							<Typography sx={{ opacity: 0.9, marginLeft: "2ch" }}>
 								({ExecutionDisplayNames[execution]})
 							</Typography>

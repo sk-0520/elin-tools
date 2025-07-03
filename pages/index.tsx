@@ -1,31 +1,64 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
+	type AccordionSummaryProps,
+	Box,
 	Button,
+	type ButtonProps,
 	Divider,
 	Link,
-	List,
-	ListItem,
-	ListItemText,
 	Stack,
 	styled,
 	Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
 import { DefaultPage } from "@/components/layout/DefaultPage";
+import { getPage, type PageId } from "@/features/pages";
 import { getDefaultStorage, getDefaultStorageName } from "@/features/storage";
+import { usePickpocketWeightCalculationStore } from "@/hooks/calculation/usePickpocketWeightCalculationStore";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 
-const StyledListItemButton = styled(ListItem)();
-const StyledListItemText = styled(ListItemText)({
-	marginLeft: 20,
-	".MuiListItemText-primary": {
-		fontFamily: "monospace",
-	},
-});
+const StyledAccordionSummary = styled((props: AccordionSummaryProps) => {
+	const { children, ...originProps } = props;
+	return (
+		<AccordionSummary expandIcon={<ExpandMoreIcon />} {...originProps}>
+			<Typography variant="h6">{children}</Typography>
+		</AccordionSummary>
+	);
+})({});
+const StyledAccordionDetails = styled(AccordionDetails)({});
+const StyledResetButton = styled((props: ButtonProps) => (
+	<Button variant="contained" {...props} />
+))({});
 
 const Page: NextPage = () => {
 	const weaponEditorsStore = useWeaponEditorsStore();
+	const pickpocketWeightCalculationStore =
+		usePickpocketWeightCalculationStore();
 	const globalMapStore = useGlobalMapStore();
+
+	const stores: Array<{ pageId: PageId; state: object; reset: () => void }> = [
+		{
+			pageId: "weapon",
+			state: weaponEditorsStore,
+			reset: weaponEditorsStore.reset,
+		},
+		{
+			pageId: "calculation",
+			state: { pickpocketWeightCalculationStore },
+			reset: () => {
+				pickpocketWeightCalculationStore.reset();
+			},
+		},
+		{
+			pageId: "map",
+			state: globalMapStore,
+			reset: globalMapStore.reset,
+		},
+	];
 
 	const defaultStorageName = getDefaultStorageName();
 	const currentStorageName =
@@ -54,46 +87,47 @@ const Page: NextPage = () => {
 					細かい設定は <code>{currentStorageName}</code> に格納されます。
 				</Typography>
 
-				<List>
-					<StyledListItemButton>
-						<Button
+				{stores.map((a) => {
+					return (
+						<Accordion key={a.pageId}>
+							<StyledAccordionSummary>
+								{getPage(a.pageId).title}
+							</StyledAccordionSummary>
+							<StyledAccordionDetails>
+								<StyledResetButton onClick={() => a.reset()}>
+									ストレージ初期化
+								</StyledResetButton>
+								<Box>
+									<Typography
+										component="pre"
+										sx={{
+											whiteSpace: "pre",
+											fontFamily: "monospace",
+										}}
+									>
+										{JSON.stringify(a.state, undefined, 2)}
+									</Typography>
+								</Box>
+							</StyledAccordionDetails>
+						</Accordion>
+					);
+				})}
+				<Accordion>
+					<StyledAccordionSummary>
+						全部リセット(ワケわかんなくなった時用)
+					</StyledAccordionSummary>
+					<StyledAccordionDetails>
+						<StyledResetButton
+							color="warning"
 							onClick={() => {
 								getDefaultStorage().clear();
 								location.reload();
 							}}
 						>
-							全部リセット(ワケわかんなくなった時用)
-						</Button>
-					</StyledListItemButton>
-
-					<Divider sx={{ marginBlock: 1 }} />
-
-					<ListItem>
-						<Button onClick={() => weaponEditorsStore.reset()}>
-							武器初期化
-						</Button>
-					</ListItem>
-					<StyledListItemText
-						primary={
-							<pre>
-								{JSON.stringify(weaponEditorsStore, undefined, 2)}
-							</pre>
-						}
-					/>
-
-					<Divider sx={{ marginBlock: 1 }} />
-
-					<ListItem>
-						<Button onClick={() => globalMapStore.reset()}>
-							マップ初期化
-						</Button>
-					</ListItem>
-					<StyledListItemText
-						primary={
-							<pre>{JSON.stringify(globalMapStore, undefined, 2)}</pre>
-						}
-					/>
-				</List>
+							なんもかんもリセット
+						</StyledResetButton>
+					</StyledAccordionDetails>
+				</Accordion>
 			</Stack>
 		</DefaultPage>
 	);

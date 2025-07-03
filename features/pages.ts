@@ -39,10 +39,19 @@ export const Pages: Array<PageInfo> = [
 	},
 ];
 
-export function getExecution(): "prodction" | "staging" | "development" {
+export function getPage(pageId: PageId): PageInfo {
+	const page = Pages.find((a) => a.id === pageId);
+	if (page === undefined) {
+		throw new RangeError(pageId);
+	}
+
+	return page;
+}
+
+export function getExecution(): "production" | "staging" | "development" {
 	switch (process.env.NEXT_PUBLIC_EXECUTION) {
-		case "prodction":
-			return "prodction";
+		case "production":
+			return "production";
 
 		case "staging":
 			return "staging";
