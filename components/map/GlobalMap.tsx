@@ -16,6 +16,7 @@ import {
 	ThemeProvider,
 	Typography,
 } from "@mui/material";
+import JsonView from "@uiw/react-json-view";
 import Leaflet, {
 	type DragEndEvent,
 	LatLngBounds,
@@ -236,7 +237,12 @@ export const GlobalMap: FC = () => {
 									fontSize="small"
 									sx={{ whiteSpace: "pre" }}
 								>
-									{JSON.stringify(position, undefined, 2)}
+									<JsonView
+										displayObjectSize={false}
+										displayDataTypes={false}
+										enableClipboard={false}
+										value={position}
+									/>
 								</Typography>
 
 								<Box

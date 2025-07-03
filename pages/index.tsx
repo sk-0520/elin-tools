@@ -13,6 +13,7 @@ import {
 	styled,
 	Typography,
 } from "@mui/material";
+import JsonView, { type JsonViewProps } from "@uiw/react-json-view";
 import type { NextPage } from "next";
 import { DefaultPage } from "@/components/layout/DefaultPage";
 import { getPage, type PageId } from "@/features/pages";
@@ -32,6 +33,9 @@ const StyledAccordionSummary = styled((props: AccordionSummaryProps) => {
 const StyledAccordionDetails = styled(AccordionDetails)({});
 const StyledResetButton = styled((props: ButtonProps) => (
 	<Button variant="contained" {...props} />
+))({});
+const StyledJsonView = styled((props: JsonViewProps<object>) => (
+	<JsonView {...props} />
 ))({});
 
 const Page: NextPage = () => {
@@ -97,16 +101,10 @@ const Page: NextPage = () => {
 								<StyledResetButton onClick={() => a.reset()}>
 									ストレージ初期化
 								</StyledResetButton>
-								<Box>
-									<Typography
-										component="pre"
-										sx={{
-											whiteSpace: "pre",
-											fontFamily: "monospace",
-										}}
-									>
-										{JSON.stringify(a.state, undefined, 2)}
-									</Typography>
+								<Box sx={{ marginTop: "1em" }}>
+									<StyledJsonView
+										value={JSON.parse(JSON.stringify(a.state))}
+									/>
 								</Box>
 							</StyledAccordionDetails>
 						</Accordion>
@@ -124,7 +122,7 @@ const Page: NextPage = () => {
 								location.reload();
 							}}
 						>
-							なんもかんもリセット
+							なんもかんも初期化
 						</StyledResetButton>
 					</StyledAccordionDetails>
 				</Accordion>
