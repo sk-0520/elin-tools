@@ -44,7 +44,11 @@ export const LicenseRow: FC<LicenseRowProps> = (props) => {
 				<TableCell>{license.publisher}</TableCell>
 				<TableCell>
 					{license.licenseNote ? (
-						<Button fullWidth onClick={handleToggle}>
+						<Button
+							fullWidth
+							variant={isOpen ? "contained" : "outlined"}
+							onClick={handleToggle}
+						>
 							{license.license}
 						</Button>
 					) : (
