@@ -52,7 +52,7 @@ export const MapLabel: FC<MapLabelProps> = (props) => {
 							{`(お祭:${festival}月)`}
 						</Typography>
 					)}
-					{riskLevel !== undefined && 0 < riskLevel && (
+					{riskLevel !== undefined && (
 						<Typography
 							component="span"
 							sx={{

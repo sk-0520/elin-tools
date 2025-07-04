@@ -46,5 +46,8 @@
 		},
 		"editor.suggest.insertMode": "replace",
 		"editor.defaultFormatter": "vscode.json-language-features"
-	}
+	},
+	"cSpell.words": [
+		"nefia"
+	]
 }
