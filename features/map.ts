@@ -140,6 +140,7 @@ export const GlobalMapItemMapping = {
 			implementation: "completed",
 			kind: "base",
 			position: { lat: 919.5, lng: 318.00007316714294 },
+			return: true,
 		},
 		{
 			name: "静かな砂浜",
@@ -173,6 +174,7 @@ export const GlobalMapItemMapping = {
 			implementation: "completed",
 			kind: "sample",
 			position: { lat: 845.5, lng: 517.5002560850004 },
+			return: true,
 		},
 		{
 			name: "パルミア",
@@ -207,6 +209,7 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			riskLevel: 1,
 			position: { lat: 734.5, lng: 464.4840861464045 },
+			return: true,
 		},
 		{
 			name: "イークの洞窟",
@@ -215,6 +218,7 @@ export const GlobalMapItemMapping = {
 			riskLevel: 5,
 			position: { lat: 698, lng: 735.0332178829074 },
 			direction: "top",
+			return: true,
 		},
 		{
 			name: "墓所",
@@ -299,12 +303,13 @@ export const GlobalMapItemMapping = {
 			position: { lat: 464, lng: 1279.5006950878583 },
 		},
 		{
-			name: "子犬の洞窟",
+			name: "仔犬の洞窟",
 			implementation: "inProgress",
 			kind: "nefia",
 			riskLevel: 2,
 			position: { lat: 446.5, lng: 553.9956099714219 },
 			direction: "left",
+			return: true,
 		},
 		{
 			name: "リサナス",
@@ -319,6 +324,7 @@ export const GlobalMapItemMapping = {
 			implementation: "completed",
 			kind: "sample",
 			position: { lat: 408, lng: 590.0052680342936 },
+			return: true,
 		},
 		{
 			name: "ラーナ",
@@ -341,6 +347,7 @@ export const GlobalMapItemMapping = {
 			riskLevel: 4,
 			position: { lat: 336.5, lng: 699.000073167143 },
 			direction: "left",
+			return: true,
 		},
 		{
 			name: "贖罪の村",
@@ -361,6 +368,7 @@ export const GlobalMapItemMapping = {
 			kind: "nefia",
 			riskLevel: 25,
 			position: { lat: 186, lng: 1701.4986464078552 },
+			return: true,
 		},
 		{
 			name: "古城",
