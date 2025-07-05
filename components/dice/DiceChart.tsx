@@ -24,6 +24,7 @@ interface ChartData {
 
 export const DiceChart: FC = () => {
 	const editors = useWeaponEditorsStore((a) => a.editors);
+	const probability = useWeaponEditorsStore((a) => a.probability);
 	const points = useWeaponPointsStore((a) => a.points);
 	const values = useWeaponDiceValuesStore((a) => a.values);
 
@@ -141,19 +142,19 @@ export const DiceChart: FC = () => {
 					);
 				})}
 
-				{pointSummary.keys().map((a) => {
-					return (
-						<Line
-							key={a}
-							type="linear"
-							dataKey={`${a}:probability`}
-							stroke={editors[a].color}
-							strokeOpacity={0.5}
-							fillOpacity={0.5}
-							//fill={`url(#color_${a})`}
-						/>
-					);
-				})}
+				{probability &&
+					pointSummary.keys().map((a) => {
+						return (
+							<Line
+								key={a}
+								type="linear"
+								dataKey={`${a}:probability`}
+								stroke={editors[a].color}
+								strokeOpacity={0.5}
+								fillOpacity={0.5}
+							/>
+						);
+					})}
 			</ComposedChart>
 		</ResponsiveContainer>
 	);

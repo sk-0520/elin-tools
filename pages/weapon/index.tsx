@@ -1,4 +1,13 @@
-import { Box, Button, ButtonGroup, Tooltip, Typography } from "@mui/material";
+import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
+import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
+import {
+	Box,
+	Button,
+	ButtonGroup,
+	ToggleButton,
+	Tooltip,
+	Typography,
+} from "@mui/material";
 import type { NextPage } from "next";
 import { useState } from "react";
 import { DiceChart } from "@/components/dice/DiceChart";
@@ -13,10 +22,16 @@ const Frequencies = [100, 1000, 10000, 100000] as const;
 const Page: NextPage = () => {
 	const frequency = useWeaponEditorsStore((a) => a.frequency);
 	const setFrequency = useWeaponEditorsStore((a) => a.setFrequency);
+	const probability = useWeaponEditorsStore((a) => a.probability);
+	const setProbability = useWeaponEditorsStore((a) => a.setProbability);
 	const [slacker, setSlacker] = useState({}); // 💩再計算処理
 
 	const handleFrequencyClick = (frequency: number) => {
 		setFrequency(frequency);
+	};
+
+	const handleProbabilityChanged = (probability: boolean) => {
+		setProbability(probability);
 	};
 
 	return (
@@ -57,7 +72,7 @@ const Page: NextPage = () => {
 					<Button
 						variant="contained"
 						sx={{
-							marginLeft: "2ch",
+							marginInline: "0.5ch",
 						}}
 						onClick={() => {
 							setSlacker({});
@@ -65,6 +80,18 @@ const Page: NextPage = () => {
 					>
 						再計算
 					</Button>
+					<ToggleButton
+						value={"a"}
+						selected={probability}
+						onChange={() => handleProbabilityChanged(!probability)}
+					>
+						{probability ? (
+							<CheckBoxOutlinedIcon />
+						) : (
+							<CheckBoxOutlineBlankOutlinedIcon />
+						)}
+						確率
+					</ToggleButton>
 				</Box>
 			</DiceTable>
 			<DiceChart />
