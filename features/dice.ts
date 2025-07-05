@@ -188,3 +188,43 @@ export function sum(points: Array<number[]>, fixedValue: number) {
 
 	return result;
 }
+
+/**
+ * 確率分布データを生成する
+ * @param  count 振り数
+ * @param sides 面数
+ * @returns 分布
+ */
+export function generateDiceDistribution(
+	count: number,
+	sides: number,
+): number[] {
+	// 1. 初期化：1個のサイコロの分布
+	let counts = new Array(sides * count + 1).fill(0);
+	for (let i = 1; i <= sides; i++) {
+		counts[i] = 1;
+	}
+
+	// 2. 残りのサイコロを畳み込む
+	for (let dice = 2; dice <= count; dice++) {
+		const next = Array(sides * count + 1).fill(0);
+		for (let sum = dice - 1; sum <= (dice - 1) * sides; sum++) {
+			if (counts[sum] === 0) {
+				continue;
+			}
+			for (let face = 1; face <= sides; face++) {
+				next[sum + face] += counts[sum];
+			}
+		}
+		counts = next;
+	}
+
+	// 3. 確率に変換
+	const totalOutcomes = sides ** count;
+	const result = [];
+	for (let sum = count; sum <= count * sides; sum++) {
+		result.push(counts[sum] / totalOutcomes);
+	}
+
+	return result;
+}

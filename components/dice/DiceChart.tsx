@@ -12,48 +12,10 @@ import {
 	YAxis,
 } from "recharts";
 import { getValue } from "@/features/access";
-import { rankDice, sum } from "@/features/dice";
+import { generateDiceDistribution, rankDice, sum } from "@/features/dice";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 import { useWeaponPointsStore } from "@/hooks/useWeaponPointsStore";
-
-/**
- * サイコロの確率分布データを生成する
- * @param {number} nDice  サイコロの数
- * @param {number} nSides サイコロの面数
- * @returns {{sum: number, probability: number}[]}
- */
-function generateDiceDistribution(nDice: number, nSides: number) {
-	// 1. 初期化：1個のサイコロの分布
-	let counts = Array(nSides * nDice + 1).fill(0);
-	for (let face = 1; face <= nSides; face++) {
-		counts[face] = 1;
-	}
-
-	// 2. 残りのサイコロを畳み込む
-	for (let dice = 2; dice <= nDice; dice++) {
-		const next = Array(nSides * nDice + 1).fill(0);
-		for (let sum = dice - 1; sum <= (dice - 1) * nSides; sum++) {
-			if (counts[sum] === 0) continue;
-			for (let face = 1; face <= nSides; face++) {
-				next[sum + face] += counts[sum];
-			}
-		}
-		counts = next;
-	}
-
-	// 3. 確率に変換
-	const totalOutcomes = nSides ** nDice;
-	const result = [];
-	for (let sum = nDice; sum <= nDice * nSides; sum++) {
-		result.push({
-			sum,
-			probability: counts[sum] / totalOutcomes,
-		});
-	}
-
-	return result;
-}
 
 interface ChartData {
 	damage: number;
@@ -89,14 +51,14 @@ export const DiceChart: FC = () => {
 	const distributions: Record<string, Array<number>> = {};
 	for (const [id, value] of Object.entries(values)) {
 		const aaa = generateDiceDistribution(value.count, value.sides);
-		distributions[id] = aaa.map((a) => a.probability);
+		distributions[id] = aaa;
 	}
 	console.table(distributions);
 
-	const length = rank.maximum - rank.minimum + 1;
+	const length = rank.maximum - rank.minimum;
 	const data = new Array<ChartData>(length);
 
-	for (let i = 0; i < length + 1; i++) {
+	for (let i = 0; i < length; i++) {
 		const damage = i + rank.minimum;
 
 		const currentData: ChartData = {
@@ -108,23 +70,20 @@ export const DiceChart: FC = () => {
 			const pointValues = getValue(pointSummary, id);
 			const dice = values[id];
 
-			const count = pointValues.filter((a) => a === damage).length;
-			currentData[id] = count / pointValues.length;
-			currentData[`${id}:dice`] = distributions[id][i];
-
-			// if (dice.minimum <= damage && damage <= dice.maximum) {
-			// 	const count = pointValues.filter((a) => a === damage).length;
-			// 	currentData[id] = count / pointValues.length;
-			// 	currentData[`${id}:dice`] = distributions[id][i];
-			// } else {
-			// 	currentData[id] = 0;
-			// }
+			if (dice.minimum <= damage && damage <= dice.maximum) {
+				const count = pointValues.filter((a) => a === damage).length;
+				currentData[id] = count / pointValues.length;
+				currentData[`${id}:dice`] =
+					distributions[id][damage - dice.minimum];
+			} else {
+				currentData[id] = 0;
+			}
 		}
 
 		data[i] = currentData;
 	}
 
-	console.table(data);
+	//console.table(data);
 
 	// TODO: 高さ制御適当
 	return (
