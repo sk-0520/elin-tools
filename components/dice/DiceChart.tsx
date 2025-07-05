@@ -1,17 +1,18 @@
 import type { FC } from "react";
 import {
 	Area,
-	AreaChart,
 	CartesianGrid,
+	ComposedChart,
 	Label,
 	Legend,
+	Line,
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
 	YAxis,
 } from "recharts";
 import { getValue } from "@/features/access";
-import { rankDice, sum } from "@/features/dice";
+import { generateDiceDistribution, rankDice, sum } from "@/features/dice";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 import { useWeaponPointsStore } from "@/hooks/useWeaponPointsStore";
@@ -23,6 +24,7 @@ interface ChartData {
 
 export const DiceChart: FC = () => {
 	const editors = useWeaponEditorsStore((a) => a.editors);
+	const probability = useWeaponEditorsStore((a) => a.probability);
 	const points = useWeaponPointsStore((a) => a.points);
 	const values = useWeaponDiceValuesStore((a) => a.values);
 
@@ -46,32 +48,48 @@ export const DiceChart: FC = () => {
 		Object.entries(points).map(([k, v]) => [k, sum(v, values[k].fixedValue)]),
 	);
 
-	const length = rank.maximum - rank.minimum + 1;
+	// 確率分布を算出
+	const distributions: Record<string, Array<number>> = {};
+	for (const [id, value] of Object.entries(values)) {
+		const aaa = generateDiceDistribution(value.count, value.sides);
+		distributions[id] = aaa;
+	}
+	console.table(distributions);
+
+	const length = rank.maximum - rank.minimum;
 	const data = new Array<ChartData>(length);
+
 	for (let i = 0; i < length; i++) {
 		const damage = i + rank.minimum;
 
 		const currentData: ChartData = {
 			damage: damage,
 		};
+
+		// 実際に振った値を格納
 		for (const id of Object.keys(values)) {
 			const pointValues = getValue(pointSummary, id);
 			const dice = values[id];
 
 			if (dice.minimum <= damage && damage <= dice.maximum) {
 				const count = pointValues.filter((a) => a === damage).length;
-				currentData[id] = count;
+				currentData[id] = count / pointValues.length;
+				currentData[`${id}:probability`] =
+					distributions[id][damage - dice.minimum];
 			} else {
 				currentData[id] = 0;
 			}
 		}
+
 		data[i] = currentData;
 	}
+
+	//console.table(data);
 
 	// TODO: 高さ制御適当
 	return (
 		<ResponsiveContainer width="100%" height={500}>
-			<AreaChart layout="vertical" data={data}>
+			<ComposedChart layout="vertical" data={data}>
 				<defs>
 					{pointSummary.keys().map((a) => {
 						return (
@@ -123,7 +141,21 @@ export const DiceChart: FC = () => {
 						/>
 					);
 				})}
-			</AreaChart>
+
+				{probability &&
+					pointSummary.keys().map((a) => {
+						return (
+							<Line
+								key={a}
+								type="linear"
+								dataKey={`${a}:probability`}
+								stroke={editors[a].color}
+								strokeOpacity={0.5}
+								fillOpacity={0.5}
+							/>
+						);
+					})}
+			</ComposedChart>
 		</ResponsiveContainer>
 	);
 };

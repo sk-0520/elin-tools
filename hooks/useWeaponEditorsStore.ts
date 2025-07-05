@@ -13,11 +13,13 @@ const DefaultState: WeaponEditorsState = {
 		B: { dice: "4d2+1", color: "#ed7d31" },
 	},
 	frequency: 1000,
+	probability: true,
 };
 
 interface WeaponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
 	readonly frequency: number;
+	readonly probability: boolean;
 }
 
 interface WeaponEditorsAction {
@@ -25,6 +27,7 @@ interface WeaponEditorsAction {
 
 	setEditor: (id: string, value: DiceEditor) => void;
 	setFrequency: (frequency: number) => void;
+	setProbability: (probability: boolean) => void;
 }
 
 export const useWeaponEditorsStore = create<
@@ -47,12 +50,16 @@ export const useWeaponEditorsStore = create<
 					) {
 						return;
 					}
-					const ediors = { ...current, [id]: value };
-					set({ editors: ediors });
+					const editors = { ...current, [id]: value };
+					set({ editors: editors });
 				},
 
 				setFrequency: (frequency: number) => {
 					set({ frequency: frequency });
+				},
+
+				setProbability: (probability: boolean) => {
+					set({ probability: probability });
 				},
 			};
 		},
