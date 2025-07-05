@@ -117,7 +117,7 @@ export const DiceChart: FC = () => {
 				</defs>
 				<CartesianGrid strokeDasharray="3" />
 				<XAxis type="number">
-					<Label value="頻度" offset={0} position="bottom" />
+					<Label value="確率" offset={0} position="bottom" />
 				</XAxis>
 				<YAxis dataKey="damage" reversed>
 					<Label
