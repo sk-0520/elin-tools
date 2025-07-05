@@ -1,10 +1,11 @@
 import type { FC } from "react";
 import {
 	Area,
-	AreaChart,
 	CartesianGrid,
+	ComposedChart,
 	Label,
 	Legend,
+	Line,
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
@@ -15,6 +16,44 @@ import { rankDice, sum } from "@/features/dice";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 import { useWeaponPointsStore } from "@/hooks/useWeaponPointsStore";
+
+/**
+ * サイコロの確率分布データを生成する
+ * @param {number} nDice  サイコロの数
+ * @param {number} nSides サイコロの面数
+ * @returns {{sum: number, probability: number}[]}
+ */
+function generateDiceDistribution(nDice: number, nSides: number) {
+	// 1. 初期化：1個のサイコロの分布
+	let counts = Array(nSides * nDice + 1).fill(0);
+	for (let face = 1; face <= nSides; face++) {
+		counts[face] = 1;
+	}
+
+	// 2. 残りのサイコロを畳み込む
+	for (let dice = 2; dice <= nDice; dice++) {
+		const next = Array(nSides * nDice + 1).fill(0);
+		for (let sum = dice - 1; sum <= (dice - 1) * nSides; sum++) {
+			if (counts[sum] === 0) continue;
+			for (let face = 1; face <= nSides; face++) {
+				next[sum + face] += counts[sum];
+			}
+		}
+		counts = next;
+	}
+
+	// 3. 確率に変換
+	const totalOutcomes = nSides ** nDice;
+	const result = [];
+	for (let sum = nDice; sum <= nDice * nSides; sum++) {
+		result.push({
+			sum,
+			probability: counts[sum] / totalOutcomes,
+		});
+	}
+
+	return result;
+}
 
 interface ChartData {
 	damage: number;
@@ -46,32 +85,51 @@ export const DiceChart: FC = () => {
 		Object.entries(points).map(([k, v]) => [k, sum(v, values[k].fixedValue)]),
 	);
 
+	// 確率分布を算出
+	const distributions: Record<string, Array<number>> = {};
+	for (const [id, value] of Object.entries(values)) {
+		const aaa = generateDiceDistribution(value.count, value.sides);
+		distributions[id] = aaa.map((a) => a.probability);
+	}
+	console.table(distributions);
+
 	const length = rank.maximum - rank.minimum + 1;
 	const data = new Array<ChartData>(length);
-	for (let i = 0; i < length; i++) {
+
+	for (let i = 0; i < length + 1; i++) {
 		const damage = i + rank.minimum;
 
 		const currentData: ChartData = {
 			damage: damage,
 		};
+
+		// 実際に振った値を格納
 		for (const id of Object.keys(values)) {
 			const pointValues = getValue(pointSummary, id);
 			const dice = values[id];
 
-			if (dice.minimum <= damage && damage <= dice.maximum) {
-				const count = pointValues.filter((a) => a === damage).length;
-				currentData[id] = count;
-			} else {
-				currentData[id] = 0;
-			}
+			const count = pointValues.filter((a) => a === damage).length;
+			currentData[id] = count / pointValues.length;
+			currentData[`${id}:dice`] = distributions[id][i];
+
+			// if (dice.minimum <= damage && damage <= dice.maximum) {
+			// 	const count = pointValues.filter((a) => a === damage).length;
+			// 	currentData[id] = count / pointValues.length;
+			// 	currentData[`${id}:dice`] = distributions[id][i];
+			// } else {
+			// 	currentData[id] = 0;
+			// }
 		}
+
 		data[i] = currentData;
 	}
+
+	console.table(data);
 
 	// TODO: 高さ制御適当
 	return (
 		<ResponsiveContainer width="100%" height={500}>
-			<AreaChart layout="vertical" data={data}>
+			<ComposedChart layout="vertical" data={data}>
 				<defs>
 					{pointSummary.keys().map((a) => {
 						return (
@@ -123,7 +181,20 @@ export const DiceChart: FC = () => {
 						/>
 					);
 				})}
-			</AreaChart>
+
+				{pointSummary.keys().map((a) => {
+					return (
+						<Line
+							key={a}
+							type="natural"
+							dataKey={`${a}:dice`}
+							stroke={editors[a].color}
+							fillOpacity={1}
+							fill={`url(#color_${a})`}
+						/>
+					);
+				})}
+			</ComposedChart>
 		</ResponsiveContainer>
 	);
 };
