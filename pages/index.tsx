@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
 	Accordion,
@@ -14,13 +16,16 @@ import {
 	Typography,
 } from "@mui/material";
 import JsonView, { type JsonViewProps } from "@uiw/react-json-view";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { DefaultPage } from "@/components/layout/DefaultPage";
+import { LicenseTable } from "@/components/license/LicenseTable";
+import type { License } from "@/features/license";
 import { getPage, type PageId } from "@/features/pages";
 import { getDefaultStorage, getDefaultStorageName } from "@/features/storage";
 import { usePickpocketWeightCalculationStore } from "@/hooks/calculation/usePickpocketWeightCalculationStore";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
+import packageJson from "@/package.json";
 
 const StyledAccordionSummary = styled((props: AccordionSummaryProps) => {
 	const { children, ...originProps } = props;
@@ -38,7 +43,12 @@ const StyledJsonView = styled((props: JsonViewProps<object>) => (
 	<JsonView {...props} />
 ))({});
 
-const Page: NextPage = () => {
+interface PageProps {
+	license: License;
+}
+
+const Page: NextPage<PageProps> = (props) => {
+	const { license } = props;
 	const weaponEditorsStore = useWeaponEditorsStore();
 	const pickpocketWeightCalculationStore =
 		usePickpocketWeightCalculationStore();
@@ -126,9 +136,36 @@ const Page: NextPage = () => {
 						</StyledResetButton>
 					</StyledAccordionDetails>
 				</Accordion>
+
+				<Divider sx={{ marginBlock: 2 }} />
+
+				<Typography variant="h6">ライセンス</Typography>
+				<LicenseTable licenseItems={[license]} />
 			</Stack>
 		</DefaultPage>
 	);
 };
 
 export default Page;
+
+export const getStaticProps: GetStaticProps<PageProps> = () => {
+	const licensePath = path.join(process.cwd(), "LICENSE");
+	const licenseNote = fs.readFileSync(licensePath, {
+		encoding: "utf-8",
+	});
+
+	return {
+		props: {
+			license: {
+				license: packageJson.license,
+				licenseNote: licenseNote,
+				module: `${packageJson.name}@${packageJson.version}`,
+				publisher: packageJson.author,
+				repository: packageJson.repository.url.replace(
+					/^(git\+)(?<URL>.+)(\.git)$/,
+					"$<URL>",
+				),
+			},
+		},
+	};
+};

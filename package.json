@@ -1,7 +1,13 @@
 {
 	"name": "elin-tools",
 	"version": "0.1.0",
+	"license": "WTFPL",
+	"author": "sk",
 	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sk-0520/elin-tools.git"
+	},
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build:license": "ts-node --project tsconfig.local.json ./tools/license/license-entry.ts",
