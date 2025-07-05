@@ -73,7 +73,7 @@ export const DiceChart: FC = () => {
 			if (dice.minimum <= damage && damage <= dice.maximum) {
 				const count = pointValues.filter((a) => a === damage).length;
 				currentData[id] = count / pointValues.length;
-				currentData[`${id}:dice`] =
+				currentData[`${id}:probability`] =
 					distributions[id][damage - dice.minimum];
 			} else {
 				currentData[id] = 0;
@@ -145,11 +145,12 @@ export const DiceChart: FC = () => {
 					return (
 						<Line
 							key={a}
-							type="natural"
-							dataKey={`${a}:dice`}
+							type="linear"
+							dataKey={`${a}:probability`}
 							stroke={editors[a].color}
-							fillOpacity={1}
-							fill={`url(#color_${a})`}
+							strokeOpacity={0.5}
+							fillOpacity={0.5}
+							//fill={`url(#color_${a})`}
 						/>
 					);
 				})}
