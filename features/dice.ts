@@ -102,7 +102,7 @@ export function calculateDice(
 			fixedValue: fixedValue,
 
 			minimum: dice.count + fixedValue,
-			maximum: dice.count * dice.sides + dice.count * fixedValue,
+			maximum: dice.count * dice.sides + fixedValue,
 			expected: getExpectedValue(dice.count, dice.sides) + fixedValue,
 		};
 	}
@@ -156,7 +156,7 @@ export function rankDice(
  * @param dice ダイス値
  * @param count 試行回数(dice側でふる回数を持っているのでこれはその実行を何度行うか)
  * @param random 将来的に変更できるように
- * @returns ふりまくった結果 [0]: 順序, [0][...] その結果(振り数分の配列で要素は結果)
+ * @returns ふりまくった結果 [0]: 順序, [0][...] その結果(振り数分の配列で要素は結果 ※固定値は未考慮)
  */
 export function rollDice(
 	dice: DiceValue,
@@ -168,7 +168,7 @@ export function rollDice(
 	for (let i = 0; i < count; i++) {
 		const points = new Array<number>(dice.count);
 		for (let j = 0; j < dice.count; j++) {
-			const value = random.nextInt(1, dice.sides) + dice.fixedValue;
+			const value = random.nextInt(1, dice.sides);
 			points[j] = value;
 		}
 		result[i] = points;
@@ -177,13 +177,13 @@ export function rollDice(
 	return result;
 }
 
-export function sum(points: Array<number[]>) {
+export function sum(points: Array<number[]>, fixedValue: number) {
 	const result = new Array<number>(points.length);
 
 	for (let i = 0; i < points.length; i++) {
 		const pointValues = points[i];
 		const summary = pointValues.reduce((p, c) => p + c, 0);
-		result[i] = summary;
+		result[i] = summary + fixedValue;
 	}
 
 	return result;

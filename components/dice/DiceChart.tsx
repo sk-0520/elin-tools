@@ -43,7 +43,7 @@ export const DiceChart: FC = () => {
 	};
 
 	const pointSummary = new Map(
-		Object.entries(points).map(([k, v]) => [k, sum(v)]),
+		Object.entries(points).map(([k, v]) => [k, sum(v, values[k].fixedValue)]),
 	);
 
 	const length = rank.maximum - rank.minimum + 1;

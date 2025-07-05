@@ -228,9 +228,9 @@ describe("rollDice", () => {
 		for (const actualArray of actual) {
 			expect(actualArray).toHaveLength(dice.count);
 			for (const actualElement of actualArray) {
-				expect(actualElement).toBeGreaterThanOrEqual(dice.fixedValue);
+				expect(actualElement).toBeGreaterThanOrEqual(1);
 				expect(actualElement).toBeLessThanOrEqual(
-					dice.count * dice.sides + dice.fixedValue,
+					dice.count * dice.sides,
 				);
 			}
 		}
@@ -240,10 +240,25 @@ describe("rollDice", () => {
 describe("sum", () => {
 	test("sum", () => {
 		expect(
-			sum([
-				[10, 20, 30],
-				[-10, -20, -30],
-			]),
+			sum(
+				[
+					[10, 20, 30],
+					[-10, -20, -30],
+				],
+				0,
+			),
 		).toStrictEqual([60, -60]);
+	});
+
+	test("sum-fixed", () => {
+		expect(
+			sum(
+				[
+					[10, 20, 30],
+					[-10, -20, -30],
+				],
+				10,
+			),
+		).toStrictEqual([70, -50]);
 	});
 });
