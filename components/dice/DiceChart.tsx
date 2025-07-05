@@ -45,7 +45,10 @@ export const DiceChart: FC = () => {
 	};
 
 	const pointSummary = new Map(
-		Object.entries(points).map(([k, v]) => [k, sum(v, values[k].fixedValue)]),
+		Object.entries(points).map(([k, v]) => [
+			k,
+			sum(v, k in values ? values[k].fixedValue : 0),
+		]),
 	);
 
 	// 確率分布を算出
