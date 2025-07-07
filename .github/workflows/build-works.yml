@@ -60,6 +60,7 @@ jobs:
           echo "NEXT_PUBLIC_EXECUTION=staging" >> .env.production
           echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
           echo "NEXT_PUBLIC_TRACKING=true" >> .env.production
+          echo "NEXT_PUBLIC_SCM_VERSION=${{ github.sha }}" >> .env.production
 
       - name: <Env> production
         #if: github.ref == 'refs/heads/master'
@@ -71,6 +72,7 @@ jobs:
           echo "NEXT_PUBLIC_EXECUTION=production" >> .env.production
           echo "NEXT_PUBLIC_DEFAULT_STORAGE=local" >> .env.production
           echo "NEXT_PUBLIC_TRACKING=true" >> .env.production
+          echo "NEXT_PUBLIC_SCM_VERSION=${{ github.sha }}" >> .env.production
 
       - name: <Build> front-end
         shell: bash

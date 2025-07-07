@@ -16,6 +16,7 @@ import type { FC, ReactNode } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { getExecution, getPage, type PageId } from "@/features/pages";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
+import { ScmVersion } from "../ScmVersion";
 import { SideMenu } from "../SideMenu";
 
 const BaseTitle = "elin tools";
@@ -48,6 +49,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 					{pageId !== "root" ? `${page.title} - ` : ""}
 					{BaseTitle}
 				</title>
+				<ScmVersion mode="head" />
 			</Head>
 			<Box sx={{ display: "flex" }}>
 				<AppBar
