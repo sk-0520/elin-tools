@@ -16,7 +16,7 @@ export class ItemsTypeError extends AccessError {}
  * @param index 添え字。
  * @throws {@link OutOfRangeError} 取得できないか値が `undefine`
  */
-export function getValue<TValue>(
+export function getElement<TValue>(
 	array: ReadonlyArray<TValue>,
 	index: number,
 ): Exclude<TValue, undefined>;
@@ -27,7 +27,7 @@ export function getValue<TValue>(
  * @param key キー。
  * @throws {@link OutOfRangeError} 取得できないか値が `undefine`
  */
-export function getValue<TKey extends PropertyKey, TValue>(
+export function getElement<TKey extends PropertyKey, TValue>(
 	map: Map<TKey, TValue> | ReadonlyMap<TKey, TValue>,
 	key: TKey,
 ): Exclude<TValue, undefined>;
@@ -38,7 +38,7 @@ export function getValue<TKey extends PropertyKey, TValue>(
  * @param key キー。
  * @throws {@link OutOfRangeError} 取得できないか値が `undefine`
  */
-export function getValue<TKey extends PropertyKey, TValue>(
+export function getElement<TKey extends PropertyKey, TValue>(
 	record: Record<TKey, TValue>,
 	key: TKey,
 ): Exclude<TValue, undefined>;
@@ -49,11 +49,11 @@ export function getValue<TKey extends PropertyKey, TValue>(
  * @param key キー。
  * @throws {@link OutOfRangeError} 取得できないか値が `undefine`
  */
-export function getValue<TValue>(
+export function getElement<TValue>(
 	record: { [key: PropertyKey]: TValue },
 	key: PropertyKey,
 ): Exclude<TValue, undefined>;
-export function getValue<TKey extends PropertyKey | number, TValue>(
+export function getElement<TKey extends PropertyKey | number, TValue>(
 	items:
 		| ReadonlyArray<TValue>
 		| (Map<TKey, TValue> | ReadonlyMap<TKey, TValue>)

@@ -1,4 +1,4 @@
-import { getValue } from "./access";
+import { getElement } from "./access";
 import { AppError } from "./error";
 import type { Random } from "./random";
 
@@ -48,8 +48,8 @@ export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 		throw new DiceFormatError(`dice: ${dice}`);
 	}
 	const diceValues: DiceUnknownDice = {
-		count: Number.parseInt(getValue(regexArray.groups, "COUNT")),
-		sides: Number.parseInt(getValue(regexArray.groups, "SIDES")),
+		count: Number.parseInt(getElement(regexArray.groups, "COUNT")),
+		sides: Number.parseInt(getElement(regexArray.groups, "SIDES")),
 	};
 
 	if (!regexArray.groups.FIXED_SIGN) {
@@ -61,8 +61,10 @@ export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 
 	return {
 		fixed: true,
-		fixedSign: toFixedSign(getValue(regexArray.groups, "FIXED_SIGN")),
-		fixedValue: Number.parseInt(getValue(regexArray.groups, "FIXED_VALUE")),
+		fixedSign: toFixedSign(getElement(regexArray.groups, "FIXED_SIGN")),
+		fixedValue: Number.parseInt(
+			getElement(regexArray.groups, "FIXED_VALUE"),
+		),
 		...diceValues,
 	};
 }
@@ -156,7 +158,8 @@ export function rankDice(
 			prevEqual:
 				index === 0
 					? false
-					: av[property] === getValue(array, index - 1)[1][property],
+					: av[property] ===
+						getElement(array, index - 1)[1][property],
 		}));
 
 	return sortedItems;
@@ -192,7 +195,7 @@ export function sum(points: Array<number[]>, fixedValue: number) {
 	const result = new Array<number>(points.length);
 
 	for (let i = 0; i < points.length; i++) {
-		const pointValues = getValue(points, i);
+		const pointValues = getElement(points, i);
 		const summary = pointValues.reduce((p, c) => p + c, 0);
 		result[i] = summary + fixedValue;
 	}

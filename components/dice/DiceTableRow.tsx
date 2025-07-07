@@ -1,7 +1,7 @@
 import { TableCell, TableRow, TextField } from "@mui/material";
 import { type ChangeEvent, type FC, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { getValue } from "@/features/access";
+import { getElement } from "@/features/access";
 import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
@@ -24,7 +24,7 @@ export type DiceTableRowProps = {
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	const { id, slacker } = props;
 	const frequency = useWeaponEditorsStore((a) => a.frequency);
-	const editor = useWeaponEditorsStore((a) => getValue(a.editors, id));
+	const editor = useWeaponEditorsStore((a) => getElement(a.editors, id));
 	const setEditor = useWeaponEditorsStore((a) => a.setEditor);
 	const udValue = useWeaponDiceValuesStore((a) => a.values[id]);
 	const udError = useWeaponDiceValuesStore((a) => a.errors[id]);

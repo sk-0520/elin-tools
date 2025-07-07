@@ -11,7 +11,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { getValue } from "@/features/access";
+import { getElement } from "@/features/access";
 import { generateDiceDistribution, rankDice, sum } from "@/features/dice";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
@@ -37,15 +37,15 @@ export const DiceChart: FC = () => {
 		maximum: rankDice(values, "maximum"),
 	};
 	const rank = {
-		minimum: getValue(summary.minimum, summary.minimum.length - 1).value
+		minimum: getElement(summary.minimum, summary.minimum.length - 1).value
 			.minimum,
-		maximum: getValue(summary.maximum, 0).value.maximum,
+		maximum: getElement(summary.maximum, 0).value.maximum,
 	};
 
 	const pointSummary = new Map(
 		Object.entries(points).map(([k, v]) => [
 			k,
-			sum(v, k in values ? getValue(values, k).fixedValue : 0),
+			sum(v, k in values ? getElement(values, k).fixedValue : 0),
 		]),
 	);
 
@@ -69,14 +69,14 @@ export const DiceChart: FC = () => {
 
 		// 実際に振った値を格納
 		for (const id of Object.keys(values)) {
-			const pointValues = getValue(pointSummary, id);
-			const dice = getValue(values, id);
+			const pointValues = getElement(pointSummary, id);
+			const dice = getElement(values, id);
 
 			if (dice.minimum <= damage && damage <= dice.maximum) {
 				const count = pointValues.filter((a) => a === damage).length;
 				currentData[id] = count / pointValues.length;
-				currentData[`${id}:probability`] = getValue(
-					getValue(distributions, id),
+				currentData[`${id}:probability`] = getElement(
+					getElement(distributions, id),
 					damage - dice.minimum,
 				);
 			} else {
@@ -106,12 +106,12 @@ export const DiceChart: FC = () => {
 							>
 								<stop
 									offset="5%"
-									stopColor={getValue(editors, a).color}
+									stopColor={getElement(editors, a).color}
 									stopOpacity={0.8}
 								/>
 								<stop
 									offset="95%"
-									stopColor={getValue(editors, a).color}
+									stopColor={getElement(editors, a).color}
 									stopOpacity={0.1}
 								/>
 							</linearGradient>
@@ -138,7 +138,7 @@ export const DiceChart: FC = () => {
 							key={a}
 							type="monotone"
 							dataKey={a}
-							stroke={getValue(editors, a).color}
+							stroke={getElement(editors, a).color}
 							fillOpacity={1}
 							fill={`url(#color_${a})`}
 						/>
@@ -152,7 +152,7 @@ export const DiceChart: FC = () => {
 								key={a}
 								type="linear"
 								dataKey={`${a}:probability`}
-								stroke={getValue(editors, a).color}
+								stroke={getElement(editors, a).color}
 								strokeOpacity={0.5}
 								fillOpacity={0.5}
 							/>
