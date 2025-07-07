@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import type { FC } from "react";
 import { Fragment } from "react";
+import { getValue } from "@/features/access";
 import type { RankValue } from "@/features/dice";
 import {
 	type DiceEditor,
@@ -27,7 +28,7 @@ const StyledIdListItem = styled((props: StyledIdListItemProps) => {
 		<ListItem disablePadding {...originProps}>
 			<EditorId
 				id={id}
-				color={editors[id].color}
+				color={getValue(editors, id).color}
 				strong={isTop}
 				size="small"
 			/>

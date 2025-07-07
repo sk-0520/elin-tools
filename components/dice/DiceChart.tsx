@@ -37,17 +37,15 @@ export const DiceChart: FC = () => {
 		maximum: rankDice(values, "maximum"),
 	};
 	const rank = {
-		minimum:
-			summary.minimum[
-				summary.minimum.length === 1 ? 0 : summary.minimum.length - 1
-			].value.minimum,
-		maximum: summary.maximum[0].value.maximum,
+		minimum: getValue(summary.minimum, summary.minimum.length - 1).value
+			.minimum,
+		maximum: getValue(summary.maximum, 0).value.maximum,
 	};
 
 	const pointSummary = new Map(
 		Object.entries(points).map(([k, v]) => [
 			k,
-			sum(v, k in values ? values[k].fixedValue : 0),
+			sum(v, k in values ? getValue(values, k).fixedValue : 0),
 		]),
 	);
 
@@ -72,13 +70,15 @@ export const DiceChart: FC = () => {
 		// 実際に振った値を格納
 		for (const id of Object.keys(values)) {
 			const pointValues = getValue(pointSummary, id);
-			const dice = values[id];
+			const dice = getValue(values, id);
 
 			if (dice.minimum <= damage && damage <= dice.maximum) {
 				const count = pointValues.filter((a) => a === damage).length;
 				currentData[id] = count / pointValues.length;
-				currentData[`${id}:probability`] =
-					distributions[id][damage - dice.minimum];
+				currentData[`${id}:probability`] = getValue(
+					getValue(distributions, id),
+					damage - dice.minimum,
+				);
 			} else {
 				currentData[id] = 0;
 			}
@@ -106,12 +106,12 @@ export const DiceChart: FC = () => {
 							>
 								<stop
 									offset="5%"
-									stopColor={editors[a].color}
+									stopColor={getValue(editors, a).color}
 									stopOpacity={0.8}
 								/>
 								<stop
 									offset="95%"
-									stopColor={editors[a].color}
+									stopColor={getValue(editors, a).color}
 									stopOpacity={0.1}
 								/>
 							</linearGradient>
@@ -138,7 +138,7 @@ export const DiceChart: FC = () => {
 							key={a}
 							type="monotone"
 							dataKey={a}
-							stroke={editors[a].color}
+							stroke={getValue(editors, a).color}
 							fillOpacity={1}
 							fill={`url(#color_${a})`}
 						/>
@@ -152,7 +152,7 @@ export const DiceChart: FC = () => {
 								key={a}
 								type="linear"
 								dataKey={`${a}:probability`}
-								stroke={editors[a].color}
+								stroke={getValue(editors, a).color}
 								strokeOpacity={0.5}
 								fillOpacity={0.5}
 							/>

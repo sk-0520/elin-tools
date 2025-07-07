@@ -1,6 +1,7 @@
 import { TableCell, TableRow, TextField } from "@mui/material";
 import { type ChangeEvent, type FC, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { getValue } from "@/features/access";
 import { calculateDice, parseDice, rollDice } from "@/features/dice";
 import { BuiltinRandom } from "@/features/random";
 import { useWeaponDiceValuesStore } from "@/hooks/useWeaponDiceValuesStore";
@@ -23,10 +24,10 @@ export type DiceTableRowProps = {
 export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	const { id, slacker } = props;
 	const frequency = useWeaponEditorsStore((a) => a.frequency);
-	const editor = useWeaponEditorsStore((a) => a.editors[id]);
+	const editor = useWeaponEditorsStore((a) => getValue(a.editors, id));
 	const setEditor = useWeaponEditorsStore((a) => a.setEditor);
-	const value = useWeaponDiceValuesStore((a) => a.values[id]);
-	const error = useWeaponDiceValuesStore((a) => a.errors[id]);
+	const udValue = useWeaponDiceValuesStore((a) => a.values[id]);
+	const udError = useWeaponDiceValuesStore((a) => a.errors[id]);
 	const setDiceValue = useWeaponDiceValuesStore((a) => a.setValue);
 	const setError = useWeaponDiceValuesStore((a) => a.setError);
 	const remove = useWeaponPointsStore((a) => a.remove);
@@ -116,31 +117,31 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 					)}
 				/>
 			</TableCell>
-			{error ? (
-				<TableCell colSpan={ErrorColSpan}>{error}</TableCell>
-			) : value === undefined ? (
+			{udError ? (
+				<TableCell colSpan={ErrorColSpan}>{udError}</TableCell>
+			) : udValue === undefined ? (
 				<TableCell colSpan={ErrorColSpan}></TableCell>
 			) : (
 				<>
 					<TableCell>
-						<NumericFormat value={value.count} />
+						<NumericFormat value={udValue.count} />
 					</TableCell>
 					<TableCell>
-						<NumericFormat value={value.sides} />
+						<NumericFormat value={udValue.sides} />
 					</TableCell>
 					<TableCell>
 						<NumericFormat
-							value={value.hasFixed ? value.fixedValue : undefined}
+							value={udValue.hasFixed ? udValue.fixedValue : undefined}
 						/>
 					</TableCell>
 					<TableCell>
-						<NumericFormat value={value.minimum} />
+						<NumericFormat value={udValue.minimum} />
 					</TableCell>
 					<TableCell>
-						<NumericFormat value={value.maximum} />
+						<NumericFormat value={udValue.maximum} />
 					</TableCell>
 					<TableCell>
-						<NumericFormat value={value.expected} />
+						<NumericFormat value={udValue.expected} />
 					</TableCell>
 				</>
 			)}

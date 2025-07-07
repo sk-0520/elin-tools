@@ -1,8 +1,10 @@
+import { getValue } from "./access";
 import { AppError } from "./error";
 import type { Random } from "./random";
 
 export class DiceError extends AppError {}
 export class DiceFormatError extends DiceError {}
+export class DiceFixedSignFormatError extends DiceFormatError {}
 
 export type DiceSign = "+" | "-";
 // 大文字小文字くらいは許容する
@@ -30,15 +32,24 @@ export interface DiceWithFixed extends DiceUnknownDice {
 	fixedValue: number;
 }
 
+function toFixedSign(raw: string): DiceSign {
+	switch (raw) {
+		case "+":
+		case "-":
+			return raw;
+	}
+
+	throw new DiceFixedSignFormatError(raw);
+}
+
 export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 	const regexArray = DiceRegex.exec(dice);
 	if (!regexArray || !regexArray.groups) {
 		throw new DiceFormatError(`dice: ${dice}`);
 	}
-
 	const diceValues: DiceUnknownDice = {
-		count: Number.parseInt(regexArray.groups.COUNT),
-		sides: Number.parseInt(regexArray.groups.SIDES),
+		count: Number.parseInt(getValue(regexArray.groups, "COUNT")),
+		sides: Number.parseInt(getValue(regexArray.groups, "SIDES")),
 	};
 
 	if (!regexArray.groups.FIXED_SIGN) {
@@ -50,8 +61,8 @@ export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 
 	return {
 		fixed: true,
-		fixedSign: regexArray.groups.FIXED_SIGN as DiceSign,
-		fixedValue: Number.parseInt(regexArray.groups.FIXED_VALUE),
+		fixedSign: toFixedSign(getValue(regexArray.groups, "FIXED_SIGN")),
+		fixedValue: Number.parseInt(getValue(regexArray.groups, "FIXED_VALUE")),
 		...diceValues,
 	};
 }
@@ -145,7 +156,7 @@ export function rankDice(
 			prevEqual:
 				index === 0
 					? false
-					: av[property] === array[index - 1][1][property],
+					: av[property] === getValue(array, index - 1)[1][property],
 		}));
 
 	return sortedItems;
@@ -181,7 +192,7 @@ export function sum(points: Array<number[]>, fixedValue: number) {
 	const result = new Array<number>(points.length);
 
 	for (let i = 0; i < points.length; i++) {
-		const pointValues = points[i];
+		const pointValues = getValue(points, i);
 		const summary = pointValues.reduce((p, c) => p + c, 0);
 		result[i] = summary + fixedValue;
 	}

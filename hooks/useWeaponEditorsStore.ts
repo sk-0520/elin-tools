@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { getValue } from "@/features/access";
 import { getDefaultStorage } from "@/features/storage";
 
 export interface DiceEditor {
@@ -44,9 +45,10 @@ export const useWeaponEditorsStore = create<
 
 				setEditor: (id: string, value: DiceEditor) => {
 					const current = get().editors;
+					const currentEditor = getValue(current, id);
 					if (
-						current[id].dice === value.dice &&
-						current[id].color === value.color
+						currentEditor.dice === value.dice &&
+						currentEditor.color === value.color
 					) {
 						return;
 					}
