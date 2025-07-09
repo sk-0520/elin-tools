@@ -14,6 +14,14 @@ export const MapImplementations = [
 ] as const;
 export type MapImplementation = (typeof MapImplementations)[number];
 
+interface DetailGuild {
+	name: string;
+}
+
+interface DetailTrainer {
+	skills: Array<string>;
+}
+
 interface GlobalMapItem {
 	/** 表示名 */
 	name: string;
@@ -388,7 +396,7 @@ export const GlobalMapItemMapping = {
 			implementation: "completed",
 			kind: "base",
 			position: { lat: 171, lng: 626.9787083613963 },
-			festival: 9,
+			festival: 3,
 		},
 		{
 			name: "風の眠る場所",
