@@ -14,14 +14,6 @@ export const MapImplementations = [
 ] as const;
 export type MapImplementation = (typeof MapImplementations)[number];
 
-interface DetailGuild {
-	name: string;
-}
-
-interface DetailTrainer {
-	skills: Array<string>;
-}
-
 interface GlobalMapItem {
 	/** 表示名 */
 	name: string;
