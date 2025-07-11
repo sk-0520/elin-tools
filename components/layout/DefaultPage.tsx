@@ -51,34 +51,36 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 				</title>
 				<ScmVersion mode="head" />
 			</Head>
-			<Box sx={{ display: "flex" }}>
-				<AppBar
-					id="header"
-					position="fixed"
-					sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })}
-				>
-					<Toolbar>
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							onClick={sidebarStore.toggle}
-							edge="start"
-							sx={{
-								marginRight: "1ch",
-							}}
-						>
-							{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
-						</IconButton>
-						<Typography variant="h6" noWrap component="h1">
-							{page.title}
+
+			<AppBar
+				id="header"
+				position="sticky"
+				sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1, padding: 0 })}
+			>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						onClick={sidebarStore.toggle}
+						edge="start"
+						sx={{
+							marginRight: "1ch",
+						}}
+					>
+						{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
+					</IconButton>
+					<Typography variant="h6" noWrap component="h1">
+						{page.title}
+					</Typography>
+					{execution !== "production" && (
+						<Typography sx={{ opacity: 0.9, marginLeft: "2ch" }}>
+							({ExecutionDisplayNames[execution]})
 						</Typography>
-						{execution !== "production" && (
-							<Typography sx={{ opacity: 0.9, marginLeft: "2ch" }}>
-								({ExecutionDisplayNames[execution]})
-							</Typography>
-						)}
-					</Toolbar>
-				</AppBar>
+					)}
+				</Toolbar>
+			</AppBar>
+
+			<Box sx={{ display: "flex" }}>
 				<Drawer
 					sx={{
 						width: sidebarWidth,
@@ -104,7 +106,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						margin: "1em 3ch 10em 2ch",
 					}}
 				>
-					<Offset />
 					<Box component="main">{children}</Box>
 				</Box>
 			</Box>

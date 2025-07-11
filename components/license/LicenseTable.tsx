@@ -1,6 +1,7 @@
-import { Table, TableBody } from "@mui/material";
+import { TableBody } from "@mui/material";
 import type { FC } from "react";
 import type { License } from "@/features/license";
+import { DefaultTable } from "../layout/default/DefaultTable";
 import { LicenseHeader } from "./LicenseHeader";
 import { LicenseRow } from "./LicenseRow";
 
@@ -12,7 +13,7 @@ export const LicenseTable: FC<LicenseTableProps> = (props) => {
 	const { licenseItems } = props;
 
 	return (
-		<Table
+		<DefaultTable
 			stickyHeader
 			sx={{
 				tableLayout: "fixed",
@@ -25,6 +26,6 @@ export const LicenseTable: FC<LicenseTableProps> = (props) => {
 					<LicenseRow key={a.module} license={a} />
 				))}
 			</TableBody>
-		</Table>
+		</DefaultTable>
 	);
 };

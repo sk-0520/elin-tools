@@ -1,5 +1,4 @@
 import {
-	Table,
 	TableBody,
 	TableCell,
 	TableFooter,
@@ -9,6 +8,7 @@ import {
 import type { FC, ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
+import { DefaultTable } from "../layout/default/DefaultTable";
 import { DiceTableRow } from "./DiceTableRow";
 import { DiceTableSummary } from "./DiceTableSummary";
 
@@ -29,7 +29,7 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 	);
 
 	return (
-		<Table sx={{ tableLayout: "fixed" }}>
+		<DefaultTable stickyHeader sx={{ tableLayout: "fixed" }}>
 			<TableHead>
 				<TableRow>
 					<TableCell width={30}>*</TableCell>
@@ -50,6 +50,6 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 			<TableFooter>
 				<DiceTableSummary>{children}</DiceTableSummary>
 			</TableFooter>
-		</Table>
+		</DefaultTable>
 	);
 };
