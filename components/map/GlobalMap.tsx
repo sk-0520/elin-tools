@@ -334,7 +334,7 @@ export const GlobalMap: FC = () => {
 							<Collapse
 								in={controller}
 								sx={{
-									"*": { fontSize: "0.7rem" },
+									"*": { fontSize: "0.7rem", paddingBlock: "1px" },
 								}}
 							>
 								<Divider />
