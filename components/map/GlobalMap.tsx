@@ -317,7 +317,12 @@ export const GlobalMap: FC = () => {
 									コントローラー
 								</Typography>
 							</ListItemButton>
-							<Collapse in={controller}>
+							<Collapse
+								in={controller}
+								sx={{
+									"*": { fontSize: "0.7rem" },
+								}}
+							>
 								<Divider />
 
 								<List>
