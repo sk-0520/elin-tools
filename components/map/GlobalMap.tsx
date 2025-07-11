@@ -21,9 +21,12 @@ import Leaflet, {
 	type DragEndEvent,
 	LatLngBounds,
 	type LatLngExpression,
+	type LeafletEvent,
+	type LeafletEventHandlerFnMap,
 } from "leaflet";
 import { type FC, Fragment, useMemo, useRef, useState } from "react";
 import {
+	Circle,
 	ImageOverlay,
 	LayerGroup,
 	MapContainer,
@@ -136,8 +139,14 @@ export const GlobalMap: FC = () => {
 	);
 	const refMap = useRef<Leaflet.Map | null>(null);
 	const refMaker = useRef<Leaflet.Marker | null>(null);
-	const developEventHandlers = useMemo(
+	const developEventHandlers = useMemo<LeafletEventHandlerFnMap>(
 		() => ({
+			drag: (_: LeafletEvent) => {
+				const marker = refMaker.current;
+				if (marker != null) {
+					setPosition(marker.getLatLng());
+				}
+			},
 			dragend: (_: DragEndEvent) => {
 				const marker = refMaker.current;
 				if (marker != null) {
@@ -230,6 +239,11 @@ export const GlobalMap: FC = () => {
 						draggable
 						eventHandlers={developEventHandlers}
 					>
+						<Circle
+							center={position}
+							pathOptions={{ fillColor: "orange", color: "lime" }}
+							radius={10}
+						/>
 						<Popup autoClose={false}>
 							<Stack>
 								<Typography
