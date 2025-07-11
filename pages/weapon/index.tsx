@@ -17,6 +17,7 @@ import { NumericFormat } from "@/components/NumericFormat";
 import { ReferenceLink } from "@/components/ReferenceLink";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
 
+//const Frequencies = [10, 100, 1000, 10000, 100000] as const;
 const Frequencies = [100, 1000, 10000, 100000] as const;
 
 const Page: NextPage = () => {
@@ -60,8 +61,16 @@ const Page: NextPage = () => {
 										onClick={(_e) => handleFrequencyClick(a)}
 									>
 										<Typography>
-											10
-											<sup>{Math.log10(a)}</sup>
+											<span
+												style={{
+													fontSize: "0.4em",
+												}}
+											>
+												10
+											</span>
+											<sup style={{ fontSize: "0.7em" }}>
+												{Math.log10(a)}
+											</sup>
 										</Typography>
 									</Button>
 								</Tooltip>
