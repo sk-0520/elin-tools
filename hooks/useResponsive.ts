@@ -1,6 +1,5 @@
 import { useTheme } from "@mui/material";
-import { useEffect } from "react";
-import { create } from "zustand";
+import { useEffect, useState } from "react";
 import {
 	getMobileBreakpoint,
 	getPcBreakpoint,
@@ -29,8 +28,9 @@ export type ResponsiveState = {
 	};
 };
 
-export const useResponsive = create<ResponsiveState>()((set, _get) => {
+export const useResponsive = () => {
 	const theme = useTheme();
+	const [state, setState] = useState(DefaultState);
 
 	const applyWindowSize = () => {
 		const windowSize: WindowSize = {
@@ -38,7 +38,8 @@ export const useResponsive = create<ResponsiveState>()((set, _get) => {
 			height: window.innerHeight,
 		};
 
-		set({
+		setState({
+			...DefaultState,
 			window: windowSize,
 			isMobile: isMobile(theme, windowSize),
 		});
@@ -67,4 +68,4 @@ export const useResponsive = create<ResponsiveState>()((set, _get) => {
 			pc: getPcBreakpoint(theme),
 		},
 	};
-});
+};
