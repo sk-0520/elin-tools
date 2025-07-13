@@ -67,8 +67,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 		<ThemeProvider theme={DefaultTheme}>
 			<Head>
 				<title>
-					{isMobile ? "m" : "pc"}
-					{windowSize.width}
 					{pageId !== "root" ? `${page.title} - ` : ""}
 					{BaseTitle}
 				</title>
