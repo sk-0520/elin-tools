@@ -48,7 +48,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 	const sidebarStore = useSidebarStore();
 	const isMobile = useResponsive((a) => a.isMobile);
-	const windowSize = useResponsive((a) => a.windowSize);
 	const initialize = useResponsive((a) => a.initialize);
 
 	const page = getPage(pageId);
