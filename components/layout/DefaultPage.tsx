@@ -15,6 +15,7 @@ import Head from "next/head";
 import type { FC, ReactNode } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { getExecution, getPage, type PageId } from "@/features/pages";
+import { useResponsive } from "@/hooks/useResponsive";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { ScmVersion } from "../ScmVersion";
 import { SideMenu } from "../SideMenu";
@@ -39,13 +40,20 @@ export interface DefaultPageProps {
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
 	const sidebarStore = useSidebarStore();
+	const isMobile = useResponsive((a) => a.isMobile);
+	const windowSize = useResponsive((a) => a.windowSize);
+	const initialize = useResponsive((a) => a.initialize);
 
 	const page = getPage(pageId);
+
+	initialize();
 
 	return (
 		<ThemeProvider theme={DefaultTheme}>
 			<Head>
 				<title>
+					{isMobile ? "m" : "pc"}
+					{windowSize.width}
 					{pageId !== "root" ? `${page.title} - ` : ""}
 					{BaseTitle}
 				</title>

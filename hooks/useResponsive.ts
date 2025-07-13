@@ -1,71 +1,60 @@
 import { useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-	getMobileBreakpoint,
-	getPcBreakpoint,
-	isMobile,
-	type WindowSize,
-} from "@/features/responsive";
+import { useEffect } from "react";
+import { create } from "zustand";
+import { isMobile, type WindowSize } from "@/features/responsive";
 
 const DefaultState: ResponsiveState = {
-	window: {
+	windowSize: {
 		width: 1024,
 		height: 800,
 	},
 	isMobile: false,
-	style: {
-		mobile: "",
-		pc: "",
-	},
 };
 
 export type ResponsiveState = {
-	window: WindowSize;
+	windowSize: WindowSize;
 	isMobile: boolean;
-	style: {
-		mobile: string;
-		pc: string;
-	};
 };
 
-export const useResponsive = () => {
-	const theme = useTheme();
-	const [state, setState] = useState(DefaultState);
+export type ResponsiveAction = {
+	initialize: () => void;
+};
 
-	const applyWindowSize = () => {
-		const windowSize: WindowSize = {
-			width: window.innerWidth,
-			height: window.innerHeight,
-		};
+export type ResponsiveStore = ResponsiveState & ResponsiveAction;
 
-		setState({
-			...DefaultState,
-			window: windowSize,
-			isMobile: isMobile(theme, windowSize),
-		});
-	};
-
-	const handleResize = () => {
-		applyWindowSize();
-	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: handleResize
-	useEffect(() => {
-		window.addEventListener("resize", handleResize);
-
-		applyWindowSize();
-
-		return () => {
-			window.removeEventListener("resize", handleResize);
-		};
-	}, []);
-
+export const useResponsive = create<ResponsiveStore>()((set, _get) => {
 	return {
 		...DefaultState,
 
-		style: {
-			mobile: getMobileBreakpoint(theme),
-			pc: getPcBreakpoint(theme),
+		initialize: () => {
+			const theme = useTheme();
+
+			const applyWindowSize = () => {
+				const windowSize: WindowSize = {
+					width: window.innerWidth,
+					height: window.innerHeight,
+				};
+
+				set({
+					windowSize: windowSize,
+					isMobile: isMobile(theme, windowSize),
+				});
+			};
+
+			const handleResize = () => {
+				applyWindowSize();
+			};
+
+			// biome-ignore lint/correctness/useExhaustiveDependencies: handleResize
+			useEffect(() => {
+				window.addEventListener("resize", handleResize);
+
+				applyWindowSize();
+
+				return () => {
+					window.removeEventListener("resize", handleResize);
+				};
+			}, []);
 		},
 	};
-};
+});

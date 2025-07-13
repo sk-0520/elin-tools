@@ -12,10 +12,12 @@ export function isMobile(theme: Theme, size: WindowSize): boolean {
 	return size.width <= theme.breakpoints.values[mobileBreakpoint];
 }
 
-export function getMobileBreakpoint(theme: Theme): string {
-	return theme.breakpoints.down(mobileBreakpoint);
-}
+export function getBreakpoint(theme: Theme, device: "pc" | "mobile"): string {
+	switch (device) {
+		case "pc":
+			return theme.breakpoints.up(pcBreakpoint);
 
-export function getPcBreakpoint(theme: Theme): string {
-	return theme.breakpoints.up(pcBreakpoint);
+		case "mobile":
+			return theme.breakpoints.down(mobileBreakpoint);
+	}
 }
