@@ -46,7 +46,9 @@ const AppMenuIcon: FC<{ isOpen: boolean }> = (props) => {
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-	const sidebarStore = useSidebarStore();
+	//const sidebarStore = useSidebarStore();
+	const isOpen = useSidebarStore((a) => a.isOpen);
+	const toggle = useSidebarStore((a) => a.toggle);
 	const isMobile = useResponsive((a) => a.isMobile);
 	const initialize = useResponsive((a) => a.initialize);
 
@@ -82,7 +84,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						color="inherit"
 						aria-label="open drawer"
 						onClick={() => {
-							sidebarStore.toggle();
+							toggle();
 							if (isMobile) {
 								setIsMobileSidebarOpen((a) => !a);
 							}
@@ -93,9 +95,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 						}}
 					>
 						<AppMenuIcon
-							isOpen={
-								isMobile ? isMobileSidebarOpen : sidebarStore.isOpen
-							}
+							isOpen={isMobile ? isMobileSidebarOpen : isOpen}
 						/>
 					</IconButton>
 					<Typography
@@ -129,7 +129,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 										width: sidebarWidth,
 										boxSizing: "border-box",
 									},
-									display: sidebarStore.isOpen ? undefined : "none",
+									display: isOpen ? undefined : "none",
 								}
 					}
 					anchor="left"
