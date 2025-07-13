@@ -29,7 +29,7 @@ export const DiceTable: FC<DiceTableProps> = (props) => {
 	);
 
 	return (
-		<DefaultTable stickyHeader sx={{ tableLayout: "fixed" }}>
+		<DefaultTable stickyHeader>
 			<TableHead>
 				<TableRow>
 					<TableCell width={30}>*</TableCell>
