@@ -101,7 +101,15 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 							}
 						/>
 					</IconButton>
-					<Typography variant="h6" noWrap component="h1">
+					<Typography
+						variant="h6"
+						noWrap
+						component="h1"
+						sx={{
+							// 地味に削れるテキストの対応
+							paddingRight: "2px",
+						}}
+					>
 						{page.title}
 					</Typography>
 					{execution !== "production" && (
