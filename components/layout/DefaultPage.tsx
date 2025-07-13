@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import Head from "next/head";
-import type { FC, ReactNode } from "react";
+import { type FC, type ReactNode, useEffect, useState } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { getExecution, getPage, type PageId } from "@/features/pages";
 import { useResponsive } from "@/hooks/useResponsive";
@@ -37,8 +37,15 @@ export interface DefaultPageProps {
 	children: ReactNode;
 }
 
+const AppMenuIcon: FC<{ isOpen: boolean }> = (props) => {
+	const { isOpen } = props;
+
+	return isOpen ? <MenuOpenIcon /> : <MenuIcon />;
+};
+
 export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const { children, pageId } = props;
+	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 	const sidebarStore = useSidebarStore();
 	const isMobile = useResponsive((a) => a.isMobile);
 	const windowSize = useResponsive((a) => a.windowSize);
@@ -47,6 +54,14 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	const page = getPage(pageId);
 
 	initialize();
+
+	useEffect(() => {
+		if (!isMobile) {
+			if (isMobileSidebarOpen) {
+				setIsMobileSidebarOpen(false);
+			}
+		}
+	}, [isMobile, isMobileSidebarOpen]);
 
 	return (
 		<ThemeProvider theme={DefaultTheme}>
@@ -69,13 +84,22 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
-						onClick={sidebarStore.toggle}
+						onClick={() => {
+							sidebarStore.toggle();
+							if (isMobile) {
+								setIsMobileSidebarOpen((a) => !a);
+							}
+						}}
 						edge="start"
 						sx={{
 							marginRight: "1ch",
 						}}
 					>
-						{sidebarStore.isOpen ? <MenuOpenIcon /> : <MenuIcon />}
+						<AppMenuIcon
+							isOpen={
+								isMobile ? isMobileSidebarOpen : sidebarStore.isOpen
+							}
+						/>
 					</IconButton>
 					<Typography variant="h6" noWrap component="h1">
 						{page.title}
@@ -90,17 +114,27 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 
 			<Box sx={{ display: "flex" }}>
 				<Drawer
-					sx={{
-						width: sidebarWidth,
-						flexShrink: 0,
-						"& .MuiDrawer-paper": {
-							width: sidebarWidth,
-							boxSizing: "border-box",
-						},
-						display: sidebarStore.isOpen ? undefined : "none",
-					}}
-					variant="permanent"
+					sx={
+						isMobile
+							? undefined
+							: {
+									width: sidebarWidth,
+									flexShrink: 0,
+									"& .MuiDrawer-paper": {
+										width: sidebarWidth,
+										boxSizing: "border-box",
+									},
+									display: sidebarStore.isOpen ? undefined : "none",
+								}
+					}
 					anchor="left"
+					open={isMobile ? isMobileSidebarOpen : undefined}
+					variant={isMobile ? "temporary" : "permanent"}
+					onClose={() => {
+						if (isMobile) {
+							setIsMobileSidebarOpen(false);
+						}
+					}}
 				>
 					<Offset />
 					<Divider />
