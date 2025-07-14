@@ -22,6 +22,10 @@ interface ChartData {
 	[key: string]: number;
 }
 
+function toProbabilityId(baseId: string) {
+	return `${baseId}:probability`;
+}
+
 export const DiceChart: FC = () => {
 	const editors = useWeaponEditorsStore((a) => a.editors);
 	const probability = useWeaponEditorsStore((a) => a.probability);
@@ -52,8 +56,8 @@ export const DiceChart: FC = () => {
 	// 確率分布を算出
 	const distributions: Record<string, Array<number>> = {};
 	for (const [id, value] of Object.entries(values)) {
-		const aaa = generateDiceDistribution(value.count, value.sides);
-		distributions[id] = aaa;
+		const distribution = generateDiceDistribution(value.count, value.sides);
+		distributions[id] = distribution;
 	}
 	console.table(distributions);
 
@@ -75,7 +79,7 @@ export const DiceChart: FC = () => {
 			if (dice.minimum <= damage && damage <= dice.maximum) {
 				const count = pointValues.filter((a) => a === damage).length;
 				currentData[id] = count / pointValues.length;
-				currentData[`${id}:probability`] = getElement(
+				currentData[toProbabilityId(id)] = getElement(
 					getElement(distributions, id),
 					damage - dice.minimum,
 				);
@@ -151,7 +155,7 @@ export const DiceChart: FC = () => {
 							<Line
 								key={a}
 								type="linear"
-								dataKey={`${a}:probability`}
+								dataKey={toProbabilityId(a)}
 								stroke={getElement(editors, a).color}
 								strokeOpacity={0.5}
 								fillOpacity={0.5}
