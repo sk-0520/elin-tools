@@ -7,32 +7,35 @@ const DefaultState: PickpocketWeightCalculationState = {
 	pickpocket: 10,
 };
 
-interface PickpocketWeightCalculationState {
+export interface PickpocketWeightCalculationState {
 	readonly strength: number;
 	readonly pickpocket: number;
 }
 
-interface PickpocketWeightCalculationAction {
+export interface PickpocketWeightCalculationAction {
 	reset: () => void;
 	setStrength: (value: number) => void;
 	setPickpocket: (value: number) => void;
 }
 
-export const usePickpocketWeightCalculationStore = create<
-	PickpocketWeightCalculationState & PickpocketWeightCalculationAction
->()(
-	persist(
-		(set, _get) => ({
-			...DefaultState,
+export interface PickpocketWeightCalculationStore
+	extends PickpocketWeightCalculationState,
+		PickpocketWeightCalculationAction {}
 
-			reset: () => set(DefaultState),
+export const usePickpocketWeightCalculationStore =
+	create<PickpocketWeightCalculationStore>()(
+		persist(
+			(set, _get) => ({
+				...DefaultState,
 
-			setStrength: (value: number) => set({ strength: value }),
-			setPickpocket: (value: number) => set({ pickpocket: value }),
-		}),
-		{
-			name: "calculation-pickpocket-weight",
-			storage: createJSONStorage(() => getDefaultStorage()),
-		},
-	),
-);
+				reset: () => set(DefaultState),
+
+				setStrength: (value: number) => set({ strength: value }),
+				setPickpocket: (value: number) => set({ pickpocket: value }),
+			}),
+			{
+				name: "calculation-pickpocket-weight",
+				storage: createJSONStorage(() => getDefaultStorage()),
+			},
+		),
+	);

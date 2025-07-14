@@ -17,13 +17,13 @@ const DefaultState: WeaponEditorsState = {
 	probability: true,
 };
 
-interface WeaponEditorsState {
+export interface WeaponEditorsState {
 	readonly editors: Record<string, DiceEditor>;
 	readonly frequency: number;
 	readonly probability: boolean;
 }
 
-interface WeaponEditorsAction {
+export interface WeaponEditorsAction {
 	reset: () => void;
 
 	setEditor: (id: string, value: DiceEditor) => void;
@@ -31,9 +31,11 @@ interface WeaponEditorsAction {
 	setProbability: (probability: boolean) => void;
 }
 
-export const useWeaponEditorsStore = create<
-	WeaponEditorsState & WeaponEditorsAction
->()(
+export interface WeaponEditorsStore
+	extends WeaponEditorsState,
+		WeaponEditorsAction {}
+
+export const useWeaponEditorsStore = create<WeaponEditorsStore>()(
 	persist(
 		(set, get) => {
 			return {

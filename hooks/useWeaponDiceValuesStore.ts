@@ -6,44 +6,48 @@ const DefaultState: WeaponDiceValuesState = {
 	values: {},
 };
 
-interface WeaponDiceValuesState {
+export interface WeaponDiceValuesState {
 	readonly errors: Record<string, string>;
 	readonly values: Record<string, DiceValue>;
 }
 
-interface WeaponDiceValuesAction {
+export interface WeaponDiceValuesAction {
 	setError: (id: string, error: string) => void;
 	setValue: (id: string, dice: DiceValue | undefined) => void;
 }
 
-export const useWeaponDiceValuesStore = create<
-	WeaponDiceValuesState & WeaponDiceValuesAction
->((set, get) => {
-	return {
-		...DefaultState,
+export interface WeaponDiceValuesStore
+	extends WeaponDiceValuesState,
+		WeaponDiceValuesAction {}
 
-		setError: (key: string, error: string) => {
-			const values = { ...get().values };
-			const errors = { ...get().errors, [key]: error };
+export const useWeaponDiceValuesStore = create<WeaponDiceValuesStore>(
+	(set, get) => {
+		return {
+			...DefaultState,
 
-			delete values[key];
+			setError: (key: string, error: string) => {
+				const values = { ...get().values };
+				const errors = { ...get().errors, [key]: error };
 
-			set({ values: values, errors: errors });
-		},
-
-		setValue: (key: string, dice: DiceValue | undefined) => {
-			const values = { ...get().values };
-			const errors = { ...get().errors };
-
-			if (dice) {
-				values[key] = dice;
-			} else {
 				delete values[key];
-			}
 
-			delete errors[key];
+				set({ values: values, errors: errors });
+			},
 
-			set({ values: values, errors: errors });
-		},
-	};
-});
+			setValue: (key: string, dice: DiceValue | undefined) => {
+				const values = { ...get().values };
+				const errors = { ...get().errors };
+
+				if (dice) {
+					values[key] = dice;
+				} else {
+					delete values[key];
+				}
+
+				delete errors[key];
+
+				set({ values: values, errors: errors });
+			},
+		};
+	},
+);

@@ -22,14 +22,14 @@ const DefaultState: GlobalMapState = {
 	},
 };
 
-interface GlobalMapState {
+export interface GlobalMapState {
 	readonly controller: boolean;
 	readonly isVisibles: Record<MapKind, boolean>;
 	readonly conditions: Record<MapCondition, boolean>;
 	readonly implementations: Record<MapImplementation, boolean>;
 }
 
-interface GlobalMapAction {
+export interface GlobalMapAction {
 	reset: () => void;
 
 	setController: (isVisible: boolean) => void;
@@ -41,7 +41,9 @@ interface GlobalMapAction {
 	) => void;
 }
 
-export const useGlobalMapStore = create<GlobalMapState & GlobalMapAction>()(
+export interface GlobalMapStore extends GlobalMapState, GlobalMapAction {}
+
+export const useGlobalMapStore = create<GlobalMapStore>()(
 	persist(
 		(set, get) => ({
 			...DefaultState,

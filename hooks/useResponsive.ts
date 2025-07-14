@@ -11,16 +11,16 @@ const DefaultState: ResponsiveState = {
 	isMobile: false,
 };
 
-export type ResponsiveState = {
+export interface ResponsiveState {
 	windowSize: WindowSize;
 	isMobile: boolean;
-};
+}
 
-export type ResponsiveAction = {
+export interface ResponsiveAction {
 	initialize: () => void;
-};
+}
 
-export type ResponsiveStore = ResponsiveState & ResponsiveAction;
+export interface ResponsiveStore extends ResponsiveState, ResponsiveAction {}
 
 export const useResponsive = create<ResponsiveStore>()((set, _get) => {
 	return {

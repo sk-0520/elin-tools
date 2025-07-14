@@ -6,17 +6,19 @@ const DefaultState: SidebarState = {
 	isOpen: true,
 };
 
-interface SidebarState {
+export interface SidebarState {
 	readonly isOpen: boolean;
 }
 
-interface SidebarAction {
+export interface SidebarAction {
 	open: () => void;
 	close: () => void;
 	toggle: () => void;
 }
 
-export const useSidebarStore = create<SidebarState & SidebarAction>()(
+export interface SidebarStore extends SidebarState, SidebarAction {}
+
+export const useSidebarStore = create<SidebarStore>()(
 	persist(
 		(set, get) => ({
 			...DefaultState,

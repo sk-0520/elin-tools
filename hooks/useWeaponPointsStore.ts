@@ -13,6 +13,10 @@ export interface WeaponPointsAction {
 	setPoint: (id: string, points: Array<Array<number>>) => void;
 }
 
+export interface WeaponPointsStore
+	extends WeaponPointsState,
+		WeaponPointsAction {}
+
 export const useWeaponPointsStore = create<
 	WeaponPointsState & WeaponPointsAction
 >((set, get) => {
