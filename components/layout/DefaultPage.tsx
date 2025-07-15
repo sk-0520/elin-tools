@@ -15,7 +15,7 @@ import Head from "next/head";
 import { type FC, type ReactNode, useEffect, useState } from "react";
 import { DefaultTheme } from "@/components/theme/DefaultTheme";
 import { getExecution, getPage, type PageId } from "@/features/pages";
-import { useResponsive } from "@/hooks/useResponsive";
+import { useResponsiveStore } from "@/hooks/useResponsiveStore";
 import { useSidebarStore } from "@/hooks/useSidebarStore";
 import { ScmVersion } from "../ScmVersion";
 import { SideMenu } from "../SideMenu";
@@ -49,8 +49,8 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 	//const sidebarStore = useSidebarStore();
 	const isOpen = useSidebarStore((a) => a.isOpen);
 	const toggle = useSidebarStore((a) => a.toggle);
-	const isMobile = useResponsive((a) => a.isMobile);
-	const initialize = useResponsive((a) => a.initialize);
+	const isMobile = useResponsiveStore((a) => a.isMobile);
+	const initialize = useResponsiveStore((a) => a.initialize);
 
 	const page = getPage(pageId);
 

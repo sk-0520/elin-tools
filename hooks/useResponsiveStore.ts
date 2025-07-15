@@ -22,7 +22,7 @@ export interface ResponsiveAction {
 
 export interface ResponsiveStore extends ResponsiveState, ResponsiveAction {}
 
-export const useResponsive = create<ResponsiveStore>()((set, _get) => {
+export const useResponsiveStore = create<ResponsiveStore>()((set, _get) => {
 	return {
 		...DefaultState,
 
