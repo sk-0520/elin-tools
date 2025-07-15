@@ -94,9 +94,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 							marginRight: "1ch",
 						}}
 					>
-						<AppMenuIcon
-							isOpen={isMobile ? isMobileSidebarOpen : isOpen}
-						/>
+						<AppMenuIcon isOpen={isMobile ? isMobileSidebarOpen : isOpen} />
 					</IconButton>
 					<Typography
 						variant="h6"

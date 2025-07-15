@@ -24,9 +24,7 @@ export const PickpocketWeightCalculator: FC = () => {
 							<InputTextField
 								value={strength}
 								onChange={(ev) =>
-									convertFloatChain(ev.target.value, (a) =>
-										setStrength(a),
-									)
+									convertFloatChain(ev.target.value, (a) => setStrength(a))
 								}
 							/>
 						</TableCell>
@@ -37,9 +35,7 @@ export const PickpocketWeightCalculator: FC = () => {
 							<InputTextField
 								value={toDisplayFloat(pickpocket)}
 								onChange={(ev) =>
-									convertFloatChain(ev.target.value, (a) =>
-										setPickpocket(a),
-									)
+									convertFloatChain(ev.target.value, (a) => setPickpocket(a))
 								}
 							/>
 						</TableCell>

@@ -72,10 +72,7 @@ export const LicenseRow: FC<LicenseRowProps> = (props) => {
 									padding: "1em",
 								}}
 							>
-								<Typography
-									component="pre"
-									sx={{ fontFamily: "monospace" }}
-								>
+								<Typography component="pre" sx={{ fontFamily: "monospace" }}>
 									{license.licenseNote}
 								</Typography>
 							</Paper>

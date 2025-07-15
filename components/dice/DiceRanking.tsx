@@ -50,11 +50,7 @@ export const DiceRanking: FC<DiceRankingProps> = (props) => {
 				return (
 					<Fragment key={a.id}>
 						{index === 0 ? (
-							<StyledIdListItem
-								id={a.id}
-								editors={editors}
-								isTop={true}
-							/>
+							<StyledIdListItem id={a.id} editors={editors} isTop={true} />
 						) : (
 							<>
 								<ListItem
@@ -66,11 +62,7 @@ export const DiceRanking: FC<DiceRankingProps> = (props) => {
 								>
 									<Typography>{a.prevEqual ? "=" : ">"}</Typography>
 								</ListItem>
-								<StyledIdListItem
-									id={a.id}
-									editors={editors}
-									isTop={false}
-								/>
+								<StyledIdListItem id={a.id} editors={editors} isTop={false} />
 							</>
 						)}
 					</Fragment>

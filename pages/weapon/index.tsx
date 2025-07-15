@@ -55,9 +55,7 @@ const Page: NextPage = () => {
 							return (
 								<Tooltip key={a} title={<NumericFormat value={a} />}>
 									<Button
-										variant={
-											frequency === a ? "contained" : undefined
-										}
+										variant={frequency === a ? "contained" : undefined}
 										onClick={(_e) => handleFrequencyClick(a)}
 									>
 										<Typography>
@@ -68,9 +66,7 @@ const Page: NextPage = () => {
 											>
 												10
 											</span>
-											<sup style={{ fontSize: "0.7em" }}>
-												{Math.log10(a)}
-											</sup>
+											<sup style={{ fontSize: "0.7em" }}>{Math.log10(a)}</sup>
 										</Typography>
 									</Button>
 								</Tooltip>

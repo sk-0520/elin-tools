@@ -14,6 +14,68 @@ export const MapImplementations = [
 ] as const;
 export type MapImplementation = (typeof MapImplementations)[number];
 
+export const MapKindDefines: Array<{
+	kind: MapKind;
+	display: string;
+	color: string;
+	direction: Exclude<TooltipProps["direction"], undefined>;
+}> = [
+	{
+		kind: "base",
+		display: "拠点",
+		color: "blue",
+		direction: "bottom",
+	},
+	{
+		kind: "nefia",
+		display: "ネフィア",
+		color: "red",
+		direction: "right",
+	},
+	{
+		kind: "sample",
+		display: "初期地点",
+		color: "yellow",
+		direction: "right",
+	},
+];
+
+export const MapConditionDefines: Array<{
+	condition: MapCondition;
+	display: string;
+}> = [
+	{
+		condition: "return",
+		display: "帰還先に限定",
+	},
+	{
+		condition: "festival",
+		display: "お祭り開催地に限定",
+	},
+	{
+		condition: "implementation",
+		display: "実装度合いで限定",
+	},
+];
+
+export const MapImplementationDefines: Array<{
+	implementation: MapImplementation;
+	display: string;
+}> = [
+	{
+		implementation: "completed",
+		display: "実装済み",
+	},
+	{
+		implementation: "inProgress",
+		display: "実装途中",
+	},
+	{
+		implementation: "notImplemented",
+		display: "未実装",
+	},
+];
+
 interface GlobalMapItem {
 	/** 表示名 */
 	name: string;

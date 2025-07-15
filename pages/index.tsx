@@ -112,9 +112,7 @@ const Page: NextPage<PageProps> = (props) => {
 									ストレージ初期化
 								</StyledResetButton>
 								<Box sx={{ marginTop: "1em" }}>
-									<StyledJsonView
-										value={JSON.parse(JSON.stringify(a.state))}
-									/>
+									<StyledJsonView value={JSON.parse(JSON.stringify(a.state))} />
 								</Box>
 							</StyledAccordionDetails>
 						</Accordion>

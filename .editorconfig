@@ -7,7 +7,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.tsx]
-indent_size = 3
+indent_size = 2
 
 [*.{yml,yaml}]
 indent_style = space
