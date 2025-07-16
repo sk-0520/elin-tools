@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 const Version =
 	process.env.NEXT_PUBLIC_SCM_VERSION ??
-	"0000000000000000000000000000000000000000";
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 export interface ScmVersionProps {
 	mode: "head";
