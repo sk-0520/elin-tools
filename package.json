@@ -1,6 +1,6 @@
 {
 	"name": "elin-tools",
-	"version": "0.1.0",
+	"version": "20250102.0304.05",
 	"license": "WTFPL",
 	"author": "sk",
 	"private": true,
@@ -11,8 +11,9 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build:license": "ts-node --project tsconfig.local.json ./tools/license/license-entry.ts",
+		"build:package": "ts-node --project tsconfig.local.json ./tools/package/package-entry.ts",
 		"build:app": "next build",
-		"build": "npm-run-all --sequential build:license build:app",
+		"build": "npm-run-all --sequential build:license build:package build:app",
 		"test": "jest",
 		"lint:type": "tsc",
 		"lint:code": "biome check .",
