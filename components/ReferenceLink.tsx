@@ -12,8 +12,12 @@ export const ReferenceLink: FC<ReferenceLinkProps> = (props) => {
 
 	return (
 		<Tooltip title="参照元">
-			<Link href={href} target="_blank">
-				{<OpenInNewIcon />}
+			<Link
+				href={href}
+				target="_blank"
+				sx={{ display: "inline-flex", verticalAlign: "middle" }}
+			>
+				{<OpenInNewIcon fontSize="small" />}
 				{children}
 			</Link>
 		</Tooltip>
