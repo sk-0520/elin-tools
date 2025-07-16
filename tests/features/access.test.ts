@@ -107,6 +107,30 @@ describe("getElement:Record", () => {
 	});
 });
 
+describe("getElement:keyValue", () => {
+	const commonInput: { [key: PropertyKey]: number | string | undefined } = {
+		a: "A",
+		b: 2,
+		c: undefined,
+	};
+
+	test("normal", () => {
+		expect(getElement(commonInput, "a")).toBe("A");
+	});
+
+	test("out of range", () => {
+		expect(() => getElement(commonInput, "A")).toThrow(
+			new OutOfRangeError("key = A"),
+		);
+	});
+
+	test("undefined", () => {
+		expect(() => getElement(commonInput, "c")).toThrow(
+			new OutOfRangeError("key = c"),
+		);
+	});
+});
+
 describe("getElement:?", () => {
 	test("unknown", () => {
 		const input = 123;
