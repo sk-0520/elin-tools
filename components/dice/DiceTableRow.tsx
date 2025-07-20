@@ -92,7 +92,6 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				<Controller
 					control={control}
 					name="dice"
-					// biome-ignore lint/correctness/noUnusedFunctionParameters: あとでー
 					render={({ field, formState: { errors } }) => (
 						<TextField
 							{...field}
