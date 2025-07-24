@@ -75,7 +75,6 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 			</Head>
 
 			<AppBar
-				id="header"
 				position="sticky"
 				sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1, padding: 0 })}
 			>
