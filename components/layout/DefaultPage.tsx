@@ -68,8 +68,7 @@ export const DefaultPage: FC<DefaultPageProps> = (props) => {
 		<ThemeProvider theme={DefaultTheme}>
 			<Head>
 				<title>
-					{pageId !== "root" ? `${page.title} - ` : ""}
-					{BaseTitle}
+					{`${pageId !== "root" ? `${page.title} - ` : ""}${BaseTitle}`}
 				</title>
 				<ScmVersion mode="head" />
 			</Head>
