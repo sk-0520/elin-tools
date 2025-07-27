@@ -105,7 +105,7 @@ interface GlobalMapNefiaItem extends GlobalMapItem {
 	riskLevel: number;
 }
 
-interface GlobalMapSmapleItem extends GlobalMapItem {
+interface GlobalMapSampleItem extends GlobalMapItem {
 	kind: "sample";
 }
 
@@ -468,6 +468,6 @@ export const GlobalMapItemMapping = {
 	] satisfies (
 		| GlobalMapBaseItem
 		| GlobalMapNefiaItem
-		| GlobalMapSmapleItem
+		| GlobalMapSampleItem
 	)[],
 };
