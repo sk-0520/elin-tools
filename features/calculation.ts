@@ -96,7 +96,7 @@ export function convertFloat(input: unknown): number {
 
 /**
  * 小数点をふわっとしてピッタリ表示にする
- * @param float
+ * @param input
  * @returns
  */
 export function toDisplayFloat(input: number): string {

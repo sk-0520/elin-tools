@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { toCssFontFamily } from "@/features/font";
+import { toCssFontFamily } from "@/features/style";
 
 export const DefaultFontFamily: CSSProperties["fontFamily"] = toCssFontFamily([
 	"Verdana",

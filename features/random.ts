@@ -5,10 +5,22 @@ function builtin_randomInt(min: number, max: number): number {
 }
 
 export interface Random {
+	/**
+	 * @returns 0 <= result < 1
+	 */
 	next(): number;
 
+	/**
+	 * @returns 0 <= result
+	 */
 	nextInt(): number;
+	/**
+	 * @returns 0 <= result < max
+	 */
 	nextInt(max: number): number;
+	/**
+	 * @returns min <= result < max
+	 */
 	nextInt(min: number, max: number): number;
 }
 

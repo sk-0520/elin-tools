@@ -1,4 +1,4 @@
-import { toCssFontFamily } from "@/features/font";
+import { toCssFontFamily } from "@/features/style";
 
 describe("toCssFontFamily", () => {
 	test.each([
