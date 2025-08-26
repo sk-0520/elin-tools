@@ -139,6 +139,15 @@ export const GlobalMapItemMapping = {
 			position: { lat: 1390, lng: 1098.4986464078552 },
 		},
 		{
+			name: "帰らずの森",
+			implementation: "completed",
+			kind: "nefia",
+			position: { lat: 1319.0193428439584, lng: 989 },
+			direction: "left",
+			riskLevel: 19,
+			return: true,
+		},
+		{
 			name: "妹の館",
 			implementation: "inProgress",
 			kind: "base",
