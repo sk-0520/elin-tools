@@ -48,8 +48,8 @@ export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 		throw new DiceFormatError(`dice: ${dice}`);
 	}
 	const diceValues: DiceUnknownDice = {
-		count: Number.parseInt(getElement(regexArray.groups, "COUNT")),
-		sides: Number.parseInt(getElement(regexArray.groups, "SIDES")),
+		count: Number.parseInt(getElement(regexArray.groups, "COUNT"), 10),
+		sides: Number.parseInt(getElement(regexArray.groups, "SIDES"), 10),
 	};
 
 	if (!regexArray.groups.FIXED_SIGN) {
@@ -64,6 +64,7 @@ export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 		fixedSign: toFixedSign(getElement(regexArray.groups, "FIXED_SIGN")),
 		fixedValue: Number.parseInt(
 			getElement(regexArray.groups, "FIXED_VALUE"),
+			10,
 		),
 		...diceValues,
 	};

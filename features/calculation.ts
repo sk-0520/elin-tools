@@ -35,7 +35,7 @@ export function convertIntChain(
 	input: unknown,
 	receiver: (number: number) => void,
 ): boolean {
-	const result = convertNumberCore(input, (a) => Number.parseInt(a));
+	const result = convertNumberCore(input, (a) => Number.parseInt(a, 10));
 
 	if (result.success) {
 		receiver(result.value);
@@ -69,7 +69,7 @@ export function convertFloatChain(
  * @throws {ConvertError} 変換失敗
  */
 export function convertInt(input: unknown): number {
-	const result = convertNumberCore(input, (a) => Number.parseInt(a));
+	const result = convertNumberCore(input, (a) => Number.parseInt(a, 10));
 
 	if (!result.success) {
 		throw new ConvertError(`input: ${input}`);
