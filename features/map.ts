@@ -341,9 +341,9 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "ミノタウロスの巣",
-			implementation: "notImplemented",
+			implementation: "completed",
 			kind: "nefia",
-			riskLevel: 1,
+			riskLevel: 26,
 			position: { lat: 554.25, lng: 826.7480974966951 },
 		},
 		{
