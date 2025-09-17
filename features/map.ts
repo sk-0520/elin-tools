@@ -113,8 +113,8 @@ interface GlobalMapSampleItem extends GlobalMapItem {
 export const GlobalMapItemMapping = {
 	items: [
 		{
-			name: "どこか",
-			implementation: "inProgress",
+			name: "永遠の庭",
+			implementation: "completed",
 			kind: "base",
 			position: { lat: 1518, lng: 1117.2499451246429 },
 		},
