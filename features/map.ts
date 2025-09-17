@@ -435,7 +435,7 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "ルーリエ海底神殿",
-			implementation: "inProgress",
+			implementation: "completed",
 			kind: "nefia",
 			riskLevel: 25,
 			position: { lat: 186, lng: 1701.4986464078552 },
