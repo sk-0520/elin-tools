@@ -299,9 +299,9 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "竜窟",
-			implementation: "notImplemented",
+			implementation: "inProgress",
 			kind: "nefia",
-			riskLevel: 1,
+			riskLevel: 51,
 			position: { lat: 681, lng: 281.48661041283685 },
 			direction: "left",
 		},
