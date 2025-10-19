@@ -222,8 +222,7 @@ export const GlobalMapItemMapping = {
 		{
 			name: "丘の洞窟",
 			implementation: "completed",
-			kind: "nefia",
-			riskLevel: 1,
+			kind: "sample",
 			position: { lat: 881, lng: 443.99370762570476 },
 		},
 		{
