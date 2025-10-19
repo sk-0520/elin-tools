@@ -155,6 +155,12 @@ export const GlobalMapItemMapping = {
 			return: true,
 		},
 		{
+			name: "ドーガ遺跡キャンプ",
+			implementation: "inProgress",
+			kind: "base",
+			position: { lat: 1225, lng: 865 },
+		},
+		{
 			name: "すくつ",
 			implementation: "completed",
 			kind: "nefia",
