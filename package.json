@@ -9,7 +9,7 @@
 		"url": "git+https://github.com/sk-0520/elin-tools.git"
 	},
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev",
 		"build:license": "ts-node --project tsconfig.local.json ./tools/license/license-entry.ts",
 		"build:package": "ts-node --project tsconfig.local.json ./tools/package/package-entry.ts",
 		"build:app": "next build",
@@ -54,7 +54,7 @@
 		"@mui/material": "^7.3.4",
 		"@uiw/react-json-view": "^2.0.0-alpha.39",
 		"leaflet": "^1.9.4",
-		"next": "15.5.6",
+		"next": "16.0.1",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
 		"react-hook-form": "^7.65.0",
@@ -64,7 +64,7 @@
 		"zustand": "^5.0.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.6",
+		"@biomejs/biome": "2.3.2",
 		"@markuplint/jsx-parser": "^4.7.21",
 		"@markuplint/react-spec": "^4.5.21",
 		"@types/jest": "^30.0.0",
@@ -76,7 +76,7 @@
 		"jest": "^30.2.0",
 		"license-checker": "^25.0.1",
 		"markuplint": "^4.13.1",
-		"npm-check-updates": "^19.1.1",
+		"npm-check-updates": "^19.1.2",
 		"npm-run-all": "^4.1.5",
 		"sharp": "^0.34.4",
 		"ts-jest": "^29.4.5",
