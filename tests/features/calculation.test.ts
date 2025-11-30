@@ -8,24 +8,32 @@ import {
 } from "@/features/calculation";
 
 describe("convertIntChain", () => {
-	test.each([{}, [], true, null, undefined, Number.NaN, 1n])(
-		"no number(not nan) | no string: %p",
-		(input: unknown) => {
-			expect(convertIntChain(input, (a) => fail(`a: ${a}`))).toBeFalsy();
-		},
-	);
+	test.each([
+		{},
+		[],
+		true,
+		null,
+		undefined,
+		Number.NaN,
+		1n,
+	])("no number(not nan) | no string: %p", (input: unknown) => {
+		expect(convertIntChain(input, (a) => fail(`a: ${a}`))).toBeFalsy();
+	});
 
 	test.each([-1, 0, 1])("number: %d", (input: number) => {
 		const actual = convertIntChain(input, (a) => expect(a).toBe(input));
 		expect(actual).toBeTruthy();
 	});
 
-	test.each(["", "-a", ".", ".1", "10a"])(
-		"fail string: %s",
-		(input: string) => {
-			expect(convertIntChain(input, (a) => fail(`a: ${a}`))).toBeFalsy();
-		},
-	);
+	test.each([
+		"",
+		"-a",
+		".",
+		".1",
+		"10a",
+	])("fail string: %s", (input: string) => {
+		expect(convertIntChain(input, (a) => fail(`a: ${a}`))).toBeFalsy();
+	});
 
 	test.each([
 		[-1, "-1"],
@@ -45,14 +53,17 @@ describe("convertIntChain", () => {
 });
 
 describe("convertFloatChain", () => {
-	test.each([{}, [], true, null, undefined, Number.NaN, 1n])(
-		"no number(not nan) | no string: %p",
-		(input: unknown) => {
-			expect(
-				convertFloatChain(input, (a) => fail(`a: ${a}`)),
-			).toBeFalsy();
-		},
-	);
+	test.each([
+		{},
+		[],
+		true,
+		null,
+		undefined,
+		Number.NaN,
+		1n,
+	])("no number(not nan) | no string: %p", (input: unknown) => {
+		expect(convertFloatChain(input, (a) => fail(`a: ${a}`))).toBeFalsy();
+	});
 
 	test.each([-1, 0, 1])("number: %d", (input: number) => {
 		const actual = convertFloatChain(input, (a) => expect(a).toBe(input));
@@ -84,23 +95,31 @@ describe("convertFloatChain", () => {
 });
 
 describe("convertInt", () => {
-	test.each([{}, [], true, null, undefined, Number.NaN, 1n])(
-		"no number(not nan) | no string: %p",
-		(input: unknown) => {
-			expect(() => convertInt(input)).toThrow(ConvertError);
-		},
-	);
+	test.each([
+		{},
+		[],
+		true,
+		null,
+		undefined,
+		Number.NaN,
+		1n,
+	])("no number(not nan) | no string: %p", (input: unknown) => {
+		expect(() => convertInt(input)).toThrow(ConvertError);
+	});
 
 	test.each([-1, 0, 1])("number: %d", (input: number) => {
 		expect(convertInt(input)).toBe(input);
 	});
 
-	test.each(["", "-a", ".", ".1", "10a"])(
-		"fail string: %s",
-		(input: string) => {
-			expect(() => convertInt(input)).toThrow(ConvertError);
-		},
-	);
+	test.each([
+		"",
+		"-a",
+		".",
+		".1",
+		"10a",
+	])("fail string: %s", (input: string) => {
+		expect(() => convertInt(input)).toThrow(ConvertError);
+	});
 
 	test.each([
 		[-1, "-1"],
@@ -118,12 +137,17 @@ describe("convertInt", () => {
 });
 
 describe("convertFloat", () => {
-	test.each([{}, [], true, null, undefined, Number.NaN, 1n])(
-		"no number(not nan) | no string: %p",
-		(input: unknown) => {
-			expect(() => convertFloat(input)).toThrow(ConvertError);
-		},
-	);
+	test.each([
+		{},
+		[],
+		true,
+		null,
+		undefined,
+		Number.NaN,
+		1n,
+	])("no number(not nan) | no string: %p", (input: unknown) => {
+		expect(() => convertFloat(input)).toThrow(ConvertError);
+	});
 
 	test.each([-1, 0, 1])("number: %d", (input: number) => {
 		expect(convertFloat(input)).toBe(input);

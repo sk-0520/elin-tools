@@ -11,12 +11,16 @@ import {
 import { BuiltinRandom } from "@/features/random";
 
 describe("parseDice", () => {
-	test.each([[""], ["1"], ["1d"], ["1dA"], ["1d1*"], ["1d1+a"]])(
-		"DiceFormatError: %s",
-		(dice: string) => {
-			expect(() => parseDice(dice)).toThrow(DiceFormatError);
-		},
-	);
+	test.each([
+		[""],
+		["1"],
+		["1d"],
+		["1dA"],
+		["1d1*"],
+		["1d1+a"],
+	])("DiceFormatError: %s", (dice: string) => {
+		expect(() => parseDice(dice)).toThrow(DiceFormatError);
+	});
 
 	test.each([
 		[
@@ -31,12 +35,9 @@ describe("parseDice", () => {
 			{ fixed: false, count: 4, sides: 5 } satisfies DiceWithoutFixed,
 			" 4 d 5 ",
 		],
-	])(
-		"DiceWithoutFixed: %p, %s",
-		(expected: DiceWithoutFixed, dice: string) => {
-			expect(parseDice(dice)).toStrictEqual(expected);
-		},
-	);
+	])("DiceWithoutFixed: %p, %s", (expected: DiceWithoutFixed, dice: string) => {
+		expect(parseDice(dice)).toStrictEqual(expected);
+	});
 
 	test.each([
 		[
