@@ -17,7 +17,7 @@ import {
 	Marker,
 	Popup,
 } from "react-leaflet";
-import { GlobalMapItemMapping, MapKindDefines } from "@/features/map";
+import { GlobalMapItemMapping, getColor, getDirection } from "@/features/map";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 import nextConfig from "../../next.config";
 import { GlobalMapController } from "./GlobalMapController";
@@ -67,6 +67,10 @@ export const GlobalMap: FC = () => {
 		[],
 	);
 
+	const mapItems = GlobalMapItemMapping.items.filter((a) =>
+		a.kinds.some((b) => isVisibles[b]),
+	);
+
 	return (
 		<MapContainer
 			crs={Leaflet.CRS.Simple}
@@ -94,43 +98,44 @@ export const GlobalMap: FC = () => {
 				url={`${basePath}/components/map/GlobalMap/GlobalMap.jpg`}
 			/>
 
-			{MapKindDefines.map((a) => {
-				return (
-					isVisibles[a.kind] && (
-						<LayerGroup key={a.kind}>
-							{GlobalMapItemMapping.items
-								.filter((b) => b.kind === a.kind)
-								.filter((b) => (conditions.return ? b.return === true : true))
-								.filter((b) =>
-									conditions.festival ? b.festival !== undefined : true,
-								)
-								.filter((b) =>
-									conditions.implementation
-										? (implementations.completed &&
-												b.implementation === "completed") ||
-											(implementations.inProgress &&
-												b.implementation === "inProgress") ||
-											(implementations.notImplemented &&
-												b.implementation === "notImplemented")
-										: true,
-								)
-								.map((b) => {
-									return (
-										<MapLabel
-											key={b.name}
-											color={a.color}
-											center={b.position}
-											label={b.name}
-											direction={b.direction ? b.direction : a.direction}
-											festival={b.festival}
-											riskLevel={b.riskLevel}
-										/>
-									);
-								})}
-						</LayerGroup>
-					)
-				);
-			})}
+			{
+				<LayerGroup>
+					{mapItems
+						.filter((a) => (conditions.return ? a.return === true : true))
+						.filter((a) =>
+							conditions.festival ? a.festival !== undefined : true,
+						)
+						.filter((a) =>
+							conditions.implementation
+								? (implementations.completed &&
+										a.implementation === "completed") ||
+									(implementations.inProgress &&
+										a.implementation === "inProgress") ||
+									(implementations.notImplemented &&
+										a.implementation === "notImplemented")
+								: true,
+						)
+						.map((a) => {
+							const visibleKind = a.kinds.find((b) => isVisibles[b]);
+							if (!visibleKind) {
+								throw new Error();
+							}
+							return (
+								<MapLabel
+									key={a.name}
+									color={getColor(a.kinds, visibleKind)}
+									center={a.position}
+									label={a.name}
+									direction={
+										a.direction ? a.direction : getDirection(visibleKind)
+									}
+									festival={a.festival}
+									riskLevel={a.riskLevel}
+								/>
+							);
+						})}
+				</LayerGroup>
+			}
 
 			{devChecked && (
 				<LayerGroup>
