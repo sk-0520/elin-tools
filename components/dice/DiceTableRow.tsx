@@ -41,7 +41,6 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 	console.debug({ id });
 
 	useEffect(() => {
-		console.assert(slacker);
 		if (!editor.dice.trim()) {
 			setDiceValue(id, undefined);
 			remove(id);
@@ -57,16 +56,7 @@ export const DiceTableRow: FC<DiceTableRowProps> = (props) => {
 				setError(id, `${ex}`);
 			}
 		}
-	}, [
-		id,
-		slacker,
-		editor.dice,
-		frequency,
-		setError,
-		setDiceValue,
-		remove,
-		setPoint,
-	]);
+	}, [id, editor.dice, frequency, setError, setDiceValue, remove, setPoint]);
 
 	const handleDiceChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

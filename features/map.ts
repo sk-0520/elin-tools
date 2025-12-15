@@ -212,9 +212,9 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "死者の洞窟",
-			implementation: "notImplemented",
+			implementation: "inProgress", // TODO: まだやってないから知らん
 			kinds: ["nefia"],
-			riskLevel: 2,
+			riskLevel: 32,
 			position: { lat: 882, lng: 717.0199746300302 },
 		},
 		{
