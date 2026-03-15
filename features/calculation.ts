@@ -104,3 +104,17 @@ export function toDisplayFloat(input: number): string {
 	const value = Math.floor(input * base) / base;
 	return value.toFixed(2);
 }
+
+export interface YearMonthDay {
+	year: number;
+	month: number;
+	day: number;
+}
+
+export function toElapsedYears(days: number): YearMonthDay {
+	// elin 世界では一か月が 30 日っぽい。ドキュメントないのでゲーム中の感覚値だけど。
+	const year = Math.trunc(days / (30 * 12));
+	const month = Math.trunc((days % (30 * 12)) / 30);
+	const day = days % 30;
+	return { year, month, day };
+}

@@ -22,6 +22,7 @@ import { LicenseTable } from "@/components/license/LicenseTable";
 import type { License } from "@/features/license";
 import { getPage, type PageId } from "@/features/pages";
 import { getDefaultStorage, getDefaultStorageName } from "@/features/storage";
+import { useElapsedYearsCalculatorStore } from "@/hooks/calculation/useElapsedYearsCalculatorStore";
 import { usePickpocketWeightCalculationStore } from "@/hooks/calculation/usePickpocketWeightCalculationStore";
 import { useGlobalMapStore } from "@/hooks/useGlobalMapStore";
 import { useWeaponEditorsStore } from "@/hooks/useWeaponEditorsStore";
@@ -52,6 +53,7 @@ const Page: NextPage<PageProps> = (props) => {
 	const weaponEditorsStore = useWeaponEditorsStore();
 	const pickpocketWeightCalculationStore =
 		usePickpocketWeightCalculationStore();
+	const elapsedYearsCalculatorStore = useElapsedYearsCalculatorStore();
 	const globalMapStore = useGlobalMapStore();
 
 	const stores: Array<{ pageId: PageId; state: object; reset: () => void }> = [
@@ -62,9 +64,10 @@ const Page: NextPage<PageProps> = (props) => {
 		},
 		{
 			pageId: "calculation",
-			state: { pickpocketWeightCalculationStore },
+			state: { pickpocketWeightCalculationStore, elapsedYearsCalculatorStore },
 			reset: () => {
 				pickpocketWeightCalculationStore.reset();
+				elapsedYearsCalculatorStore.reset();
 			},
 		},
 		{

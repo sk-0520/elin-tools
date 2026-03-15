@@ -5,6 +5,8 @@ import {
 	convertInt,
 	convertIntChain,
 	toDisplayFloat,
+	toElapsedYears,
+	type YearMonthDay,
 } from "@/features/calculation";
 
 describe("convertIntChain", () => {
@@ -190,5 +192,20 @@ describe("toDisplayFloat", () => {
 		["0.01", 0.019],
 	])("input: %d", (expected: string, input: number) => {
 		expect(toDisplayFloat(input)).toBe(expected);
+	});
+});
+
+describe("toElapsedYears", () => {
+	test.each([
+		[0, { year: 0, month: 0, day: 0 }],
+		[29, { year: 0, month: 0, day: 29 }],
+		[30, { year: 0, month: 1, day: 0 }],
+		[31, { year: 0, month: 1, day: 1 }],
+		[359, { year: 0, month: 11, day: 29 }],
+		[360, { year: 1, month: 0, day: 0 }],
+		[390, { year: 1, month: 1, day: 0 }],
+		[721, { year: 2, month: 0, day: 1 }],
+	])("input: %d", (input: number, expected: YearMonthDay) => {
+		expect(toElapsedYears(input)).toStrictEqual(expected);
 	});
 });
