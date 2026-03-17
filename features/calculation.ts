@@ -111,7 +111,7 @@ export interface YearMonthDay {
 	day: number;
 }
 
-export function toElapsedYears(days: number): YearMonthDay {
+export function convertElapsedYears(days: number): YearMonthDay {
 	// elin 世界では一か月が 30 日っぽい。ドキュメントないのでゲーム中の感覚値だけど。
 	const year = Math.trunc(days / (30 * 12));
 	const month = Math.trunc((days % (30 * 12)) / 30);

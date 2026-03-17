@@ -1,11 +1,11 @@
 import {
 	ConvertError,
+	convertElapsedYears,
 	convertFloat,
 	convertFloatChain,
 	convertInt,
 	convertIntChain,
 	toDisplayFloat,
-	toElapsedYears,
 	type YearMonthDay,
 } from "@/features/calculation";
 
@@ -195,7 +195,7 @@ describe("toDisplayFloat", () => {
 	});
 });
 
-describe("toElapsedYears", () => {
+describe("convertElapsedYears", () => {
 	test.each([
 		[0, { year: 0, month: 0, day: 0 }],
 		[29, { year: 0, month: 0, day: 29 }],
@@ -206,6 +206,6 @@ describe("toElapsedYears", () => {
 		[390, { year: 1, month: 1, day: 0 }],
 		[721, { year: 2, month: 0, day: 1 }],
 	])("input: %d", (input: number, expected: YearMonthDay) => {
-		expect(toElapsedYears(input)).toStrictEqual(expected);
+		expect(convertElapsedYears(input)).toStrictEqual(expected);
 	});
 });
