@@ -21,6 +21,7 @@
 		"lint": "npm-run-all --parallel lint:*",
 		"lint-fix": "biome check --write .",
 		"lint-fix-unsafe": "biome check --write --unsafe .",
+		"map": "ts-node --project tsconfig.local.json ./tools/map/map-entry.ts",
 		"npm-check": "ncu",
 		"npm-update": "ncu -u && npm install && npm run build:license"
 	},
