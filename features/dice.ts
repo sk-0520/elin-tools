@@ -44,7 +44,7 @@ function toFixedSign(raw: string): DiceSign {
 
 export function parseDice(dice: string): DiceWithoutFixed | DiceWithFixed {
 	const regexArray = DiceRegex.exec(dice);
-	if (!regexArray || !regexArray.groups) {
+	if (!regexArray?.groups) {
 		throw new DiceFormatError(`dice: ${dice}`);
 	}
 	const diceValues: DiceUnknownDice = {

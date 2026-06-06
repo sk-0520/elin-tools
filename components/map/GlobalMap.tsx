@@ -1,5 +1,5 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import JsonView from "@uiw/react-json-view";
 import Leaflet, {
 	type DragEndEvent,
@@ -152,18 +152,12 @@ export const GlobalMap: FC = () => {
 						/>
 						<Popup autoClose={false}>
 							<Stack>
-								<Typography
-									variant="body1"
-									fontSize="small"
-									sx={{ whiteSpace: "pre" }}
-								>
-									<JsonView
-										displayObjectSize={false}
-										displayDataTypes={false}
-										enableClipboard={false}
-										value={position}
-									/>
-								</Typography>
+								<JsonView
+									displayObjectSize={false}
+									displayDataTypes={false}
+									enableClipboard={false}
+									value={position}
+								/>
 
 								<Box
 									sx={{

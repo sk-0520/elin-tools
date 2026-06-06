@@ -27,7 +27,11 @@
 			"@/*": [
 				"./*"
 			]
-		}
+		},
+		"rootDir": ".",
+		"types": [
+			"jest"
+		]
 	},
 	"include": [
 		"next-env.d.ts",
