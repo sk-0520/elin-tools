@@ -14,11 +14,11 @@ jobs:
 
     steps:
       - name: <Checkout> Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: <Restore> .next/cache
         if: github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/master'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .next/cache
@@ -28,7 +28,7 @@ jobs:
             ${{ github.job }}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
       - name: <Add> Node/NPM
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: ./.node-version
           cache: npm
@@ -81,12 +81,12 @@ jobs:
           NODE_ENV: ${{ env.NODE_ENV }}
 
       - name: <Artifact> front-end
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: out
 
       - name: <Artifact> coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage
@@ -112,4 +112,4 @@ jobs:
     steps:
       - name: <Deploy> GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
