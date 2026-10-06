@@ -428,8 +428,8 @@ export const GlobalMapItemMapping = {
 		},
 		{
 			name: "古城",
-			implementation: "notImplemented",
-			kinds: ["nefia"],
+			implementation: "inProgress",
+			kinds: ["base"],
 			riskLevel: 1,
 			position: { lat: 212, lng: 498.9853665714064 },
 		},
